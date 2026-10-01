@@ -1,0 +1,1180 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Login | FoundLink</title>
+
+
+    <!-- Bootstrap -->
+
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+    >
+
+
+    <!-- Bootstrap Icons -->
+
+    <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+    >
+
+
+    <style>
+
+        :root {
+
+            --primary: #59aaa9;
+            --primary-dark: #438f8e;
+            --navy: #21366d;
+
+            --text: #536174;
+
+            --background: #f8fbfc;
+
+            --border: #e3eeee;
+
+            --white: #ffffff;
+
+        }
+
+
+        * {
+            box-sizing: border-box;
+        }
+
+
+        html,
+        body {
+
+            width: 100%;
+            min-height: 100%;
+            margin: 0;
+
+        }
+
+
+        body {
+
+            font-family:
+                "Segoe UI",
+                Arial,
+                Helvetica,
+                sans-serif;
+
+            background: var(--background);
+
+            color: var(--text);
+
+        }
+
+
+        /* =========================================
+           NAVBAR
+        ========================================= */
+
+        .top-navbar {
+
+            height: 72px;
+
+            background: var(--white);
+
+            border-bottom: 1px solid var(--border);
+
+            padding: 0 5%;
+
+        }
+
+
+        .brand {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 10px;
+
+            text-decoration: none;
+
+        }
+
+
+        .brand-icon {
+
+            width: 44px;
+            height: 44px;
+
+            background: var(--primary);
+
+            color: white;
+
+            border-radius: 12px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            font-size: 23px;
+
+            box-shadow:
+                0 7px 18px
+                rgba(89, 170, 169, 0.25);
+
+        }
+
+
+        .brand-name {
+
+            font-size: 23px;
+
+            font-weight: 800;
+
+            letter-spacing: -0.5px;
+
+            color: var(--navy);
+
+        }
+
+
+        .brand-name span {
+
+            color: var(--primary);
+
+        }
+
+
+        .home-link {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 7px;
+
+            text-decoration: none;
+
+            color: #536174;
+
+            font-size: 14px;
+
+            font-weight: 600;
+
+            padding: 9px 12px;
+
+            border-radius: 8px;
+
+            transition: 0.2s;
+
+        }
+
+
+        .home-link:hover {
+
+            color: var(--primary);
+
+            background: #f0f8f8;
+
+        }
+
+
+        /* =========================================
+           MAIN
+        ========================================= */
+
+        .login-wrapper {
+
+            min-height:
+                calc(100vh - 72px);
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            padding: 35px 20px;
+
+        }
+
+
+        /* =========================================
+           LOGIN CARD
+        ========================================= */
+
+        .login-card {
+
+            width: 100%;
+
+            max-width: 1080px;
+
+            min-height: 550px;
+
+            background: var(--white);
+
+            border-radius: 22px;
+
+            overflow: hidden;
+
+            display: grid;
+
+            grid-template-columns: 53% 47%;
+
+            box-shadow:
+                0 20px 55px
+                rgba(33, 54, 109, 0.12);
+
+            border: 1px solid rgba(227, 238, 238, 0.8);
+
+        }
+
+
+        /* =========================================
+           IMAGE PANEL
+        ========================================= */
+
+        .image-panel {
+
+            position: relative;
+
+            overflow: hidden;
+
+            background-image:
+
+                linear-gradient(
+                    rgba(33, 54, 109, 0.57),
+                    rgba(33, 54, 109, 0.57)
+                ),
+
+                url(
+                    "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=1200&q=85"
+                );
+
+            background-size: cover;
+
+            background-position: center;
+
+        }
+
+
+        .image-content {
+
+            position: absolute;
+
+            left: 48px;
+
+            right: 45px;
+
+            bottom: 42px;
+
+            color: white;
+
+        }
+
+
+        .image-label {
+
+            display: inline-flex;
+
+            align-items: center;
+
+            gap: 7px;
+
+            font-size: 12px;
+
+            font-weight: 800;
+
+            letter-spacing: 1.4px;
+
+            margin-bottom: 13px;
+
+            color: #dff7f7;
+
+        }
+
+
+        .image-label i {
+
+            font-size: 15px;
+
+            color: var(--primary);
+
+        }
+
+
+        .image-content h1 {
+
+            font-size: 37px;
+
+            line-height: 1.15;
+
+            font-weight: 800;
+
+            letter-spacing: -0.7px;
+
+            margin-bottom: 16px;
+
+            max-width: 440px;
+
+        }
+
+
+        .image-content p {
+
+            font-size: 14px;
+
+            line-height: 1.75;
+
+            color: rgba(255, 255, 255, 0.93);
+
+            max-width: 475px;
+
+            margin: 0;
+
+        }
+
+
+        /* =========================================
+           FORM PANEL
+        ========================================= */
+
+        .form-panel {
+
+            padding: 40px 47px;
+
+            display: flex;
+
+            flex-direction: column;
+
+            justify-content: center;
+
+        }
+
+
+        .form-icon {
+
+            width: 48px;
+
+            height: 48px;
+
+            border-radius: 13px;
+
+            background: #eaf7f7;
+
+            color: var(--primary);
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            font-size: 23px;
+
+            margin-bottom: 15px;
+
+        }
+
+
+        .form-panel h2 {
+
+            color: var(--navy);
+
+            font-size: 30px;
+
+            font-weight: 800;
+
+            margin-bottom: 6px;
+
+            letter-spacing: -0.5px;
+
+        }
+
+
+        .subtitle {
+
+            color: #718095;
+
+            font-size: 13px;
+
+            margin-bottom: 23px;
+
+        }
+
+
+        /* =========================================
+           MESSAGES
+        ========================================= */
+
+        .alert {
+
+            font-size: 12px;
+
+            border-radius: 9px;
+
+            padding: 9px 11px;
+
+            margin-bottom: 14px;
+
+        }
+
+
+        /* =========================================
+           LABEL
+        ========================================= */
+
+        .form-label {
+
+            color: #40536a;
+
+            font-size: 13px;
+
+            font-weight: 700;
+
+            margin-bottom: 7px;
+
+        }
+
+
+        .password-label {
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+        }
+
+
+        .forgot-link {
+
+            color: var(--primary-dark);
+
+            text-decoration: none;
+
+            font-size: 12px;
+
+            font-weight: 700;
+
+        }
+
+
+        .forgot-link:hover {
+
+            color: var(--navy);
+
+            text-decoration: underline;
+
+        }
+
+
+        /* =========================================
+           INPUT
+        ========================================= */
+
+        .input-group {
+
+            margin-bottom: 19px;
+
+        }
+
+
+        .input-group-text {
+
+            min-width: 45px;
+
+            justify-content: center;
+
+            background: #f8fbfc;
+
+            border: 1px solid #dce9ea;
+
+            border-right: none;
+
+            color: #78909a;
+
+        }
+
+
+        .form-control {
+
+            height: 46px;
+
+            border: 1px solid #dce9ea;
+
+            font-size: 14px;
+
+            color: var(--navy);
+
+            box-shadow: none !important;
+
+        }
+
+
+        .form-control::placeholder {
+
+            color: #9aa8b3;
+
+        }
+
+
+        .form-control:focus {
+
+            border-color: var(--primary);
+
+        }
+
+
+        .input-group:focus-within
+        .input-group-text {
+
+            border-color: var(--primary);
+
+            color: var(--primary);
+
+        }
+
+
+        /* =========================================
+           PASSWORD TOGGLE
+        ========================================= */
+
+        .password-toggle {
+
+            width: 48px;
+
+            border: 1px solid #dce9ea;
+
+            border-left: none;
+
+            background: white;
+
+            color: #738691;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            cursor: pointer;
+
+        }
+
+
+        .password-toggle:hover {
+
+            color: var(--primary);
+
+        }
+
+
+        /* =========================================
+           LOGIN BUTTON
+        ========================================= */
+
+        .login-btn {
+
+            width: 100%;
+
+            height: 46px;
+
+            border: none;
+
+            border-radius: 10px;
+
+            background: var(--primary);
+
+            color: white;
+
+            font-size: 14px;
+
+            font-weight: 700;
+
+            margin-top: 2px;
+
+            transition: 0.2s;
+
+        }
+
+
+        .login-btn:hover {
+
+            background: var(--primary-dark);
+
+            color: white;
+
+            transform: translateY(-1px);
+
+        }
+
+
+        /* =========================================
+           REGISTER
+        ========================================= */
+
+        .register-text {
+
+            text-align: center;
+
+            margin-top: 19px;
+
+            color: #718095;
+
+            font-size: 13px;
+
+        }
+
+
+        .register-text a {
+
+            color: var(--primary-dark);
+
+            text-decoration: none;
+
+            font-weight: 800;
+
+        }
+
+
+        .register-text a:hover {
+
+            color: var(--navy);
+
+            text-decoration: underline;
+
+        }
+
+
+        /* =========================================
+           SECURITY
+        ========================================= */
+
+        .security-note {
+
+            margin-top: 20px;
+
+            padding-top: 13px;
+
+            border-top: 1px solid #edf2f3;
+
+            text-align: center;
+
+            color: #84929f;
+
+            font-size: 10px;
+
+        }
+
+
+        .security-note i {
+
+            color: var(--primary);
+
+            margin-right: 3px;
+
+        }
+
+
+        /* =========================================
+           MOBILE
+        ========================================= */
+
+        @media (max-width: 850px) {
+
+            .login-wrapper {
+
+                padding: 25px 15px;
+
+            }
+
+
+            .login-card {
+
+                grid-template-columns: 1fr;
+
+            }
+
+
+            .image-panel {
+
+                min-height: 300px;
+
+            }
+
+
+            .form-panel {
+
+                padding: 35px 28px;
+
+            }
+
+        }
+
+
+        @media (max-width: 500px) {
+
+            .top-navbar {
+
+                padding: 0 18px;
+
+            }
+
+
+            .brand-name {
+
+                font-size: 20px;
+
+            }
+
+
+            .brand-icon {
+
+                width: 40px;
+                height: 40px;
+
+                font-size: 20px;
+
+            }
+
+
+            .home-link {
+
+                font-size: 12px;
+
+            }
+
+
+            .home-link {
+
+                padding: 7px;
+
+            }
+
+
+            .image-content {
+
+                left: 27px;
+
+                right: 27px;
+
+                bottom: 27px;
+
+            }
+
+
+            .image-content h1 {
+
+                font-size: 29px;
+
+            }
+
+
+            .form-panel {
+
+                padding: 30px 22px;
+
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- =====================================================
+     NAVBAR
+===================================================== -->
+
+<nav class="top-navbar d-flex justify-content-between align-items-center">
+
+
+    <a
+        href="{% url 'home' %}"
+        class="brand"
+    >
+
+        <div class="brand-icon">
+
+            <!-- FINAL FOUNDLINK LOGO -->
+
+            <i class="bi bi-geo-alt-fill"></i>
+
+        </div>
+
+
+        <div class="brand-name">
+
+            Found<span>Link</span>
+
+        </div>
+
+    </a>
+
+
+    <a
+        href="{% url 'home' %}"
+        class="home-link"
+    >
+
+        <i class="bi bi-arrow-left"></i>
+
+        Back to Home
+
+    </a>
+
+
+</nav>
+
+
+
+<!-- =====================================================
+     LOGIN AREA
+===================================================== -->
+
+<div class="login-wrapper">
+
+
+    <div class="login-card">
+
+
+        <!-- =================================================
+             LEFT IMAGE
+        ================================================== -->
+
+        <div class="image-panel">
+
+
+            <div class="image-content">
+
+
+                <div class="image-label">
+
+                    <i class="bi bi-geo-alt-fill"></i>
+
+                    FOUNDLINK
+
+                </div>
+
+
+                <h1>
+
+                    Reconnect with what matters.
+
+                </h1>
+
+
+                <p>
+
+                    Find lost belongings, report found items,
+                    and help your college community reconnect
+                    with what they have lost.
+
+                </p>
+
+
+            </div>
+
+        </div>
+
+
+
+        <!-- =================================================
+             RIGHT FORM
+        ================================================== -->
+
+        <div class="form-panel">
+
+
+            <div class="form-icon">
+
+                <i class="bi bi-person-lock"></i>
+
+            </div>
+
+
+            <h2>
+
+                Login to FoundLink
+
+            </h2>
+
+
+            <p class="subtitle">
+
+                Welcome back. Continue helping your community.
+
+            </p>
+
+
+
+            <!-- =================================================
+                 DJANGO MESSAGES
+            ================================================== -->
+
+            {% if messages %}
+
+                {% for message in messages %}
+
+                    <div class="alert alert-{{ message.tags }}">
+
+                        {{ message }}
+
+                    </div>
+
+                {% endfor %}
+
+            {% endif %}
+
+
+
+            <!-- =================================================
+                 LOGIN FORM
+            ================================================== -->
+
+            <form method="POST">
+
+                {% csrf_token %}
+
+
+                <!-- EMAIL -->
+
+                <label class="form-label">
+
+                    Email Address
+
+                </label>
+
+
+                <div class="input-group">
+
+                    <span class="input-group-text">
+
+                        <i class="bi bi-envelope"></i>
+
+                    </span>
+
+
+                    <input
+                        type="email"
+                        name="email"
+                        class="form-control"
+                        placeholder="Enter your email"
+                        autocomplete="email"
+                        required
+                    >
+
+                </div>
+
+
+
+                <!-- PASSWORD -->
+
+                <div class="password-label">
+
+                    <label class="form-label">
+
+                        Password
+
+                    </label>
+
+
+                    <a
+                        href="{% url 'forgot_password' %}"
+                        class="forgot-link"
+                    >
+
+                        Forgot Password?
+
+                    </a>
+
+                </div>
+
+
+                <div class="input-group">
+
+                    <span class="input-group-text">
+
+                        <i class="bi bi-lock"></i>
+
+                    </span>
+
+
+                    <input
+                        type="password"
+                        name="password"
+                        id="password"
+                        class="form-control"
+                        placeholder="Enter your password"
+                        autocomplete="current-password"
+                        required
+                    >
+
+
+                    <button
+                        type="button"
+                        class="password-toggle"
+                        id="togglePassword"
+                        aria-label="Show password"
+                    >
+
+                        <i
+                            class="bi bi-eye-slash"
+                            id="passwordIcon"
+                        ></i>
+
+                    </button>
+
+                </div>
+
+
+
+                <!-- LOGIN -->
+
+                <button
+                    type="submit"
+                    class="login-btn"
+                >
+
+                    <i class="bi bi-box-arrow-in-right me-1"></i>
+
+                    Login
+
+                </button>
+
+            </form>
+
+
+
+            <!-- =================================================
+                 REGISTER LINK
+            ================================================== -->
+
+            <div class="register-text">
+
+                Don't have an account?
+
+                <a href="{% url 'register' %}">
+
+                    Create an Account
+
+                </a>
+
+            </div>
+
+
+
+            <!-- =================================================
+                 SECURITY
+            ================================================== -->
+
+            <div class="security-note">
+
+                <i class="bi bi-shield-check"></i>
+
+                Your FoundLink account information is kept secure.
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<!-- =====================================================
+     PASSWORD SHOW / HIDE
+===================================================== -->
+
+<script>
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    const password =
+        document.getElementById("password");
+
+    const eye =
+        document.getElementById("passwordIcon");
+
+    const button =
+        document.getElementById("togglePassword");
+
+
+    if (!password || !eye || !button) {
+        return;
+    }
+
+
+    button.addEventListener("click", function () {
+
+        if (password.type === "password") {
+
+            password.type = "text";
+
+
+            eye.classList.remove(
+                "bi-eye-slash"
+            );
+
+
+            eye.classList.add(
+                "bi-eye"
+            );
+
+
+            button.setAttribute(
+                "aria-label",
+                "Hide password"
+            );
+
+
+        } else {
+
+            password.type = "password";
+
+
+            eye.classList.remove(
+                "bi-eye"
+            );
+
+
+            eye.classList.add(
+                "bi-eye-slash"
+            );
+
+
+            button.setAttribute(
+                "aria-label",
+                "Show password"
+            );
+
+        }
+
+    });
+
+});
+
+</script>
+
+
+</body>
+
+</html>

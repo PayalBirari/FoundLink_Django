@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Edit Lost Item - FoundLink</title>
+
+    <!-- Bootstrap -->
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+    >
+
+    <!-- Bootstrap Icons -->
+    <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+    >
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background: #f8fbfc;
+            font-family: Arial, Helvetica, sans-serif;
+            color: #21366d;
+        }
+
+        /* =========================================
+           NAVBAR
+        ========================================= */
+
+        .navbar {
+            height: 68px;
+            background: #ffffff;
+            border-bottom: 1px solid #e3eeee;
+            padding: 0 35px;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            color: #21366d;
+            font-size: 23px;
+            font-weight: 700;
+        }
+
+        .brand-icon {
+            width: 39px;
+            height: 39px;
+            border-radius: 11px;
+            background: #59aaa9;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+
+        .brand span {
+            color: #59aaa9;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 22px;
+        }
+
+        .nav-link-custom {
+            text-decoration: none;
+            color: #52647a;
+            font-size: 11px;
+            font-weight: 600;
+            transition: 0.2s;
+        }
+
+        .nav-link-custom:hover {
+            color: #59aaa9;
+        }
+
+        .nav-link-custom i {
+            margin-right: 4px;
+        }
+
+        /* =========================================
+           PAGE AREA
+        ========================================= */
+
+        .page-area {
+            min-height: calc(100vh - 68px);
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .edit-card {
+            width: 100%;
+            max-width: 860px;
+            background: #ffffff;
+            border: 1px solid #e1eeee;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 8px 25px rgba(33, 54, 109, 0.07);
+        }
+
+        /* =========================================
+           CARD HEADER
+        ========================================= */
+
+        .card-header-custom {
+            background: linear-gradient(
+                135deg,
+                #21366d,
+                #438f8e
+            );
+            color: #ffffff;
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .header-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background: rgba(255,255,255,0.15);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 19px;
+        }
+
+        .card-header-custom h4 {
+            margin: 0;
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .card-header-custom p {
+            margin: 3px 0 0;
+            font-size: 10px;
+            color: #dcebea;
+        }
+
+        /* =========================================
+           FORM BODY
+        ========================================= */
+
+        .form-body {
+            padding: 18px 20px;
+        }
+
+        .info-box {
+            background: #eef8f8;
+            border-left: 3px solid #59aaa9;
+            border-radius: 7px;
+            padding: 8px 10px;
+            font-size: 10px;
+            color: #607477;
+            margin-bottom: 15px;
+        }
+
+        .info-box i {
+            color: #59aaa9;
+            margin-right: 4px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px 18px;
+        }
+
+        .form-group {
+            margin: 0;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 11px;
+            font-weight: 700;
+            margin-bottom: 5px;
+            color: #21366d;
+        }
+
+        .form-control,
+        .form-select {
+            width: 100%;
+            min-height: 36px;
+            border: 1px solid #d5e3e5;
+            border-radius: 7px;
+            padding: 6px 9px;
+            font-size: 11px;
+            color: #405867;
+            background: #ffffff;
+        }
+
+        .form-control:focus,
+        .form-select:focus {
+            border-color: #59aaa9;
+            box-shadow: 0 0 0 3px rgba(89,170,169,0.12);
+        }
+
+        textarea.form-control {
+            height: 65px;
+            resize: none;
+        }
+
+        .full-width {
+            grid-column: 1 / -1;
+        }
+
+        input[type="file"] {
+            background: #f8fbfc;
+            padding-top: 7px;
+        }
+
+        ul.errorlist {
+            list-style: none;
+            padding: 0;
+            margin: 3px 0 0;
+            color: #dc3545;
+            font-size: 10px;
+        }
+
+        /* =========================================
+           IMAGE HELP
+        ========================================= */
+
+        .image-help {
+            font-size: 9px;
+            color: #8a999f;
+            margin-top: 4px;
+        }
+
+        /* =========================================
+           BUTTON AREA
+        ========================================= */
+
+        .button-area {
+            display: flex;
+            justify-content: flex-end;
+            gap: 8px;
+            margin-top: 15px;
+            padding-top: 12px;
+            border-top: 1px solid #edf2f1;
+        }
+
+        .btn-update,
+        .btn-back {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            border-radius: 7px;
+            padding: 8px 14px;
+            font-size: 10px;
+            font-weight: 700;
+            transition: 0.2s;
+        }
+
+        .btn-update {
+            border: none;
+            background: #59aaa9;
+            color: #ffffff;
+        }
+
+        .btn-update:hover {
+            background: #438f8e;
+            color: #ffffff;
+        }
+
+        .btn-back {
+            text-decoration: none;
+            background: #ffffff;
+            color: #52647a;
+            border: 1px solid #d2e0e2;
+        }
+
+        .btn-back:hover {
+            background: #f1f7f7;
+            color: #21366d;
+        }
+
+        /* =========================================
+           SECURITY NOTE
+        ========================================= */
+
+        .security-note {
+            margin-top: 12px;
+            padding: 8px 10px;
+            background: #f7fafb;
+            border-radius: 7px;
+            color: #788795;
+            font-size: 9px;
+        }
+
+        .security-note i {
+            color: #59aaa9;
+            margin-right: 4px;
+        }
+
+        /* =========================================
+           MOBILE
+        ========================================= */
+
+        @media (max-width: 750px) {
+
+            .navbar {
+                padding: 0 18px;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .page-area {
+                padding: 15px;
+                align-items: flex-start;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .full-width {
+                grid-column: auto;
+            }
+
+        }
+
+        @media (max-width: 500px) {
+
+            .brand {
+                font-size: 20px;
+            }
+
+            .brand-icon {
+                width: 36px;
+                height: 36px;
+                font-size: 18px;
+            }
+
+            .page-area {
+                padding: 10px;
+            }
+
+            .form-body {
+                padding: 15px;
+            }
+
+            .card-header-custom {
+                padding: 13px 15px;
+            }
+
+            .button-area {
+                flex-direction: column-reverse;
+            }
+
+            .btn-update,
+            .btn-back {
+                width: 100%;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- =====================================================
+     NAVBAR
+===================================================== -->
+
+<nav class="navbar d-flex justify-content-between align-items-center">
+
+    <a
+        href="{% url 'home' %}"
+        class="brand"
+    >
+
+        <div class="brand-icon">
+            <i class="bi bi-geo-alt-fill"></i>
+        </div>
+
+        Found<span>Link</span>
+
+    </a>
+
+
+    <div class="nav-links">
+
+        <a
+            href="{% url 'dashboard' %}"
+            class="nav-link-custom"
+        >
+            <i class="bi bi-grid-1x2-fill"></i>
+            Dashboard
+        </a>
+
+
+        <a
+            href="{% url 'view_lost_items' %}"
+            class="nav-link-custom"
+        >
+            <i class="bi bi-search"></i>
+            Lost Items
+        </a>
+
+
+        <a
+            href="{% url 'view_found_items' %}"
+            class="nav-link-custom"
+        >
+            <i class="bi bi-check-circle"></i>
+            Found Items
+        </a>
+
+
+        <a
+            href="{% url 'profile' %}"
+            class="nav-link-custom"
+        >
+            <i class="bi bi-person-circle"></i>
+            Profile
+        </a>
+
+    </div>
+
+</nav>
+
+
+
+<!-- =====================================================
+     PAGE
+===================================================== -->
+
+<div class="page-area">
+
+    <div class="edit-card">
+
+
+        <!-- CARD HEADER -->
+
+        <div class="card-header-custom">
+
+            <div class="header-icon">
+                <i class="bi bi-pencil-square"></i>
+            </div>
+
+            <div>
+
+                <h4>
+                    Edit Lost Item
+                </h4>
+
+                <p>
+                    Update your lost item information
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <!-- FORM BODY -->
+
+        <div class="form-body">
+
+
+            <div class="info-box">
+
+                <i class="bi bi-info-circle"></i>
+
+                Update the information below and save your changes.
+                Accurate details help FoundLink Smart Match find possible matches.
+
+            </div>
+
+
+            <form
+                method="POST"
+                enctype="multipart/form-data"
+            >
+
+                {% csrf_token %}
+
+
+                <div class="form-row">
+
+
+                    <!-- ITEM NAME -->
+
+                    <div class="form-group">
+
+                        <label>
+                            Item Name
+                        </label>
+
+                        {{ form.item_name }}
+
+                    </div>
+
+
+                    <!-- CATEGORY -->
+
+                    <div class="form-group">
+
+                        <label>
+                            Category
+                        </label>
+
+                        {{ form.category }}
+
+                    </div>
+
+
+                    <!-- LOCATION -->
+
+                    <div class="form-group">
+
+                        <label>
+                            Lost Location
+                        </label>
+
+                        {{ form.location }}
+
+                    </div>
+
+
+                    <!-- DATE -->
+
+                    <div class="form-group">
+
+                        <label>
+                            Lost Date
+                        </label>
+
+                        {{ form.lost_date }}
+
+                    </div>
+
+
+                    <!-- DESCRIPTION -->
+
+                    <div class="form-group full-width">
+
+                        <label>
+                            Description
+                        </label>
+
+                        {{ form.description }}
+
+                    </div>
+
+
+                    <!-- IMAGE -->
+
+                    <div class="form-group full-width">
+
+                        <label>
+                            Item Image
+                        </label>
+
+                        {{ form.image }}
+
+                        <div class="image-help">
+                            <i class="bi bi-image"></i>
+                            Add a clear image to improve identification and matching.
+                        </div>
+
+                    </div>
+
+
+                </div>
+
+
+                <!-- BUTTONS -->
+
+                <div class="button-area">
+
+                    <a
+                        href="{% url 'my_reports' %}"
+                        class="btn-back"
+                    >
+                        <i class="bi bi-arrow-left"></i>
+                        Back to My Reports
+                    </a>
+
+
+                    <button
+                        type="submit"
+                        class="btn-update"
+                    >
+                        <i class="bi bi-check-circle"></i>
+                        Update Item
+                    </button>
+
+                </div>
+
+
+            </form>
+
+
+            <div class="security-note">
+
+                <i class="bi bi-shield-check"></i>
+
+                Keep your item details accurate and avoid sharing passwords,
+                OTPs, or unnecessary personal information.
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+</div>
+
+
+</body>
+
+</html>
+

@@ -1,0 +1,2045 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Dashboard - FoundLink</title>
+
+    <!-- Bootstrap Icons -->
+    <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+    >
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background: #f8fbfc;
+            color: #536782;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        /* =================================================
+           TOPBAR
+        ================================================= */
+
+        .topbar {
+            height: 72px;
+            background: #ffffff;
+            border-bottom: 1px solid #edf1f4;
+            display: flex;
+            align-items: center;
+            padding: 0 28px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            min-width: 235px;
+            font-size: 25px;
+            font-weight: 800;
+            color: #21366d;
+        }
+
+        .brand-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            background: #59aaa9;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            box-shadow: 0 5px 12px rgba(55, 130, 135, 0.18);
+        }
+
+        .brand-name {
+            color: #21366d;
+        }
+
+        .brand-name span {
+            color: #59aaa9;
+        }
+
+        .page-title {
+            padding-left: 20px;
+            border-left: 1px solid #e8eef0;
+            color: #738198;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .top-right {
+            margin-left: auto;
+            display: flex;
+            align-items: center;
+            gap: 18px;
+        }
+
+        .notification-top {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background: #eef9fa;
+            color: #59aaa9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            font-size: 20px;
+        }
+
+        .notification-top:hover {
+            background: #e1f4f4;
+            color: #438f8e;
+        }
+
+        .notification-number {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            min-width: 19px;
+            height: 19px;
+            padding: 0 5px;
+            border-radius: 20px;
+            background: #ed7959;
+            color: #ffffff;
+            font-size: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+        }
+
+        .profile-link {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #344568;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .profile-link i {
+            font-size: 23px;
+            color: #59aaa9;
+        }
+
+        .profile-link:hover {
+            color: #59aaa9;
+        }
+
+        .logout-btn {
+            background: #59aaa9;
+            color: #ffffff;
+            padding: 10px 17px;
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .logout-btn:hover {
+            background: #438f8e;
+            color: #ffffff;
+        }
+
+
+        /* =================================================
+           LAYOUT
+        ================================================= */
+
+        .layout {
+            display: flex;
+            min-height: calc(100vh - 72px);
+        }
+
+
+        /* =================================================
+           SIDEBAR
+        ================================================= */
+
+        .sidebar {
+            width: 225px;
+            background: #ffffff;
+            border-right: 1px solid #edf1f4;
+            padding: 22px 14px;
+            flex-shrink: 0;
+        }
+
+        .menu-title {
+            font-size: 10px;
+            letter-spacing: 1.1px;
+            color: #92a0ae;
+            font-weight: 800;
+            margin: 4px 12px 9px;
+        }
+
+        .menu-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 12px;
+            margin-bottom: 4px;
+            border-radius: 9px;
+            color: #536782;
+            font-size: 13px;
+            font-weight: 600;
+            transition: .2s;
+        }
+
+        .menu-link i {
+            width: 20px;
+            text-align: center;
+            font-size: 17px;
+        }
+
+        .menu-link:hover {
+            background: #eef9fa;
+            color: #59aaa9;
+        }
+
+        .menu-link.active {
+            background: #e3f4f4;
+            color: #438f8e;
+        }
+
+        .sidebar-divider {
+            height: 1px;
+            background: #edf1f4;
+            margin: 17px 10px;
+        }
+
+        .sidebar-report {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 12px;
+            background: linear-gradient(145deg, #eff9fa, #f7fcfc);
+            border: 1px solid #dceeee;
+        }
+
+        .sidebar-report-icon {
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
+            background: #59aaa9;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        .sidebar-report strong {
+            display: block;
+            color: #21366d;
+            font-size: 12px;
+            margin-bottom: 5px;
+        }
+
+        .sidebar-report span {
+            display: block;
+            color: #738198;
+            font-size: 9px;
+            line-height: 1.5;
+            margin-bottom: 11px;
+        }
+
+        .sidebar-report a {
+            display: block;
+            text-align: center;
+            padding: 8px;
+            background: #ffffff;
+            border: 1px solid #cfe6e6;
+            border-radius: 8px;
+            color: #438f8e;
+            font-size: 10px;
+            font-weight: 700;
+        }
+
+        .sidebar-report a:hover {
+            background: #59aaa9;
+            color: #ffffff;
+        }
+
+
+        /* =================================================
+           CONTENT
+        ================================================= */
+
+        .content {
+            flex: 1;
+            min-width: 0;
+            padding: 22px 25px 30px;
+        }
+
+
+        /* =================================================
+           WELCOME
+        ================================================= */
+
+        .welcome {
+            min-height: 112px;
+            border-radius: 16px;
+            padding: 21px 23px;
+            background: linear-gradient(110deg, #438f8e, #59aaa9);
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .welcome::before {
+            content: "";
+            position: absolute;
+            width: 230px;
+            height: 230px;
+            border-radius: 50%;
+            background: rgba(255,255,255,.07);
+            right: -70px;
+            top: -105px;
+        }
+
+        .welcome::after {
+            content: "";
+            position: absolute;
+            width: 125px;
+            height: 125px;
+            border: 16px solid rgba(255,255,255,.06);
+            border-radius: 50%;
+            right: 150px;
+            bottom: -82px;
+        }
+
+        .welcome-icon {
+            width: 53px;
+            height: 53px;
+            border-radius: 14px;
+            background: rgba(255,255,255,.14);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 25px;
+            margin-right: 16px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .welcome-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .welcome-content h1 {
+            margin: 0 0 5px;
+            font-size: 23px;
+            font-weight: 800;
+        }
+
+        .welcome-content p {
+            margin: 0;
+            font-size: 12px;
+            color: #e0f4f3;
+        }
+
+        .smart-match {
+            margin-left: auto;
+            position: relative;
+            z-index: 2;
+            background: rgba(255,255,255,.13);
+            border: 1px solid rgba(255,255,255,.18);
+            padding: 10px 15px;
+            border-radius: 10px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .smart-dot {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #c1f2ce;
+            margin-right: 6px;
+        }
+
+
+        /* =================================================
+           STATISTICS
+        ================================================= */
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 13px;
+            margin-top: 14px;
+        }
+
+        .stat-card {
+            background: #ffffff;
+            border: 1px solid #e5edef;
+            border-radius: 13px;
+            padding: 14px;
+            display: flex;
+            align-items: center;
+            min-height: 88px;
+            box-shadow: 0 4px 17px rgba(35,65,90,.05);
+        }
+
+        .stat-icon {
+            width: 42px;
+            height: 42px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            margin-right: 11px;
+        }
+
+        .stat-lost {
+            background: #fff0eb;
+            color: #d85b3c;
+        }
+
+        .stat-found {
+            background: #eaf7f2;
+            color: #2b8b7d;
+        }
+
+        .stat-alerts {
+            background: #fff5df;
+            color: #b58120;
+        }
+
+        .stat-number {
+            font-size: 22px;
+            font-weight: 800;
+            color: #21366d;
+            line-height: 1;
+        }
+
+        .stat-label {
+            margin-top: 5px;
+            font-size: 10px;
+            color: #738198;
+            font-weight: 650;
+        }
+
+
+        /* =================================================
+           QUICK REPORT
+        ================================================= */
+
+        .quick-report {
+            margin-top: 14px;
+            background: #ffffff;
+            border: 1px solid #e5edef;
+            border-radius: 14px;
+            padding: 15px 17px;
+            box-shadow: 0 4px 17px rgba(35,65,90,.05);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+        }
+
+        .quick-report-text {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .quick-report-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background: #eef9fa;
+            color: #59aaa9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 19px;
+        }
+
+        .quick-report strong {
+            display: block;
+            color: #21366d;
+            font-size: 12px;
+        }
+
+        .quick-report span {
+            display: block;
+            color: #7b899d;
+            font-size: 9px;
+            margin-top: 3px;
+        }
+
+        .report-buttons {
+            display: flex;
+            gap: 8px;
+        }
+
+        .report-btn {
+            padding: 9px 13px;
+            border-radius: 8px;
+            font-size: 10px;
+            font-weight: 700;
+        }
+
+        .report-lost-btn {
+            background: #fff0eb;
+            color: #d65a3c;
+        }
+
+        .report-found-btn {
+            background: #eaf7f2;
+            color: #318976;
+        }
+
+        .report-btn:hover {
+            opacity: .82;
+        }
+
+
+        /* =================================================
+           PANELS
+        ================================================= */
+
+        .dashboard-grid,
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+            margin-top: 14px;
+        }
+
+        .panel {
+            background: #ffffff;
+            border: 1px solid #e5edef;
+            border-radius: 14px;
+            overflow: hidden;
+            box-shadow: 0 4px 17px rgba(35,65,90,.05);
+        }
+
+        .panel-header {
+            min-height: 51px;
+            padding: 0 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid #edf1f4;
+        }
+
+        .panel-header h2 {
+            margin: 0;
+            font-size: 14px;
+            font-weight: 800;
+            color: #21366d;
+        }
+
+        .panel-header h2 i {
+            color: #59aaa9;
+            margin-right: 7px;
+        }
+
+        .panel-link {
+            color: #59aaa9;
+            font-size: 10px;
+            font-weight: 700;
+        }
+
+        .panel-link:hover {
+            color: #438f8e;
+        }
+
+
+        /* =================================================
+           RECENT REPORTS
+        ================================================= */
+
+        .recent {
+            padding: 14px;
+        }
+
+        .recent-heading {
+            margin-bottom: 6px;
+            color: #536782;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .report {
+            display: flex;
+            align-items: center;
+            padding: 9px 3px;
+            border-bottom: 1px solid #f0f3f3;
+        }
+
+        .report:last-child {
+            border-bottom: none;
+        }
+
+        .report-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 9px;
+            font-size: 14px;
+        }
+
+        .report-lost {
+            background: #fff0eb;
+            color: #d65a3c;
+        }
+
+        .report-found {
+            background: #eaf7f2;
+            color: #318976;
+        }
+
+        .report-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .report-name {
+            font-size: 11px;
+            font-weight: 700;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            color: #38535a;
+        }
+
+        .report-location {
+            font-size: 9px;
+            color: #94a1a4;
+            margin-top: 2px;
+        }
+
+        .badge {
+            font-size: 8px;
+            font-weight: 800;
+            border-radius: 20px;
+            padding: 4px 7px;
+        }
+
+        .badge-lost {
+            background: #fff0eb;
+            color: #d65a3c;
+        }
+
+        .badge-found {
+            background: #eaf7f2;
+            color: #318976;
+        }
+
+        .empty {
+            text-align: center;
+            padding: 30px 5px;
+            color: #98a6a9;
+            font-size: 10px;
+        }
+
+
+        /* =================================================
+           SMART MATCH
+        ================================================= */
+
+        .smart-info {
+            padding: 17px;
+        }
+
+        .smart-box {
+            background: #eff9fa;
+            border: 1px solid #dceeee;
+            border-radius: 12px;
+            padding: 14px;
+            display: flex;
+            align-items: center;
+            gap: 13px;
+        }
+
+        .smart-box-icon {
+            width: 43px;
+            height: 43px;
+            min-width: 43px;
+            border-radius: 11px;
+            background: #ffffff;
+            color: #59aaa9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 21px;
+        }
+
+        .smart-box strong {
+            display: block;
+            color: #21366d;
+            font-size: 12px;
+            margin-bottom: 4px;
+        }
+
+        .smart-box span {
+            color: #738198;
+            font-size: 10px;
+            line-height: 1.5;
+        }
+
+        .smart-points {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 9px;
+            margin-top: 12px;
+        }
+
+        .smart-point {
+            padding: 10px;
+            border: 1px solid #e5edef;
+            border-radius: 10px;
+        }
+
+        .smart-point i {
+            color: #59aaa9;
+            font-size: 17px;
+        }
+
+        .smart-point strong {
+            display: block;
+            color: #21366d;
+            font-size: 10px;
+            margin-top: 5px;
+        }
+
+        .smart-point span {
+            display: block;
+            color: #8190a2;
+            font-size: 9px;
+            line-height: 1.4;
+            margin-top: 3px;
+        }
+
+
+        /* =================================================
+           STATUS TRACKING
+        ================================================= */
+
+        .status-panel {
+            margin-top: 14px;
+        }
+
+        .status-content {
+            padding: 20px 17px;
+        }
+
+        .status-flow {
+            display: flex;
+            align-items: flex-start;
+            width: 100%;
+        }
+
+        .status-step {
+            flex: 1;
+            text-align: center;
+            min-width: 0;
+        }
+
+        .status-icon {
+            width: 40px;
+            height: 40px;
+            margin: 0 auto;
+            border-radius: 50%;
+            background: #eef9fa;
+            color: #59aaa9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+        }
+
+        .status-step strong {
+            display: block;
+            margin-top: 8px;
+            color: #21366d;
+            font-size: 9px;
+        }
+
+        .status-step span {
+            display: block;
+            color: #8997a7;
+            font-size: 8px;
+            margin-top: 2px;
+        }
+
+        .status-line {
+            flex: 0 0 45px;
+            height: 2px;
+            background: #d9eeee;
+            margin-top: 19px;
+        }
+
+
+        /* =================================================
+           NOTIFICATIONS
+        ================================================= */
+
+        .notifications {
+            max-height: 330px;
+            overflow-y: auto;
+        }
+
+        .notification {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 14px;
+            border-bottom: 1px solid #edf1f4;
+        }
+
+        .notification:last-child {
+            border-bottom: none;
+        }
+
+        .notification-icon {
+            width: 37px;
+            min-width: 37px;
+            height: 37px;
+            border-radius: 10px;
+            background: #eef9fa;
+            color: #59aaa9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+        }
+
+        .notification-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .notification-title {
+            font-size: 11px;
+            font-weight: 800;
+            color: #334c53;
+            margin-bottom: 3px;
+        }
+
+        .notification-message {
+            font-size: 9px;
+            line-height: 1.4;
+            color: #788b90;
+        }
+
+        .notification-time {
+            font-size: 8px;
+            color: #a1adaf;
+            margin-top: 4px;
+        }
+
+        .delete-btn {
+            width: 27px;
+            height: 27px;
+            border: 1px solid #f0c0b2;
+            background: #ffffff;
+            color: #d66d50;
+            border-radius: 7px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+            flex-shrink: 0;
+        }
+
+        .delete-btn:hover {
+            background: #fff0eb;
+            color: #c84d2e;
+        }
+
+        .no-alerts {
+            text-align: center;
+            padding: 42px 15px;
+            color: #91a0a4;
+            font-size: 11px;
+        }
+
+        .no-alerts i {
+            display: block;
+            font-size: 28px;
+            color: #a7b8bb;
+            margin-bottom: 9px;
+        }
+
+
+        /* =================================================
+           SAFETY
+        ================================================= */
+
+        .info-card {
+            padding: 14px 16px;
+        }
+
+        .info-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 11px;
+            padding: 9px 0;
+            border-bottom: 1px solid #f0f3f3;
+        }
+
+        .info-item:last-child {
+            border-bottom: none;
+        }
+
+        .info-icon {
+            width: 34px;
+            height: 34px;
+            min-width: 34px;
+            border-radius: 9px;
+            background: #eef9fa;
+            color: #59aaa9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 15px;
+        }
+
+        .info-item strong {
+            display: block;
+            color: #21366d;
+            font-size: 11px;
+            margin-bottom: 3px;
+        }
+
+        .info-item span {
+            color: #7b899d;
+            font-size: 9px;
+            line-height: 1.45;
+        }
+
+
+        /* =================================================
+           RESPONSIVE
+        ================================================= */
+
+        @media (max-width: 1100px) {
+
+            .sidebar {
+                width: 205px;
+            }
+
+            .brand {
+                min-width: 205px;
+            }
+
+            .dashboard-grid,
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .status-line {
+                flex-basis: 25px;
+            }
+        }
+
+
+        @media (max-width: 850px) {
+
+            .sidebar {
+                display: none;
+            }
+
+            .stats {
+                grid-template-columns: repeat(3, 1fr);
+            }
+
+            .page-title {
+                display: none;
+            }
+
+            .topbar {
+                padding: 0 16px;
+            }
+
+            .brand {
+                min-width: auto;
+            }
+
+            .content {
+                padding: 15px;
+            }
+
+            .status-line {
+                flex-basis: 18px;
+            }
+        }
+
+
+        @media (max-width: 600px) {
+
+            .profile-link span {
+                display: none;
+            }
+
+            .logout-btn {
+                padding: 8px 11px;
+            }
+
+            .smart-match {
+                display: none;
+            }
+
+            .welcome {
+                padding: 17px;
+            }
+
+            .welcome-content h1 {
+                font-size: 19px;
+            }
+
+            .welcome-content p {
+                font-size: 10px;
+            }
+
+            .smart-points {
+                grid-template-columns: 1fr;
+            }
+
+            .quick-report {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+            .report-buttons {
+                width: 100%;
+            }
+
+            .report-btn {
+                flex: 1;
+                text-align: center;
+            }
+
+            .status-flow {
+                flex-direction: column;
+                align-items: center;
+                gap: 12px;
+            }
+
+            .status-step {
+                width: 100%;
+            }
+
+            .status-line {
+                width: 2px;
+                height: 20px;
+                flex: none;
+                margin: 0;
+            }
+        }
+
+
+        @media (max-width: 430px) {
+
+            .stats {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .brand {
+                font-size: 19px;
+            }
+
+            .top-right {
+                gap: 9px;
+            }
+
+            .notification-top {
+                width: 36px;
+                height: 36px;
+            }
+
+            .profile-link i {
+                font-size: 21px;
+            }
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- =================================================
+     TOPBAR
+================================================= -->
+
+<header class="topbar">
+
+    <a href="{% url 'home' %}" class="brand">
+
+        <div class="brand-icon">
+            <i class="bi bi-geo-alt-fill"></i>
+        </div>
+
+        <span class="brand-name">
+            Found<span>Link</span>
+        </span>
+
+    </a>
+
+
+    <div class="page-title">
+        Dashboard
+    </div>
+
+
+    <div class="top-right">
+
+        <a
+            href="#notifications"
+            class="notification-top"
+            title="Notifications"
+        >
+
+            <i class="bi bi-bell"></i>
+
+            {% if notifications %}
+
+                <span class="notification-number">
+                    {{ notifications|length }}
+                </span>
+
+            {% endif %}
+
+        </a>
+
+
+        <a
+            href="{% url 'profile' %}"
+            class="profile-link"
+        >
+
+            <i class="bi bi-person-circle"></i>
+
+            <span>Profile</span>
+
+        </a>
+
+
+        <a
+            href="{% url 'logout' %}"
+            class="logout-btn"
+        >
+
+            <i class="bi bi-box-arrow-right"></i>
+            Logout
+
+        </a>
+
+    </div>
+
+</header>
+
+
+
+<div class="layout">
+
+
+    <!-- =================================================
+         SIDEBAR
+    ================================================= -->
+
+    <aside class="sidebar">
+
+        <div class="menu-title">
+            MAIN MENU
+        </div>
+
+
+        <a
+            href="{% url 'dashboard' %}"
+            class="menu-link active"
+        >
+
+            <i class="bi bi-grid-1x2-fill"></i>
+            Dashboard
+
+        </a>
+
+
+        <a
+            href="{% url 'view_lost_items' %}"
+            class="menu-link"
+        >
+
+            <i class="bi bi-search"></i>
+            Lost Items
+
+        </a>
+
+
+        <a
+            href="{% url 'view_found_items' %}"
+            class="menu-link"
+        >
+
+            <i class="bi bi-check-circle"></i>
+            Found Items
+
+        </a>
+
+
+        <a
+            href="{% url 'my_reports' %}"
+            class="menu-link"
+        >
+
+            <i class="bi bi-file-earmark-text"></i>
+            My Reports
+
+        </a>
+
+
+        <div class="sidebar-divider"></div>
+
+
+        <div class="menu-title">
+            COMMUNITY
+        </div>
+
+
+        <a
+            href="{% url 'search_users' %}"
+            class="menu-link"
+        >
+
+            <i class="bi bi-people"></i>
+            Find Users
+
+        </a>
+
+
+        <a
+            href="{% url 'my_connections' %}"
+            class="menu-link"
+        >
+
+            <i class="bi bi-person-lines-fill"></i>
+            My Connections
+
+        </a>
+
+
+        <div class="sidebar-report">
+
+            <div class="sidebar-report-icon">
+                <i class="bi bi-plus-lg"></i>
+            </div>
+
+            <strong>
+                Need to report an item?
+            </strong>
+
+            <span>
+                Quickly create a lost or found item report.
+            </span>
+
+            <a href="#quick-report">
+                Create Report
+            </a>
+
+        </div>
+
+    </aside>
+
+
+
+    <!-- =================================================
+         MAIN CONTENT
+    ================================================= -->
+
+    <main class="content">
+
+
+        <!-- =================================================
+             WELCOME
+        ================================================= -->
+
+        <section class="welcome">
+
+            <div class="welcome-icon">
+                <i class="bi bi-stars"></i>
+            </div>
+
+
+            <div class="welcome-content">
+
+                <h1>
+                    Welcome back to FoundLink
+                </h1>
+
+                <p>
+                    Manage your reports and reconnect lost belongings with their rightful owners.
+                </p>
+
+            </div>
+
+
+            <div class="smart-match">
+
+                <span class="smart-dot"></span>
+
+                Smart Matching Active
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             STATISTICS
+        ================================================= -->
+
+        <section class="stats">
+
+
+            <div class="stat-card">
+
+                <div class="stat-icon stat-lost">
+                    <i class="bi bi-search"></i>
+                </div>
+
+                <div>
+
+                    <div class="stat-number">
+                        {{ lost_items|length }}
+                    </div>
+
+                    <div class="stat-label">
+                        Lost Items
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div class="stat-icon stat-found">
+                    <i class="bi bi-check-circle"></i>
+                </div>
+
+                <div>
+
+                    <div class="stat-number">
+                        {{ found_items|length }}
+                    </div>
+
+                    <div class="stat-label">
+                        Found Items
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div class="stat-icon stat-alerts">
+                    <i class="bi bi-bell"></i>
+                </div>
+
+                <div>
+
+                    <div class="stat-number">
+                        {{ notifications|length }}
+                    </div>
+
+                    <div class="stat-label">
+                        Notifications
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             QUICK REPORT
+        ================================================= -->
+
+        <section
+            class="quick-report"
+            id="quick-report"
+        >
+
+            <div class="quick-report-text">
+
+                <div class="quick-report-icon">
+                    <i class="bi bi-plus-circle"></i>
+                </div>
+
+                <div>
+
+                    <strong>
+                        Create a New Report
+                    </strong>
+
+                    <span>
+                        Report a lost or found item to start the matching process.
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <div class="report-buttons">
+
+                <a
+                    href="{% url 'create_lost_item' %}"
+                    class="report-btn report-lost-btn"
+                >
+
+                    <i class="bi bi-search"></i>
+                    Report Lost
+
+                </a>
+
+
+                <a
+                    href="{% url 'create_found_item' %}"
+                    class="report-btn report-found-btn"
+                >
+
+                    <i class="bi bi-check-circle"></i>
+                    Report Found
+
+                </a>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             RECENT REPORTS + SMART MATCH
+        ================================================= -->
+
+        <section class="dashboard-grid">
+
+
+            <!-- RECENT REPORTS -->
+
+            <div class="panel">
+
+                <div class="panel-header">
+
+                    <h2>
+                        <i class="bi bi-clock-history"></i>
+                        Recent Reports
+                    </h2>
+
+                    <a
+                        href="{% url 'my_reports' %}"
+                        class="panel-link"
+                    >
+                        View All
+                    </a>
+
+                </div>
+
+
+                <div class="recent">
+
+                    <div class="recent-heading">
+                        Your latest activity
+                    </div>
+
+
+                    {% if lost_items %}
+
+                        {% for item in lost_items|slice:":2" %}
+
+                            <div class="report">
+
+                                <div class="report-icon report-lost">
+                                    <i class="bi bi-search"></i>
+                                </div>
+
+                                <div class="report-info">
+
+                                    <div class="report-name">
+                                        {{ item.item_name }}
+                                    </div>
+
+                                    <div class="report-location">
+
+                                        <i class="bi bi-geo-alt"></i>
+
+                                        {{ item.location }}
+
+                                    </div>
+
+                                </div>
+
+                                <span class="badge badge-lost">
+                                    LOST
+                                </span>
+
+                            </div>
+
+                        {% endfor %}
+
+                    {% endif %}
+
+
+
+                    {% if found_items %}
+
+                        {% for item in found_items|slice:":2" %}
+
+                            <div class="report">
+
+                                <div class="report-icon report-found">
+                                    <i class="bi bi-check-circle"></i>
+                                </div>
+
+                                <div class="report-info">
+
+                                    <div class="report-name">
+                                        {{ item.item_name }}
+                                    </div>
+
+                                    <div class="report-location">
+
+                                        <i class="bi bi-geo-alt"></i>
+
+                                        {{ item.location }}
+
+                                    </div>
+
+                                </div>
+
+                                <span class="badge badge-found">
+                                    FOUND
+                                </span>
+
+                            </div>
+
+                        {% endfor %}
+
+                    {% endif %}
+
+
+
+                    {% if not lost_items and not found_items %}
+
+                        <div class="empty">
+
+                            <i
+                                class="bi bi-inbox"
+                                style="font-size:25px;"
+                            ></i>
+
+                            <br>
+
+                            No reports yet.
+
+                        </div>
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+
+
+            <!-- SMART MATCH -->
+
+            <div class="panel">
+
+                <div class="panel-header">
+
+                    <h2>
+                        <i class="bi bi-stars"></i>
+                        Smart Match
+                    </h2>
+
+                </div>
+
+
+                <div class="smart-info">
+
+
+                    <div class="smart-box">
+
+                        <div class="smart-box-icon">
+                            <i class="bi bi-stars"></i>
+                        </div>
+
+                        <div>
+
+                            <strong>
+                                Smart Matching is Active
+                            </strong>
+
+                            <span>
+                                FoundLink compares item details to help identify possible matches between lost and found reports.
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <div class="smart-points">
+
+
+                        <div class="smart-point">
+
+                            <i class="bi bi-tag"></i>
+
+                            <strong>
+                                Item Details
+                            </strong>
+
+                            <span>
+                                Names and categories are compared.
+                            </span>
+
+                        </div>
+
+
+                        <div class="smart-point">
+
+                            <i class="bi bi-geo-alt"></i>
+
+                            <strong>
+                                Location
+                            </strong>
+
+                            <span>
+                                Report locations help identify matches.
+                            </span>
+
+                        </div>
+
+
+                        <div class="smart-point">
+
+                            <i class="bi bi-bell"></i>
+
+                            <strong>
+                                Notifications
+                            </strong>
+
+                            <span>
+                                Possible matches appear in your alerts.
+                            </span>
+
+                        </div>
+
+
+                        <div class="smart-point">
+
+                            <i class="bi bi-shield-check"></i>
+
+                            <strong>
+                                Safe Recovery
+                            </strong>
+
+                            <span>
+                                Verify item details before returning it.
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             ITEM STATUS TRACKING
+        ================================================= -->
+
+        <section class="panel status-panel">
+
+            <div class="panel-header">
+
+                <h2>
+                    <i class="bi bi-arrow-repeat"></i>
+                    Item Status Tracking
+                </h2>
+
+            </div>
+
+
+            <div class="status-content">
+
+                <div class="status-flow">
+
+
+                    <div class="status-step">
+
+                        <div class="status-icon">
+                            <i class="bi bi-search"></i>
+                        </div>
+
+                        <strong>
+                            Lost
+                        </strong>
+
+                        <span>
+                            Report item
+                        </span>
+
+                    </div>
+
+
+                    <div class="status-line"></div>
+
+
+                    <div class="status-step">
+
+                        <div class="status-icon">
+                            <i class="bi bi-stars"></i>
+                        </div>
+
+                        <strong>
+                            Possible Match
+                        </strong>
+
+                        <span>
+                            Smart Match
+                        </span>
+
+                    </div>
+
+
+                    <div class="status-line"></div>
+
+
+                    <div class="status-step">
+
+                        <div class="status-icon">
+                            <i class="bi bi-person-check"></i>
+                        </div>
+
+                        <strong>
+                            Contact
+                        </strong>
+
+                        <span>
+                            Connect safely
+                        </span>
+
+                    </div>
+
+
+                    <div class="status-line"></div>
+
+
+                    <div class="status-step">
+
+                        <div class="status-icon">
+                            <i class="bi bi-box-seam"></i>
+                        </div>
+
+                        <strong>
+                            Found
+                        </strong>
+
+                        <span>
+                            Item located
+                        </span>
+
+                    </div>
+
+
+                    <div class="status-line"></div>
+
+
+                    <div class="status-step">
+
+                        <div class="status-icon">
+                            <i class="bi bi-check-circle-fill"></i>
+                        </div>
+
+                        <strong>
+                            Recovered
+                        </strong>
+
+                        <span>
+                            Successfully returned
+                        </span>
+
+                    </div>
+
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             NOTIFICATIONS + SAFETY
+        ================================================= -->
+
+        <section class="info-grid">
+
+
+            <!-- NOTIFICATIONS -->
+
+            <div
+                class="panel"
+                id="notifications"
+            >
+
+                <div class="panel-header">
+
+                    <h2>
+                        <i class="bi bi-bell"></i>
+                        Smart Match Notifications
+                    </h2>
+
+                </div>
+
+
+                <div class="notifications">
+
+                    {% if notifications %}
+
+                        {% for notification in notifications %}
+
+                            <div class="notification">
+
+
+                                <div class="notification-icon">
+
+                                    <i class="bi bi-stars"></i>
+
+                                </div>
+
+
+                                <div class="notification-info">
+
+                                    <div class="notification-title">
+                                        Possible Match Found
+                                    </div>
+
+                                    <div class="notification-message">
+                                        {{ notification.message }}
+                                    </div>
+
+                                    <div class="notification-time">
+
+                                        <i class="bi bi-clock"></i>
+
+                                        {{ notification.created_at|date:"d M Y, h:i A" }}
+
+                                    </div>
+
+                                </div>
+
+
+                                <a
+                                    href="{% url 'delete_notification' notification.id %}"
+                                    class="delete-btn"
+                                    title="Delete Notification"
+                                >
+
+                                    <i class="bi bi-x-lg"></i>
+
+                                </a>
+
+
+                            </div>
+
+                        {% endfor %}
+
+
+                    {% else %}
+
+                        <div class="no-alerts">
+
+                            <i class="bi bi-bell-slash"></i>
+
+                            No smart match notifications yet.
+
+                            <br>
+
+                            We will notify you when a possible match is found.
+
+                        </div>
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+
+
+            <!-- SAFETY -->
+
+            <div class="panel">
+
+                <div class="panel-header">
+
+                    <h2>
+                        <i class="bi bi-shield-check"></i>
+                        FoundLink Safety Tips
+                    </h2>
+
+                </div>
+
+
+                <div class="info-card">
+
+
+                    <div class="info-item">
+
+                        <div class="info-icon">
+                            <i class="bi bi-person-check"></i>
+                        </div>
+
+                        <div>
+
+                            <strong>
+                                Verify the Item
+                            </strong>
+
+                            <span>
+                                Check important details before returning or receiving an item.
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <div class="info-item">
+
+                        <div class="info-icon">
+                            <i class="bi bi-geo-alt"></i>
+                        </div>
+
+                        <div>
+
+                            <strong>
+                                Choose a Safe Location
+                            </strong>
+
+                            <span>
+                                Prefer a safe public college location when meeting another user.
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <div class="info-item">
+
+                        <div class="info-icon">
+                            <i class="bi bi-shield-lock"></i>
+                        </div>
+
+                        <div>
+
+                            <strong>
+                                Protect Your Account
+                            </strong>
+
+                            <span>
+                                Never share your password or OTP with another person.
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <div class="info-item">
+
+                        <div class="info-icon">
+                            <i class="bi bi-exclamation-triangle"></i>
+                        </div>
+
+                        <div>
+
+                            <strong>
+                                Be Careful With Unknown Users
+                            </strong>
+
+                            <span>
+                                Avoid sharing unnecessary personal information with people you do not know.
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+    </main>
+
+</div>
+
+
+</body>
+
+</html>

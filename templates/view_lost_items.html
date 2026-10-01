@@ -1,0 +1,1229 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Lost Items - FoundLink</title>
+
+<!-- Bootstrap -->
+<link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+    rel="stylesheet">
+
+<!-- Bootstrap Icons -->
+<link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+<style>
+
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        margin: 0;
+        font-family: Arial, Helvetica, sans-serif;
+        background: #f8fbfc;
+        color: #21366d;
+    }
+
+    /* ================= NAVBAR ================= */
+
+    .top-navbar {
+        height: 68px;
+        background: #ffffff;
+        display: flex;
+        align-items: center;
+        padding: 0 28px;
+        border-bottom: 1px solid #e4eeee;
+        box-shadow: 0 3px 14px rgba(33, 54, 109, .06);
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+    }
+
+    .brand {
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        gap: 9px;
+        min-width: 190px;
+        font-size: 21px;
+        font-weight: 800;
+    }
+
+    .brand-icon {
+        width: 36px;
+        height: 36px;
+        border-radius: 10px;
+        background: #eaf7f7;
+        color: #59aaa9;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 20px;
+    }
+
+    .brand-found {
+        color: #21366d;
+    }
+
+    .brand-link {
+        color: #59aaa9;
+    }
+
+    .nav-links {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        flex: 1;
+    }
+
+    .nav-link {
+        text-decoration: none;
+        color: #66738a;
+        font-size: 12px;
+        font-weight: 700;
+        padding: 9px 11px;
+        border-radius: 8px;
+    }
+
+    .nav-link i {
+        margin-right: 4px;
+    }
+
+    .nav-link:hover,
+    .nav-link.active {
+        background: #edf8f8;
+        color: #438f8e;
+    }
+
+    .nav-link.active {
+        font-weight: 800;
+    }
+
+    .nav-right {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .profile-link {
+        color: #5e6d82;
+        text-decoration: none;
+        font-size: 12px;
+        font-weight: 700;
+        padding: 8px 10px;
+        border-radius: 8px;
+    }
+
+    .profile-link:hover {
+        background: #edf8f8;
+        color: #438f8e;
+    }
+
+    .logout-btn {
+        text-decoration: none;
+        background: #21366d;
+        color: white;
+        padding: 9px 13px;
+        border-radius: 8px;
+        font-size: 11px;
+        font-weight: 700;
+    }
+
+    .logout-btn:hover {
+        background: #172952;
+        color: white;
+    }
+
+    /* ================= MAIN ================= */
+
+    .main-area {
+        padding: 22px 28px 28px;
+        max-width: 1500px;
+        margin: auto;
+    }
+
+    /* ================= PAGE HEADER ================= */
+
+    .page-header {
+        background: white;
+        border: 1px solid #e1eeee;
+        border-radius: 14px;
+        padding: 18px 20px;
+        min-height: 82px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 15px;
+        box-shadow: 0 4px 14px rgba(33, 54, 109, .05);
+    }
+
+    .header-left {
+        display: flex;
+        align-items: center;
+        gap: 13px;
+    }
+
+    .header-icon {
+        width: 46px;
+        height: 46px;
+        border-radius: 12px;
+        background: #edf8f8;
+        color: #59aaa9;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 21px;
+    }
+
+    .page-header h2 {
+        margin: 0 0 4px;
+        color: #21366d;
+        font-size: 21px;
+        font-weight: 800;
+    }
+
+    .page-header p {
+        margin: 0;
+        color: #778398;
+        font-size: 11px;
+    }
+
+    .header-actions {
+        display: flex;
+        align-items: center;
+        gap: 9px;
+    }
+
+    .header-count {
+        background: #f2f8f8;
+        color: #438f8e;
+        border: 1px solid #dceeee;
+        padding: 8px 11px;
+        border-radius: 8px;
+        font-size: 10px;
+        font-weight: 800;
+    }
+
+    .report-btn {
+        text-decoration: none;
+        background: #59aaa9;
+        color: white;
+        padding: 9px 13px;
+        border-radius: 8px;
+        font-size: 10px;
+        font-weight: 800;
+        white-space: nowrap;
+    }
+
+    .report-btn:hover {
+        background: #438f8e;
+        color: white;
+    }
+
+    /* ================= SEARCH ================= */
+
+    .search-card {
+        margin-top: 14px;
+        background: white;
+        border: 1px solid #e1eeee;
+        border-radius: 12px;
+        padding: 10px;
+        box-shadow: 0 3px 10px rgba(33, 54, 109, .04);
+    }
+
+    .search-box {
+        display: flex;
+        gap: 8px;
+    }
+
+    .search-input {
+        flex: 1;
+        height: 39px;
+        border: 1px solid #d9e4e7;
+        border-radius: 8px;
+        padding: 0 12px;
+        font-size: 11px;
+        color: #34445f;
+        outline: none;
+    }
+
+    .search-input:focus {
+        border-color: #59aaa9;
+        box-shadow: 0 0 0 3px rgba(89, 170, 169, .10);
+    }
+
+    .search-btn {
+        height: 39px;
+        background: #59aaa9;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        padding: 0 16px;
+        font-size: 11px;
+        font-weight: 800;
+    }
+
+    .search-btn:hover {
+        background: #438f8e;
+    }
+
+    .clear-btn {
+        height: 39px;
+        display: flex;
+        align-items: center;
+        text-decoration: none;
+        border: 1px solid #d9e2e6;
+        color: #6c788c;
+        border-radius: 8px;
+        padding: 0 13px;
+        font-size: 11px;
+        font-weight: 700;
+    }
+
+    .clear-btn:hover {
+        background: #f5f8f9;
+        color: #21366d;
+    }
+
+    /* ================= ITEMS ================= */
+
+    .items-grid {
+        margin-top: 14px;
+    }
+
+    .item-card {
+        background: white;
+        border: 1px solid #e1e8eb;
+        border-radius: 13px;
+        overflow: hidden;
+        box-shadow: 0 3px 12px rgba(33, 54, 109, .05);
+        height: 100%;
+        transition: .2s ease;
+    }
+
+    .item-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 9px 22px rgba(33, 54, 109, .09);
+    }
+
+    /* ================= IMAGE ================= */
+
+    .item-image,
+    .no-image {
+        width: 100%;
+        height: 155px;
+    }
+
+    .item-image {
+        object-fit: cover;
+        display: block;
+    }
+
+    .no-image {
+        background: linear-gradient(135deg, #edf8f8, #e4f2f2);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #59aaa9;
+        font-size: 36px;
+    }
+
+    /* ================= CARD BODY ================= */
+
+    .item-body {
+        padding: 13px;
+    }
+
+    .status-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        background: #fff2ed;
+        color: #c9684f;
+        padding: 5px 9px;
+        border-radius: 20px;
+        font-size: 8px;
+        font-weight: 800;
+        margin-bottom: 7px;
+    }
+
+    .item-title {
+        color: #21366d;
+        font-size: 15px;
+        font-weight: 800;
+        margin: 0 0 9px;
+    }
+
+    .item-title i {
+        color: #59aaa9;
+    }
+
+    .item-info {
+        color: #718095;
+        font-size: 10px;
+        margin-bottom: 6px;
+        line-height: 1.4;
+    }
+
+    .item-info i {
+        width: 18px;
+        color: #59aaa9;
+    }
+
+    .item-info strong {
+        color: #40516d;
+    }
+
+    .description {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .reported-time {
+        border-top: 1px solid #edf1f3;
+        padding-top: 8px;
+        margin-top: 8px;
+        color: #929dab;
+        font-size: 8px;
+    }
+
+    /* ================= LIKE ================= */
+
+    .like-area {
+        display: flex;
+        align-items: center;
+        margin-top: 9px;
+        padding: 7px;
+        background: #f7fafa;
+        border-radius: 7px;
+    }
+
+    .like-btn {
+        border: 1px solid #b9dedd;
+        background: white;
+        color: #438f8e;
+        border-radius: 7px;
+        padding: 5px 9px;
+        font-size: 9px;
+        font-weight: 800;
+        text-decoration: none;
+    }
+
+    .like-btn:hover {
+        background: #edf8f8;
+        color: #438f8e;
+    }
+
+    .like-count {
+        margin-left: 8px;
+        color: #7d8998;
+        font-size: 8px;
+    }
+
+    /* ================= COMMENTS ================= */
+
+    .comment-section {
+        border-top: 1px solid #edf1f3;
+        margin-top: 9px;
+        padding-top: 9px;
+    }
+
+    .comment-title {
+        font-size: 9px;
+        color: #52627b;
+        font-weight: 800;
+        margin-bottom: 7px;
+    }
+
+    .comment-box {
+        background: #f7fafa;
+        border-left: 2px solid #59aaa9;
+        border-radius: 6px;
+        padding: 6px 8px;
+        margin-bottom: 5px;
+        font-size: 8px;
+        color: #5e6c80;
+    }
+
+    .comment-user {
+        color: #438f8e;
+        font-weight: 800;
+    }
+
+    .comment-time {
+        display: block;
+        color: #9aa4af;
+        font-size: 7px;
+        margin-top: 2px;
+    }
+
+    .no-comments {
+        color: #9aa4af;
+        font-size: 8px;
+        margin-bottom: 7px;
+    }
+
+    .comment-input {
+        height: 30px;
+        font-size: 8px;
+        border-radius: 7px 0 0 7px;
+        border: 1px solid #dce5e8;
+    }
+
+    .comment-input:focus {
+        border-color: #59aaa9;
+        box-shadow: none;
+    }
+
+    .comment-send {
+        width: 38px;
+        border: none;
+        background: #59aaa9;
+        color: white;
+        border-radius: 0 7px 7px 0;
+    }
+
+    .comment-send:hover {
+        background: #438f8e;
+    }
+
+    /* ================= ACTIONS ================= */
+
+    .actions {
+        display: flex;
+        gap: 7px;
+        border-top: 1px solid #edf1f3;
+        margin-top: 9px;
+        padding-top: 9px;
+    }
+
+    .action-btn {
+        flex: 1;
+        text-align: center;
+        text-decoration: none;
+        padding: 7px;
+        border-radius: 7px;
+        font-size: 9px;
+        font-weight: 800;
+    }
+
+    .edit-btn {
+        background: #fff7e7;
+        color: #9b7600;
+    }
+
+    .edit-btn:hover {
+        background: #fff0cc;
+        color: #7d5f00;
+    }
+
+    .delete-btn {
+        background: #fff1ef;
+        color: #d35b55;
+    }
+
+    .delete-btn:hover {
+        background: #ffe3e0;
+        color: #b84742;
+    }
+
+    /* ================= EMPTY ================= */
+
+    .empty-state {
+        background: white;
+        border: 1px solid #e1e8eb;
+        border-radius: 13px;
+        padding: 40px 20px;
+        text-align: center;
+        box-shadow: 0 3px 12px rgba(33, 54, 109, .04);
+    }
+
+    .empty-icon {
+        width: 58px;
+        height: 58px;
+        margin: 0 auto 10px;
+        border-radius: 15px;
+        background: #edf8f8;
+        color: #59aaa9;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 25px;
+    }
+
+    .empty-state h4 {
+        color: #21366d;
+        font-size: 16px;
+        font-weight: 800;
+        margin-bottom: 5px;
+    }
+
+    .empty-state p {
+        color: #7b8798;
+        font-size: 10px;
+        margin-bottom: 15px;
+    }
+
+    .empty-report-btn {
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        background: #59aaa9;
+        color: white;
+        padding: 8px 13px;
+        border-radius: 8px;
+        font-size: 10px;
+        font-weight: 800;
+    }
+
+    .empty-report-btn:hover {
+        background: #438f8e;
+        color: white;
+    }
+
+    /* ================= FOOTER ================= */
+
+    .page-footer {
+        text-align: center;
+        margin-top: 16px;
+    }
+
+    .back-btn {
+        text-decoration: none;
+        color: #718095;
+        font-size: 10px;
+        font-weight: 700;
+    }
+
+    .back-btn:hover {
+        color: #438f8e;
+    }
+
+    /* ================= MOBILE ================= */
+
+    @media (max-width: 1000px) {
+
+        .nav-links {
+            display: none;
+        }
+
+        .brand {
+            min-width: auto;
+        }
+
+        .profile-link {
+            display: none;
+        }
+
+        .main-area {
+            padding: 16px;
+        }
+
+    }
+
+    @media (max-width: 650px) {
+
+        .top-navbar {
+            padding: 0 14px;
+        }
+
+        .main-area {
+            padding: 13px;
+        }
+
+        .page-header {
+            align-items: flex-start;
+            flex-direction: column;
+        }
+
+        .header-actions {
+            width: 100%;
+        }
+
+        .header-count {
+            flex: 1;
+            text-align: center;
+        }
+
+        .report-btn {
+            flex: 1;
+            text-align: center;
+        }
+
+        .search-box {
+            flex-wrap: wrap;
+        }
+
+        .search-input {
+            width: 100%;
+            flex: none;
+        }
+
+        .search-btn,
+        .clear-btn {
+            flex: 1;
+            justify-content: center;
+        }
+
+    }
+
+</style>
+
+
+</head>
+
+<body>
+
+<!-- ================= NAVBAR ================= -->
+
+<nav class="top-navbar">
+
+
+<a href="{% url 'dashboard' %}" class="brand">
+
+    <span class="brand-icon">
+        <i class="bi bi-geo-alt-fill"></i>
+    </span>
+
+    <span>
+        <span class="brand-found">Found</span><span class="brand-link">Link</span>
+    </span>
+
+</a>
+
+
+<div class="nav-links">
+
+    <a
+        href="{% url 'dashboard' %}"
+        class="nav-link">
+
+        <i class="bi bi-grid-1x2-fill"></i>
+        Dashboard
+
+    </a>
+
+
+    <a
+        href="{% url 'view_lost_items' %}"
+        class="nav-link active">
+
+        <i class="bi bi-search"></i>
+        Lost Items
+
+    </a>
+
+
+    <a
+        href="{% url 'view_found_items' %}"
+        class="nav-link">
+
+        <i class="bi bi-check-circle-fill"></i>
+        Found Items
+
+    </a>
+
+
+    <a
+        href="{% url 'my_reports' %}"
+        class="nav-link">
+
+        <i class="bi bi-file-earmark-text-fill"></i>
+        My Reports
+
+    </a>
+
+
+    <a
+        href="{% url 'my_connections' %}"
+        class="nav-link">
+
+        <i class="bi bi-people-fill"></i>
+        Connections
+
+    </a>
+
+</div>
+
+
+<div class="nav-right">
+
+    <a
+        href="{% url 'profile' %}"
+        class="profile-link">
+
+        <i class="bi bi-person-circle"></i>
+        Profile
+
+    </a>
+
+
+    <a
+        href="{% url 'logout' %}"
+        class="logout-btn">
+
+        <i class="bi bi-box-arrow-right me-1"></i>
+        Logout
+
+    </a>
+
+</div>
+
+
+</nav>
+
+<!-- ================= MAIN ================= -->
+
+<main class="main-area">
+
+
+<!-- PAGE HEADER -->
+
+<div class="page-header">
+
+    <div class="header-left">
+
+        <div class="header-icon">
+
+            <i class="bi bi-search"></i>
+
+        </div>
+
+
+        <div>
+
+            <h2>
+                Lost Items
+            </h2>
+
+            <p>
+                Browse items reported as lost on FoundLink.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <div class="header-actions">
+
+        <div class="header-count">
+
+            <i class="bi bi-box-seam me-1"></i>
+
+            Lost Item Reports
+
+        </div>
+
+
+        <a
+            href="{% url 'create_lost_item' %}"
+            class="report-btn">
+
+            <i class="bi bi-plus-circle me-1"></i>
+
+            Report Lost
+
+        </a>
+
+    </div>
+
+</div>
+
+
+<!-- SEARCH -->
+
+<div class="search-card">
+
+    <form method="GET">
+
+        <div class="search-box">
+
+            <input
+                type="text"
+                name="q"
+                class="search-input"
+                placeholder="Search by item name, category or location"
+                value="{{ query }}">
+
+
+            <button
+                type="submit"
+                class="search-btn">
+
+                <i class="bi bi-search me-1"></i>
+
+                Search
+
+            </button>
+
+
+            <a
+                href="{% url 'view_lost_items' %}"
+                class="clear-btn">
+
+                <i class="bi bi-x-circle me-1"></i>
+
+                Clear
+
+            </a>
+
+        </div>
+
+    </form>
+
+</div>
+
+
+<!-- LOST ITEMS -->
+
+<div class="row g-3 items-grid">
+
+    {% for item in lost_items %}
+
+    <div class="col-xl-4 col-lg-4 col-md-6">
+
+        <div class="item-card">
+
+
+            <!-- IMAGE -->
+
+            {% if item.image %}
+
+                <img
+                    src="{{ item.image.url }}"
+                    class="item-image"
+                    alt="{{ item.item_name }}">
+
+            {% else %}
+
+                <div class="no-image">
+
+                    <i class="bi bi-image"></i>
+
+                </div>
+
+            {% endif %}
+
+
+            <!-- BODY -->
+
+            <div class="item-body">
+
+
+                <!-- STATUS -->
+
+                <span class="status-badge">
+
+                    <i class="bi bi-exclamation-circle-fill"></i>
+
+                    LOST ITEM
+
+                </span>
+
+
+                <!-- TITLE -->
+
+                <h5 class="item-title">
+
+                    <i class="bi bi-box-seam me-1"></i>
+
+                    {{ item.item_name }}
+
+                </h5>
+
+
+                <!-- CATEGORY -->
+
+                <div class="item-info">
+
+                    <i class="bi bi-tag-fill"></i>
+
+                    <strong>Category:</strong>
+
+                    {{ item.category }}
+
+                </div>
+
+
+                <!-- LOCATION -->
+
+                <div class="item-info">
+
+                    <i class="bi bi-geo-alt-fill"></i>
+
+                    <strong>Location:</strong>
+
+                    {{ item.location }}
+
+                </div>
+
+
+                <!-- DESCRIPTION -->
+
+                <div
+                    class="item-info description"
+                    title="{{ item.description }}">
+
+                    <i class="bi bi-card-text"></i>
+
+                    <strong>Description:</strong>
+
+                    {{ item.description }}
+
+                </div>
+
+
+                <!-- LOST DATE -->
+
+                <div class="item-info">
+
+                    <i class="bi bi-calendar-event-fill"></i>
+
+                    <strong>Lost:</strong>
+
+                    {{ item.lost_date|date:"d M Y" }}
+
+                </div>
+
+
+                <!-- REPORTED TIME -->
+
+                <div class="reported-time">
+
+                    <i class="bi bi-clock me-1"></i>
+
+                    Reported:
+
+                    {{ item.created_at|date:"d M Y, h:i A" }}
+
+                </div>
+
+
+                <!-- LIKE -->
+
+                <div class="like-area">
+
+                    <a
+                        href="{% url 'like_post' 'lost' item.id %}"
+                        class="like-btn">
+
+                        <i class="bi bi-heart me-1"></i>
+
+                        Like
+
+                    </a>
+
+
+                    <span class="like-count">
+
+                        {{ item.like_set.count }} Likes
+
+                    </span>
+
+                </div>
+
+
+                <!-- COMMENTS -->
+
+                <div class="comment-section">
+
+
+                    <div class="comment-title">
+
+                        <i class="bi bi-chat-dots-fill me-1"></i>
+
+                        Comments
+
+                    </div>
+
+
+                    {% for comment in item.comment_set.all %}
+
+                        <div class="comment-box">
+
+                            <div class="comment-user">
+
+                                {{ comment.user.full_name }}
+
+                            </div>
+
+
+                            <div>
+
+                                {{ comment.text }}
+
+                            </div>
+
+
+                            <span class="comment-time">
+
+                                {{ comment.created_at|date:"d M Y, h:i A" }}
+
+                            </span>
+
+                        </div>
+
+                    {% empty %}
+
+                        <div class="no-comments">
+
+                            No comments yet.
+
+                        </div>
+
+                    {% endfor %}
+
+
+                    <!-- COMMENT FORM -->
+
+                    <form
+                        method="POST"
+                        action="{% url 'add_comment' 'lost' item.id %}">
+
+                        {% csrf_token %}
+
+
+                        <div class="input-group">
+
+                            <input
+                                type="text"
+                                name="comment"
+                                class="form-control comment-input"
+                                placeholder="Write a comment..."
+                                required>
+
+
+                            <button
+                                type="submit"
+                                class="comment-send">
+
+                                <i class="bi bi-send"></i>
+
+                            </button>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+
+                <!-- EDIT / DELETE -->
+
+                <div class="actions">
+
+                    <a
+                        href="{% url 'edit_lost_item' item.id %}"
+                        class="action-btn edit-btn">
+
+                        <i class="bi bi-pencil-square me-1"></i>
+
+                        Edit
+
+                    </a>
+
+
+                    <a
+                        href="{% url 'delete_lost_item' item.id %}"
+                        class="action-btn delete-btn">
+
+                        <i class="bi bi-trash3 me-1"></i>
+
+                        Delete
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    {% empty %}
+
+
+    <!-- EMPTY STATE -->
+
+    <div class="col-12">
+
+        <div class="empty-state">
+
+            <div class="empty-icon">
+
+                <i class="bi bi-search"></i>
+
+            </div>
+
+
+            <h4>
+                No Lost Items Available
+            </h4>
+
+
+            <p>
+                No lost items match your search.
+            </p>
+
+
+            <a
+                href="{% url 'create_lost_item' %}"
+                class="empty-report-btn">
+
+                <i class="bi bi-plus-circle me-1"></i>
+
+                Report Lost Item
+
+            </a>
+
+        </div>
+
+    </div>
+
+
+    {% endfor %}
+
+</div>
+
+
+<!-- FOOTER -->
+
+<div class="page-footer">
+
+    <a
+        href="{% url 'dashboard' %}"
+        class="back-btn">
+
+        <i class="bi bi-arrow-left me-1"></i>
+
+        Back to Dashboard
+
+    </a>
+
+</div>
+
+
+</main>
+
+<!-- Bootstrap JS -->
+
+<script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js">
+</script>
+
+</body>
+
+</html>

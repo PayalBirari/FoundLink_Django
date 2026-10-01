@@ -1,0 +1,859 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>My Connections - FoundLink</title>
+
+    <!-- Bootstrap -->
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet">
+
+    <!-- Bootstrap Icons -->
+    <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            background: #f8fbfc;
+            font-family: Arial, sans-serif;
+            color: #21366d;
+        }
+
+        /* ==============================
+           NAVBAR
+        ============================== */
+
+        .top-navbar {
+            height: 68px;
+            background: #ffffff;
+            border-bottom: 1px solid #e5eeee;
+            display: flex;
+            align-items: center;
+            padding: 0 30px;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+        }
+
+        .brand-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 11px;
+            background: #59aaa9;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 21px;
+        }
+
+        .brand-text {
+            font-size: 23px;
+            font-weight: 700;
+            letter-spacing: -0.4px;
+        }
+
+        .brand-found {
+            color: #21366d;
+        }
+
+        .brand-link {
+            color: #59aaa9;
+        }
+
+        .navbar-right {
+            margin-left: auto;
+        }
+
+        .dashboard-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            text-decoration: none;
+            background: #59aaa9;
+            color: white;
+            padding: 9px 16px;
+            border-radius: 9px;
+            font-size: 13px;
+            font-weight: 600;
+            transition: 0.2s;
+        }
+
+        .dashboard-btn:hover {
+            background: #438f8e;
+            color: white;
+        }
+
+        /* ==============================
+           MAIN
+        ============================== */
+
+        .main-container {
+            max-width: 1150px;
+            margin: 0 auto;
+            padding: 30px 25px 45px;
+        }
+
+        /* ==============================
+           PAGE HEADER
+        ============================== */
+
+        .page-header {
+            background: linear-gradient(
+                135deg,
+                #21366d,
+                #59aaa9
+            );
+
+            border-radius: 16px;
+            padding: 22px 26px;
+            color: white;
+            margin-bottom: 20px;
+
+            display: flex;
+            align-items: center;
+
+            box-shadow: 0 6px 18px rgba(33, 54, 109, 0.10);
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .header-icon {
+            width: 54px;
+            height: 54px;
+            border-radius: 14px;
+            background: rgba(255, 255, 255, 0.16);
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-size: 26px;
+        }
+
+        .page-header h1 {
+            margin: 0;
+            font-size: 25px;
+            font-weight: 700;
+        }
+
+        .page-header p {
+            margin: 5px 0 0;
+            font-size: 13px;
+            opacity: 0.92;
+        }
+
+        /* ==============================
+           ACTION AREA
+        ============================== */
+
+        .action-area {
+            background: white;
+            border: 1px solid #e2eeee;
+            border-radius: 14px;
+            padding: 16px 19px;
+            margin-bottom: 22px;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+
+            box-shadow: 0 3px 12px rgba(33, 54, 109, 0.04);
+        }
+
+        .action-text h5 {
+            margin: 0;
+            color: #21366d;
+            font-size: 15px;
+            font-weight: 700;
+        }
+
+        .action-text p {
+            margin: 4px 0 0;
+            color: #718096;
+            font-size: 12px;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 9px;
+            flex-wrap: wrap;
+        }
+
+        .btn-search,
+        .btn-request {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+
+            text-decoration: none;
+            border-radius: 8px;
+            padding: 9px 13px;
+
+            font-size: 12px;
+            font-weight: 600;
+            transition: 0.2s;
+        }
+
+        .btn-search {
+            background: #59aaa9;
+            color: white;
+            border: 1px solid #59aaa9;
+        }
+
+        .btn-search:hover {
+            background: #438f8e;
+            border-color: #438f8e;
+            color: white;
+        }
+
+        .btn-request {
+            background: #f3f8f8;
+            color: #438f8e;
+            border: 1px solid #cfe4e4;
+        }
+
+        .btn-request:hover {
+            background: #e5f2f2;
+            color: #21366d;
+        }
+
+        /* ==============================
+           SECTION TITLE
+        ============================== */
+
+        .section-title {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+
+            margin-bottom: 13px;
+
+            color: #21366d;
+            font-size: 17px;
+            font-weight: 700;
+        }
+
+        .section-title i {
+            color: #59aaa9;
+            font-size: 20px;
+        }
+
+        /* ==============================
+           CONNECTION CARD
+        ============================== */
+
+        .connection-card {
+            background: white;
+            border: 1px solid #e1ecec;
+            border-radius: 13px;
+            padding: 18px;
+            height: 100%;
+
+            box-shadow: 0 3px 12px rgba(33, 54, 109, 0.045);
+
+            transition: 0.2s;
+        }
+
+        .connection-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(33, 54, 109, 0.09);
+            border-color: #c9dfdf;
+        }
+
+        .person-top {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 15px;
+        }
+
+        .person-icon {
+            width: 46px;
+            height: 46px;
+            flex-shrink: 0;
+
+            border-radius: 50%;
+            background: #eaf6f6;
+            color: #438f8e;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-size: 21px;
+        }
+
+        .person-name {
+            margin: 0;
+            color: #21366d;
+            font-size: 16px;
+            font-weight: 700;
+        }
+
+        .connected-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+
+            margin-top: 4px;
+
+            background: #edf8f2;
+            color: #32805f;
+
+            padding: 4px 8px;
+            border-radius: 20px;
+
+            font-size: 10px;
+            font-weight: 600;
+        }
+
+        .contact-info {
+            border-top: 1px solid #edf2f2;
+            padding-top: 13px;
+        }
+
+        .contact-row {
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+
+            margin-bottom: 9px;
+
+            font-size: 12px;
+            color: #64748b;
+
+            word-break: break-word;
+        }
+
+        .contact-row:last-child {
+            margin-bottom: 0;
+        }
+
+        .contact-row i {
+            width: 17px;
+            flex-shrink: 0;
+
+            color: #59aaa9;
+            font-size: 13px;
+            margin-top: 1px;
+        }
+
+        .contact-label {
+            color: #21366d;
+            font-weight: 600;
+            margin-right: 3px;
+        }
+
+        /* ==============================
+           EMPTY STATE
+        ============================== */
+
+        .empty-card {
+            background: white;
+            border: 1px solid #e1ecec;
+            border-radius: 14px;
+
+            padding: 45px 25px;
+            text-align: center;
+
+            box-shadow: 0 3px 12px rgba(33, 54, 109, 0.04);
+        }
+
+        .empty-icon {
+            width: 64px;
+            height: 64px;
+
+            margin: 0 auto 14px;
+
+            border-radius: 50%;
+            background: #eaf6f6;
+            color: #59aaa9;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-size: 27px;
+        }
+
+        .empty-card h4 {
+            margin-bottom: 6px;
+            color: #21366d;
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .empty-card p {
+            margin: 0;
+            color: #718096;
+            font-size: 13px;
+        }
+
+        /* ==============================
+           BACK BUTTON
+        ============================== */
+
+        .back-area {
+            text-align: center;
+            margin-top: 24px;
+        }
+
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+
+            text-decoration: none;
+
+            color: #438f8e;
+            background: white;
+            border: 1px solid #cfe0e0;
+
+            padding: 8px 14px;
+            border-radius: 8px;
+
+            font-size: 12px;
+            font-weight: 600;
+
+            transition: 0.2s;
+        }
+
+        .back-btn:hover {
+            background: #f0f7f7;
+            color: #21366d;
+        }
+
+        /* ==============================
+           RESPONSIVE
+        ============================== */
+
+        @media (max-width: 768px) {
+
+            .top-navbar {
+                padding: 0 15px;
+            }
+
+            .brand-text {
+                font-size: 20px;
+            }
+
+            .brand-icon {
+                width: 38px;
+                height: 38px;
+                font-size: 19px;
+            }
+
+            .dashboard-btn {
+                padding: 8px 11px;
+                font-size: 11px;
+            }
+
+            .main-container {
+                padding: 22px 15px 35px;
+            }
+
+            .page-header {
+                padding: 18px;
+            }
+
+            .page-header h1 {
+                font-size: 21px;
+            }
+
+            .page-header p {
+                font-size: 12px;
+            }
+
+            .header-icon {
+                width: 46px;
+                height: 46px;
+                font-size: 22px;
+            }
+
+            .action-area {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+            .action-buttons {
+                width: 100%;
+            }
+
+            .btn-search,
+            .btn-request {
+                flex: 1;
+            }
+
+        }
+
+        @media (max-width: 450px) {
+
+            .page-header {
+                padding: 16px;
+            }
+
+            .header-left {
+                gap: 11px;
+            }
+
+            .page-header h1 {
+                font-size: 19px;
+            }
+
+            .page-header p {
+                font-size: 11px;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+
+            .btn-search,
+            .btn-request {
+                width: 100%;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- ==============================
+     NAVBAR
+============================== -->
+
+<nav class="top-navbar">
+
+    <a href="{% url 'dashboard' %}" class="brand">
+
+        <span class="brand-icon">
+            <i class="bi bi-geo-alt-fill"></i>
+        </span>
+
+        <span class="brand-text">
+            <span class="brand-found">Found</span><span class="brand-link">Link</span>
+        </span>
+
+    </a>
+
+
+    <div class="navbar-right">
+
+        <a
+            href="{% url 'dashboard' %}"
+            class="dashboard-btn">
+
+            <i class="bi bi-grid-1x2-fill"></i>
+            Dashboard
+
+        </a>
+
+    </div>
+
+</nav>
+
+
+<!-- ==============================
+     MAIN CONTENT
+============================== -->
+
+<main class="main-container">
+
+
+    <!-- PAGE HEADER -->
+
+    <section class="page-header">
+
+        <div class="header-left">
+
+            <div class="header-icon">
+                <i class="bi bi-people-fill"></i>
+            </div>
+
+            <div>
+
+                <h1>My Connections</h1>
+
+                <p>
+                    View and manage the people you are connected with on FoundLink.
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- ACTION AREA -->
+
+    <section class="action-area">
+
+        <div class="action-text">
+
+            <h5>Build Your FoundLink Network</h5>
+
+            <p>
+                Find users and manage your pending connection requests.
+            </p>
+
+        </div>
+
+
+        <div class="action-buttons">
+
+            <a
+                href="{% url 'search_users' %}"
+                class="btn-search">
+
+                <i class="bi bi-search"></i>
+                Search Users
+
+            </a>
+
+
+            <a
+                href="{% url 'connection_requests' %}"
+                class="btn-request">
+
+                <i class="bi bi-person-plus-fill"></i>
+                Connection Requests
+
+            </a>
+
+        </div>
+
+    </section>
+
+
+    <!-- CONNECTIONS -->
+
+    <div class="section-title">
+
+        <i class="bi bi-person-check-fill"></i>
+
+        Your Connections
+
+    </div>
+
+
+    <div class="row g-3">
+
+
+        {% for connection in connections %}
+
+
+        <div class="col-lg-6">
+
+
+            <div class="connection-card">
+
+
+                {% if connection.sender.id == request.session.user_id %}
+
+
+                    <div class="person-top">
+
+                        <div class="person-icon">
+
+                            <i class="bi bi-person-fill"></i>
+
+                        </div>
+
+
+                        <div>
+
+                            <h5 class="person-name">
+                                {{ connection.receiver.full_name }}
+                            </h5>
+
+
+                            <span class="connected-badge">
+
+                                <i class="bi bi-check-circle-fill"></i>
+                                Connected
+
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="contact-info">
+
+                        <div class="contact-row">
+
+                            <i class="bi bi-envelope-fill"></i>
+
+                            <span>
+                                <span class="contact-label">Email:</span>
+                                {{ connection.receiver.email }}
+                            </span>
+
+                        </div>
+
+
+                        <div class="contact-row">
+
+                            <i class="bi bi-telephone-fill"></i>
+
+                            <span>
+                                <span class="contact-label">Mobile:</span>
+                                {{ connection.receiver.mobile }}
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                {% else %}
+
+
+                    <div class="person-top">
+
+                        <div class="person-icon">
+
+                            <i class="bi bi-person-fill"></i>
+
+                        </div>
+
+
+                        <div>
+
+                            <h5 class="person-name">
+                                {{ connection.sender.full_name }}
+                            </h5>
+
+
+                            <span class="connected-badge">
+
+                                <i class="bi bi-check-circle-fill"></i>
+                                Connected
+
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="contact-info">
+
+                        <div class="contact-row">
+
+                            <i class="bi bi-envelope-fill"></i>
+
+                            <span>
+                                <span class="contact-label">Email:</span>
+                                {{ connection.sender.email }}
+                            </span>
+
+                        </div>
+
+
+                        <div class="contact-row">
+
+                            <i class="bi bi-telephone-fill"></i>
+
+                            <span>
+                                <span class="contact-label">Mobile:</span>
+                                {{ connection.sender.mobile }}
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                {% endif %}
+
+
+            </div>
+
+        </div>
+
+
+        {% empty %}
+
+
+        <div class="col-12">
+
+            <div class="empty-card">
+
+                <div class="empty-icon">
+                    <i class="bi bi-people-fill"></i>
+                </div>
+
+                <h4>No Connections Yet</h4>
+
+                <p>
+                    Search for users and connect with people through FoundLink.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        {% endfor %}
+
+
+    </div>
+
+
+    <!-- BACK -->
+
+    <div class="back-area">
+
+        <a
+            href="{% url 'dashboard' %}"
+            class="back-btn">
+
+            <i class="bi bi-arrow-left"></i>
+            Back to Dashboard
+
+        </a>
+
+    </div>
+
+
+</main>
+
+
+</body>
+
+</html>
+

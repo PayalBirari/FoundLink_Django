@@ -1,0 +1,2959 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>FoundLink | Lost & Found Platform</title>
+
+    <!-- Bootstrap -->
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+    >
+
+    <!-- Bootstrap Icons -->
+    <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+    >
+
+    <style>
+
+        :root {
+            --primary: #59aaa9;
+            --primary-dark: #438f8e;
+            --navy: #21366d;
+            --text: #536174;
+            --light-bg: #f8fbfc;
+            --white: #ffffff;
+            --border: #e5eeee;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            margin: 0;
+            font-family: "Segoe UI", Arial, sans-serif;
+            color: var(--text);
+            background: var(--light-bg);
+        }
+
+
+        /* =========================
+           NAVBAR
+        ========================= */
+
+        .main-navbar {
+            height: 66px;
+            background: rgba(255,255,255,0.98);
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .main-navbar .container {
+            height: 100%;
+        }
+
+        .navbar-brand {
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 9px;
+        }
+
+        .logo-box {
+            width: 42px;
+            height: 42px;
+            background: var(--primary);
+            color: white;
+            border-radius: 11px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            box-shadow: 0 6px 16px rgba(89,170,169,0.22);
+            animation: logoFloat 3s ease-in-out infinite;
+        }
+
+        .brand-name {
+            font-size: 22px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            color: var(--navy);
+        }
+
+        .brand-name span {
+            color: var(--primary);
+        }
+
+        .nav-link {
+            color: #536174 !important;
+            font-weight: 600;
+            margin: 0 7px;
+            padding: 7px 12px !important;
+            border-radius: 8px;
+            transition: 0.2s;
+        }
+
+        .nav-link:hover {
+            color: var(--primary) !important;
+            background: #f0f8f8;
+        }
+
+        .login-btn {
+            color: var(--navy);
+            font-weight: 700;
+            text-decoration: none;
+            margin-right: 15px;
+        }
+
+        .login-btn:hover {
+            color: var(--primary);
+        }
+
+        .start-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 10px 19px;
+            border-radius: 10px;
+            font-weight: 700;
+            text-decoration: none;
+            display: inline-block;
+            transition: 0.2s;
+        }
+
+        .start-btn:hover {
+            background: var(--primary-dark);
+            color: white;
+            transform: translateY(-1px);
+        }
+
+
+        /* =========================
+           ANNOUNCEMENT
+        ========================= */
+
+        .announcement-bar {
+            height: 44px;
+            background: var(--primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            overflow: hidden;
+            white-space: nowrap;
+            position: relative;
+            z-index: 900;
+        }
+
+        .announcement-label {
+            height: 100%;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 0 22px;
+            background: var(--navy);
+            font-size: 13px;
+            font-weight: 800;
+            flex-shrink: 0;
+            z-index: 2;
+        }
+
+        .announcement-track {
+            display: inline-flex;
+            align-items: center;
+            min-width: max-content;
+            animation: announcementMove 30s linear infinite;
+        }
+
+        .announcement-item {
+            display: inline-flex;
+            align-items: center;
+            font-size: 13px;
+            font-weight: 700;
+            margin-right: 45px;
+        }
+
+        .announcement-item::after {
+            content: "•";
+            margin-left: 45px;
+            opacity: 0.8;
+        }
+
+        .announcement-empty {
+            font-size: 13px;
+            font-weight: 700;
+            padding-left: 25px;
+        }
+
+        @keyframes announcementMove {
+            from {
+                transform: translateX(100%);
+            }
+
+            to {
+                transform: translateX(-100%);
+            }
+        }
+
+        .announcement-bar:hover .announcement-track {
+            animation-play-state: paused;
+        }
+
+
+        /* =========================
+           HERO
+        ========================= */
+
+        .hero {
+            padding: 80px 0 70px;
+            background:
+                radial-gradient(
+                    circle at 90% 10%,
+                    rgba(89,170,169,0.12),
+                    transparent 30%
+                ),
+                var(--light-bg);
+            overflow: hidden;
+        }
+
+        .hero-content {
+            padding-right: 35px;
+        }
+
+        .hero-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: #e8f6f6;
+            color: var(--primary-dark);
+            padding: 8px 14px;
+            border-radius: 50px;
+            font-size: 14px;
+            font-weight: 700;
+            margin-bottom: 18px;
+            animation: fadeUp 0.7s ease both;
+        }
+
+        .hero h1 {
+            color: var(--navy);
+            font-size: clamp(42px,5vw,64px);
+            line-height: 1.08;
+            font-weight: 800;
+            letter-spacing: -2px;
+            margin-bottom: 22px;
+            animation: fadeUp 0.8s ease 0.1s both;
+        }
+
+        .hero h1 span {
+            color: var(--primary);
+        }
+
+        .hero-description {
+            font-size: 18px;
+            line-height: 1.7;
+            max-width: 590px;
+            margin-bottom: 25px;
+            animation: fadeUp 0.8s ease 0.2s both;
+        }
+
+        .hero-subtext {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            font-size: 14px;
+            font-weight: 600;
+            color: #657387;
+            margin-bottom: 30px;
+            animation: fadeUp 0.8s ease 0.3s both;
+        }
+
+        .hero-subtext i {
+            color: var(--primary);
+            font-size: 18px;
+        }
+
+        .hero-actions {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            animation: fadeUp 0.8s ease 0.4s both;
+        }
+
+        .hero-primary-btn {
+            background: var(--primary);
+            color: white;
+            text-decoration: none;
+            padding: 14px 23px;
+            border-radius: 11px;
+            font-weight: 700;
+            transition: 0.2s;
+        }
+
+        .hero-primary-btn:hover {
+            background: var(--primary-dark);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .hero-secondary-btn {
+            background: white;
+            color: var(--navy);
+            text-decoration: none;
+            padding: 14px 23px;
+            border: 1px solid #dce8e8;
+            border-radius: 11px;
+            font-weight: 700;
+            transition: 0.2s;
+        }
+
+        .hero-secondary-btn:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+
+        /* =========================
+           HERO IMAGE
+        ========================= */
+
+        .hero-visual {
+            position: relative;
+            padding: 15px;
+            animation: fadeRight 0.9s ease 0.2s both;
+        }
+
+        .hero-image-wrapper {
+            position: relative;
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 25px 60px rgba(33,54,109,0.15);
+            background: white;
+            animation: imageFloat 5s ease-in-out infinite;
+            transition: transform 0.2s ease;
+        }
+
+        .hero-image {
+            width: 100%;
+            height: 480px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .image-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(
+                to top,
+                rgba(33,54,109,0.28),
+                transparent 45%
+            );
+        }
+
+        .floating-card {
+            position: absolute;
+            background: white;
+            border-radius: 14px;
+            padding: 13px 16px;
+            box-shadow: 0 15px 35px rgba(33,54,109,0.15);
+            display: flex;
+            align-items: center;
+            gap: 11px;
+            z-index: 3;
+        }
+
+        .floating-icon {
+            width: 39px;
+            height: 39px;
+            border-radius: 10px;
+            background: #e9f7f7;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 19px;
+        }
+
+        .floating-title {
+            color: var(--navy);
+            font-weight: 800;
+            font-size: 13px;
+            margin: 0;
+        }
+
+        .floating-text {
+            font-size: 11px;
+            margin: 2px 0 0;
+            color: #7b8796;
+        }
+
+        .match-card {
+            left: -12px;
+            bottom: 40px;
+            animation: cardFloat 3.5s ease-in-out infinite;
+        }
+
+        .student-card {
+            right: -12px;
+            top: 45px;
+            animation: cardFloat 4s ease-in-out 0.7s infinite;
+        }
+
+
+        /* =========================
+           FEATURE STRIP
+        ========================= */
+
+        .feature-strip {
+            background: white;
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+            padding: 22px 0;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            color: var(--navy);
+            font-size: 14px;
+            font-weight: 700;
+            transition: 0.25s;
+        }
+
+        .feature-item:hover {
+            transform: translateY(-3px);
+        }
+
+        .feature-item i {
+            color: var(--primary);
+            font-size: 20px;
+        }
+
+
+        /* =========================
+           GENERAL SECTION
+        ========================= */
+
+        .section {
+            padding: 85px 0;
+        }
+
+        .section-white {
+            background: white;
+        }
+
+        .section-heading {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .section-label {
+            color: var(--primary);
+            font-weight: 800;
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+            margin-bottom: 9px;
+        }
+
+        .section-heading h2 {
+            color: var(--navy);
+            font-size: 36px;
+            font-weight: 800;
+            margin-bottom: 12px;
+        }
+
+        .section-heading p {
+            max-width: 650px;
+            margin: auto;
+            line-height: 1.7;
+        }
+
+
+        /* =========================
+           SCROLL REVEAL
+        ========================= */
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition:
+                opacity 0.7s ease,
+                transform 0.7s ease;
+        }
+
+        .reveal.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+
+        /* =========================
+           FEATURE CARDS
+        ========================= */
+
+        .feature-card {
+            height: 100%;
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 17px;
+            padding: 28px;
+            transition: 0.3s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-7px);
+            box-shadow: 0 15px 35px rgba(33,54,109,0.08);
+            border-color: #cfe5e5;
+        }
+
+        .feature-card-icon {
+            width: 51px;
+            height: 51px;
+            border-radius: 13px;
+            background: #eaf7f7;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 23px;
+            margin-bottom: 20px;
+        }
+
+        .feature-card h5 {
+            color: var(--navy);
+            font-weight: 800;
+            margin-bottom: 10px;
+        }
+
+        .feature-card p {
+            font-size: 14px;
+            line-height: 1.7;
+            margin: 0;
+        }
+
+
+        /* =========================
+           HOW IT WORKS
+        ========================= */
+
+        .step-card {
+            text-align: center;
+            padding: 25px 18px;
+            position: relative;
+        }
+
+        .step-number {
+            width: 58px;
+            height: 58px;
+            border-radius: 50%;
+            background: #eaf7f7;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 18px;
+            font-size: 20px;
+            font-weight: 800;
+            transition: 0.3s;
+        }
+
+        .step-card:hover .step-number {
+            background: var(--primary);
+            color: white;
+            transform: scale(1.08);
+        }
+
+        .step-card h5 {
+            color: var(--navy);
+            font-weight: 800;
+        }
+
+        .step-card p {
+            font-size: 14px;
+            line-height: 1.7;
+        }
+
+
+        /* =========================
+           SMART MATCH
+        ========================= */
+
+        .smart-section {
+            background: #edf8f8;
+        }
+
+        .smart-box {
+            background: white;
+            border: 1px solid #d9eeee;
+            border-radius: 22px;
+            padding: 45px;
+            box-shadow: 0 15px 40px rgba(33,54,109,0.06);
+        }
+
+        .smart-icon {
+            width: 62px;
+            height: 62px;
+            border-radius: 16px;
+            background: var(--primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            margin-bottom: 20px;
+            animation: smartPulse 2.5s ease-in-out infinite;
+        }
+
+        .smart-box h2 {
+            color: var(--navy);
+            font-weight: 800;
+            margin-bottom: 15px;
+        }
+
+        .smart-box p {
+            line-height: 1.8;
+            margin-bottom: 20px;
+        }
+
+        .smart-points {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .smart-points li {
+            margin-bottom: 11px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .smart-points i {
+            color: var(--primary);
+            font-size: 17px;
+        }
+
+
+        /* =========================
+           STATUS FLOW
+        ========================= */
+
+        .status-box {
+            background: #f8fbfc;
+            border: 1px solid #e5eeee;
+            border-radius: 18px;
+            padding: 25px;
+        }
+
+        .status-flow {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 7px;
+            flex-wrap: wrap;
+            margin-top: 22px;
+        }
+
+        .status-item {
+            padding: 8px 11px;
+            border-radius: 20px;
+            background: white;
+            border: 1px solid #dceaea;
+            color: #7b8796;
+            font-size: 11px;
+            font-weight: 700;
+            transition: 0.4s;
+        }
+
+        .status-item.active {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: white;
+            transform: scale(1.08);
+            box-shadow: 0 5px 15px rgba(89,170,169,0.25);
+        }
+
+        .status-arrow {
+            color: #a0adb9;
+            font-weight: 800;
+            transition: 0.3s;
+        }
+
+        .status-arrow.active {
+            color: var(--primary);
+        }
+
+
+        /* =========================
+           SAFETY & TRUST
+        ========================= */
+
+        .safety-section {
+            background: white;
+        }
+
+        .safety-card {
+            height: 100%;
+            background: #f8fbfc;
+            border: 1px solid var(--border);
+            border-radius: 17px;
+            padding: 28px;
+            transition: 0.3s;
+        }
+
+        .safety-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(33,54,109,0.08);
+            border-color: #cfe5e5;
+        }
+
+        .safety-icon {
+            width: 52px;
+            height: 52px;
+            border-radius: 13px;
+            background: #eaf7f7;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 23px;
+            margin-bottom: 18px;
+        }
+
+        .safety-card h5 {
+            color: var(--navy);
+            font-weight: 800;
+            margin-bottom: 10px;
+        }
+
+        .safety-card p {
+            font-size: 14px;
+            line-height: 1.7;
+            margin: 0;
+        }
+
+
+        /* =========================
+           CONTACT
+        ========================= */
+
+        .contact-section {
+            background: #f3f9f9;
+            padding: 75px 0;
+        }
+
+        .contact-box {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 22px;
+            padding: 40px;
+            box-shadow: 0 15px 40px rgba(33,54,109,0.06);
+        }
+
+        .contact-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: 14px;
+            background: #eaf7f7;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 25px;
+            margin-bottom: 18px;
+        }
+
+        .contact-box h3 {
+            color: var(--navy);
+            font-weight: 800;
+            margin-bottom: 12px;
+        }
+
+        .contact-box p {
+            line-height: 1.7;
+        }
+
+        .contact-detail {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .contact-detail i {
+            color: var(--primary);
+            font-size: 18px;
+        }
+
+
+        /* =========================
+           CTA
+        ========================= */
+
+        .cta-section {
+            padding: 80px 0;
+            background: var(--navy);
+        }
+
+        .cta-box {
+            text-align: center;
+            color: white;
+        }
+
+        .cta-box h2 {
+            font-size: 38px;
+            font-weight: 800;
+            margin-bottom: 14px;
+        }
+
+        .cta-box p {
+            color: #d8e0ef;
+            margin-bottom: 28px;
+        }
+
+        .cta-btn {
+            background: var(--primary);
+            color: white;
+            text-decoration: none;
+            padding: 14px 25px;
+            border-radius: 11px;
+            font-weight: 700;
+            display: inline-block;
+            transition: 0.2s;
+        }
+
+        .cta-btn:hover {
+            background: #70b9b8;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+
+        /* =========================
+           FOOTER
+        ========================= */
+
+        footer {
+            background: #182a56;
+            color: #bac5d9;
+            padding: 35px 0 25px;
+        }
+
+        .footer-brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            margin-bottom: 12px;
+        }
+
+        .footer-logo {
+            width: 39px;
+            height: 39px;
+            background: var(--primary);
+            color: white;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+
+        .footer-name {
+            color: white;
+            font-size: 21px;
+            font-weight: 800;
+        }
+
+        .footer-name span {
+            color: #72b9b8;
+        }
+
+        .footer-text {
+            font-size: 13px;
+            max-width: 400px;
+            line-height: 1.7;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(255,255,255,0.08);
+            margin-top: 25px;
+            padding-top: 18px;
+            font-size: 12px;
+        }
+
+
+        /* =========================
+           AI ASSISTANT
+        ========================= */
+
+        .ai-chat-button {
+            position: fixed;
+            right: 25px;
+            bottom: 25px;
+            height: 58px;
+            min-width: 155px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 30px;
+            padding: 0 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            font-size: 15px;
+            font-weight: 800;
+            box-shadow: 0 10px 30px rgba(33,54,109,0.25);
+            cursor: pointer;
+            z-index: 2000;
+            transition: 0.25s;
+        }
+
+        .ai-chat-button:hover {
+            background: var(--primary-dark);
+            transform: translateY(-3px);
+        }
+
+        .ai-chat-button i {
+            font-size: 22px;
+        }
+
+        .ai-chat-button::after {
+            content: "";
+            position: absolute;
+            inset: -5px;
+            border: 2px solid rgba(89,170,169,0.35);
+            border-radius: 35px;
+            animation: aiPulse 2s infinite;
+        }
+
+        .ai-chat-box {
+            position: fixed;
+            right: 25px;
+            bottom: 95px;
+            width: 350px;
+            max-width: calc(100vw - 30px);
+            background: white;
+            border: 1px solid #dceaea;
+            border-radius: 18px;
+            box-shadow: 0 20px 50px rgba(33,54,109,0.22);
+            overflow: hidden;
+            z-index: 1999;
+            display: none;
+        }
+
+        .ai-chat-box.active {
+            display: block;
+            animation: chatOpen 0.25s ease;
+        }
+
+        .ai-chat-header {
+            background: var(--navy);
+            color: white;
+            padding: 16px 18px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .ai-chat-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .ai-chat-title-icon {
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
+            background: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 19px;
+        }
+
+        .ai-chat-title strong {
+            display: block;
+            font-size: 14px;
+        }
+
+        .ai-chat-title span {
+            display: block;
+            font-size: 11px;
+            color: #d5dfed;
+            margin-top: 2px;
+        }
+
+        .ai-chat-close {
+            border: none;
+            background: transparent;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+        .ai-chat-messages {
+            height: 270px;
+            overflow-y: auto;
+            padding: 16px;
+            background: #f8fbfc;
+        }
+
+        .ai-message {
+            max-width: 85%;
+            padding: 10px 13px;
+            border-radius: 13px;
+            font-size: 13px;
+            line-height: 1.55;
+            margin-bottom: 10px;
+        }
+
+        .ai-message.bot {
+            background: white;
+            border: 1px solid #e4eeee;
+            color: var(--text);
+            margin-right: auto;
+        }
+
+        .ai-message.user {
+            background: var(--primary);
+            color: white;
+            margin-left: auto;
+        }
+
+        .ai-chat-input-area {
+            padding: 12px;
+            border-top: 1px solid #e5eeee;
+            background: white;
+            display: flex;
+            gap: 8px;
+        }
+
+        .ai-chat-input {
+            flex: 1;
+            border: 1px solid #dce7e7;
+            border-radius: 10px;
+            padding: 10px 12px;
+            font-size: 13px;
+            outline: none;
+        }
+
+        .ai-chat-input:focus {
+            border-color: var(--primary);
+        }
+
+        .ai-send-button {
+            width: 43px;
+            height: 43px;
+            border: none;
+            border-radius: 10px;
+            background: var(--primary);
+            color: white;
+            cursor: pointer;
+            font-size: 17px;
+        }
+
+        .ai-send-button:hover {
+            background: var(--primary-dark);
+        }
+
+
+        /* =========================
+           ANIMATIONS
+        ========================= */
+
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(25px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeRight {
+            from {
+                opacity: 0;
+                transform: translateX(35px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes imageFloat {
+            0%,100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-7px);
+            }
+        }
+
+        @keyframes cardFloat {
+            0%,100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-8px);
+            }
+        }
+
+        @keyframes logoFloat {
+            0%,100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-2px);
+            }
+        }
+
+        @keyframes smartPulse {
+            0%,100% {
+                box-shadow: 0 0 0 0 rgba(89,170,169,0.15);
+            }
+
+            50% {
+                box-shadow: 0 0 0 9px rgba(89,170,169,0);
+            }
+        }
+
+        @keyframes aiPulse {
+            0% {
+                transform: scale(1);
+                opacity: 0.8;
+            }
+
+            70% {
+                transform: scale(1.08);
+                opacity: 0;
+            }
+
+            100% {
+                transform: scale(1.08);
+                opacity: 0;
+            }
+        }
+
+        @keyframes chatOpen {
+            from {
+                opacity: 0;
+                transform: translateY(12px) scale(0.97);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+
+        /* =========================
+           RESPONSIVE
+        ========================= */
+
+        @media (max-width:991px) {
+
+            .hero {
+                padding-top: 55px;
+            }
+
+            .hero-content {
+                padding-right: 0;
+                margin-bottom: 40px;
+            }
+
+            .hero-image {
+                height: 400px;
+            }
+
+            .match-card {
+                left: 10px;
+            }
+
+            .student-card {
+                right: 10px;
+            }
+
+            .nav-link {
+                margin: 2px 0;
+            }
+
+            .login-btn {
+                display: inline-block;
+                margin: 10px 0;
+            }
+
+            .start-btn {
+                display: inline-block;
+                margin-bottom: 10px;
+            }
+        }
+
+        @media (max-width:767px) {
+
+            .main-navbar {
+                height: auto;
+                min-height: 66px;
+            }
+
+            .announcement-bar {
+                height: 40px;
+            }
+
+            .announcement-label {
+                padding: 0 14px;
+                font-size: 11px;
+            }
+
+            .announcement-item {
+                font-size: 11px;
+                margin-right: 30px;
+            }
+
+            .announcement-item::after {
+                margin-left: 30px;
+            }
+
+            .hero h1 {
+                font-size: 42px;
+                letter-spacing: -1px;
+            }
+
+            .hero-description {
+                font-size: 16px;
+            }
+
+            .hero-image {
+                height: 330px;
+            }
+
+            .floating-card {
+                padding: 10px 12px;
+            }
+
+            .floating-icon {
+                width: 34px;
+                height: 34px;
+                font-size: 16px;
+            }
+
+            .floating-title {
+                font-size: 11px;
+            }
+
+            .floating-text {
+                font-size: 10px;
+            }
+
+            .section {
+                padding: 65px 0;
+            }
+
+            .section-heading h2 {
+                font-size: 30px;
+            }
+
+            .smart-box {
+                padding: 28px;
+            }
+
+            .cta-box h2 {
+                font-size: 30px;
+            }
+
+            .feature-item {
+                justify-content: flex-start;
+                margin: 7px 0;
+            }
+
+            .contact-box {
+                padding: 28px;
+            }
+
+            .ai-chat-button {
+                right: 15px;
+                bottom: 15px;
+                min-width: 145px;
+                height: 54px;
+            }
+
+            .ai-chat-box {
+                right: 15px;
+                bottom: 82px;
+            }
+        }
+
+        @media (prefers-reduced-motion:reduce) {
+
+            *,
+            *::before,
+            *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                scroll-behavior: auto !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+
+    </style>
+</head>
+
+
+<body>
+
+
+<!-- =====================================================
+     NAVBAR
+===================================================== -->
+
+<nav class="navbar navbar-expand-lg main-navbar">
+
+    <div class="container">
+
+        <a href="{% url 'home' %}" class="navbar-brand">
+
+            <div class="logo-box">
+
+                <!-- LOCATION LOGO - DO NOT CHANGE -->
+
+                <i class="bi bi-geo-alt-fill"></i>
+
+            </div>
+
+            <div class="brand-name">
+                Found<span>Link</span>
+            </div>
+
+        </a>
+
+
+        <button
+            class="navbar-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#mainNavbar"
+        >
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+
+        <div class="collapse navbar-collapse" id="mainNavbar">
+
+            <ul class="navbar-nav mx-auto">
+
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'home' %}">
+                        Home
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="#about">
+                        About
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="#how-it-works">
+                        How It Works
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="#safety">
+                        Safety
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="#contact">
+                        Contact
+                    </a>
+                </li>
+
+            </ul>
+
+
+            <div class="d-lg-flex align-items-center">
+
+                <a
+                    href="{% url 'login' %}"
+                    class="login-btn"
+                >
+                    Sign In
+                </a>
+
+                <a
+                    href="{% url 'register' %}"
+                    class="start-btn"
+                >
+                    Get Started
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</nav>
+
+
+<!-- =====================================================
+     ANNOUNCEMENT
+===================================================== -->
+
+<div class="announcement-bar">
+
+    <div class="announcement-label">
+
+        <i class="bi bi-megaphone-fill"></i>
+
+        ANNOUNCEMENT
+
+    </div>
+
+
+    <div class="announcement-track">
+
+        {% if announcements %}
+
+            {% for announcement in announcements %}
+
+                <span class="announcement-item">
+
+                    <strong>
+                        {{ announcement.title }}
+                    </strong>
+
+                    &nbsp;|&nbsp;
+
+                    {{ announcement.message }}
+
+                </span>
+
+            {% endfor %}
+
+        {% else %}
+
+            <span class="announcement-empty">
+                No new announcements at the moment.
+            </span>
+
+        {% endif %}
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     HERO
+===================================================== -->
+
+<section class="hero">
+
+    <div class="container">
+
+        <div class="row align-items-center">
+
+            <div class="col-lg-6">
+
+                <div class="hero-content">
+
+                    <div class="hero-label">
+
+                        <i class="bi bi-stars"></i>
+
+                        Smart Lost & Found Platform
+
+                    </div>
+
+
+                    <h1>
+
+                        Lost Something?
+
+                        <br>
+
+                        <span>We Help You Find It.</span>
+
+                    </h1>
+
+
+                    <p class="hero-description">
+
+                        FoundLink makes it simple to report lost and found
+                        items, discover possible matches, and reconnect
+                        students with their belongings.
+
+                    </p>
+
+
+                    <div class="hero-subtext">
+
+                        <i class="bi bi-shield-check"></i>
+
+                        Safe, simple and made for your college community.
+
+                    </div>
+
+
+                    <div class="hero-actions">
+
+                        <a
+                            href="{% url 'register' %}"
+                            class="hero-primary-btn"
+                        >
+                            Get Started
+                            <i class="bi bi-arrow-right ms-1"></i>
+                        </a>
+
+
+                        <a
+                            href="#how-it-works"
+                            class="hero-secondary-btn"
+                        >
+                            How It Works
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="col-lg-6">
+
+                <div class="hero-visual" id="heroVisual">
+
+                    <div
+                        class="hero-image-wrapper"
+                        id="heroImageWrapper"
+                    >
+
+                        <img
+                            src="https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=1000&q=85"
+                            alt="College students"
+                            class="hero-image"
+                        >
+
+                        <div class="image-overlay"></div>
+
+                    </div>
+
+
+                    <div class="floating-card match-card">
+
+                        <div class="floating-icon">
+                            <i class="bi bi-stars"></i>
+                        </div>
+
+                        <div>
+
+                            <p class="floating-title">
+                                Smart Match
+                            </p>
+
+                            <p class="floating-text">
+                                Find possible matches faster
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="floating-card student-card">
+
+                        <div class="floating-icon">
+                            <i class="bi bi-mortarboard-fill"></i>
+                        </div>
+
+                        <div>
+
+                            <p class="floating-title">
+                                Built for Students
+                            </p>
+
+                            <p class="floating-text">
+                                Simple college lost & found
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     FEATURE STRIP
+===================================================== -->
+
+<section class="feature-strip reveal">
+
+    <div class="container">
+
+        <div class="row">
+
+            <div class="col-md-3">
+
+                <div class="feature-item">
+                    <i class="bi bi-pencil-square"></i>
+                    Easy Reporting
+                </div>
+
+            </div>
+
+
+            <div class="col-md-3">
+
+                <div class="feature-item">
+                    <i class="bi bi-stars"></i>
+                    Smart Matching
+                </div>
+
+            </div>
+
+
+            <div class="col-md-3">
+
+                <div class="feature-item">
+                    <i class="bi bi-bell-fill"></i>
+                    Stay Updated
+                </div>
+
+            </div>
+
+
+            <!-- CHANGED:
+                 Safe & Secure removed because
+                 Safety is explained properly below.
+            -->
+
+            <div class="col-md-3">
+
+                <div class="feature-item">
+                    <i class="bi bi-mortarboard-fill"></i>
+                    Student Friendly
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     ABOUT
+===================================================== -->
+
+<section
+    class="section section-white"
+    id="about"
+>
+
+    <div class="container">
+
+        <div class="section-heading reveal">
+
+            <div class="section-label">
+                WHY FOUNDLINK
+            </div>
+
+            <h2>
+                Everything You Need to Reconnect
+            </h2>
+
+            <p>
+                FoundLink brings reporting, matching, notifications and
+                safe communication together in one simple platform.
+            </p>
+
+        </div>
+
+
+        <div class="row g-4">
+
+
+            <div class="col-md-6 col-lg-3 reveal">
+
+                <div class="feature-card">
+
+                    <div class="feature-card-icon">
+                        <i class="bi bi-file-earmark-plus"></i>
+                    </div>
+
+                    <h5>
+                        Report Lost Items
+                    </h5>
+
+                    <p>
+                        Quickly add details, location, date and an image
+                        of your lost item.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="col-md-6 col-lg-3 reveal">
+
+                <div class="feature-card">
+
+                    <div class="feature-card-icon">
+                        <i class="bi bi-box-seam"></i>
+                    </div>
+
+                    <h5>
+                        Report Found Items
+                    </h5>
+
+                    <p>
+                        Help someone recover their belongings by reporting
+                        an item you found.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="col-md-6 col-lg-3 reveal">
+
+                <div class="feature-card">
+
+                    <div class="feature-card-icon">
+                        <i class="bi bi-stars"></i>
+                    </div>
+
+                    <h5>
+                        Smart Matching
+                    </h5>
+
+                    <p>
+                        FoundLink compares item details to identify
+                        possible lost and found matches.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="col-md-6 col-lg-3 reveal">
+
+                <div class="feature-card">
+
+                    <div class="feature-card-icon">
+                        <i class="bi bi-bell"></i>
+                    </div>
+
+                    <h5>
+                        Get Notified
+                    </h5>
+
+                    <p>
+                        Receive notifications when FoundLink identifies
+                        a possible match.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     HOW IT WORKS
+===================================================== -->
+
+<section
+    class="section"
+    id="how-it-works"
+>
+
+    <div class="container">
+
+        <div class="section-heading reveal">
+
+            <div class="section-label">
+                SIMPLE PROCESS
+            </div>
+
+            <h2>
+                How FoundLink Works
+            </h2>
+
+            <p>
+                A simple four-step process designed to make lost and found
+                reporting easier.
+            </p>
+
+        </div>
+
+
+        <div class="row g-4">
+
+
+            <div class="col-md-6 col-lg-3 reveal">
+
+                <div class="step-card">
+
+                    <div class="step-number">
+                        01
+                    </div>
+
+                    <h5>
+                        Report
+                    </h5>
+
+                    <p>
+                        Report a lost or found item with useful details.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="col-md-6 col-lg-3 reveal">
+
+                <div class="step-card">
+
+                    <div class="step-number">
+                        02
+                    </div>
+
+                    <h5>
+                        Match
+                    </h5>
+
+                    <p>
+                        Smart Matching checks available reports for
+                        possible matches.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="col-md-6 col-lg-3 reveal">
+
+                <div class="step-card">
+
+                    <div class="step-number">
+                        03
+                    </div>
+
+                    <h5>
+                        Notify
+                    </h5>
+
+                    <p>
+                        Users receive notifications about possible matches.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="col-md-6 col-lg-3 reveal">
+
+                <div class="step-card">
+
+                    <div class="step-number">
+                        04
+                    </div>
+
+                    <h5>
+                        Reconnect
+                    </h5>
+
+                    <p>
+                        Contact the relevant user and safely recover the item.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     SMART MATCH
+===================================================== -->
+
+<section class="section smart-section">
+
+    <div class="container">
+
+        <div class="smart-box reveal">
+
+            <div class="row align-items-center">
+
+                <div class="col-lg-7">
+
+                    <div class="smart-icon">
+                        <i class="bi bi-stars"></i>
+                    </div>
+
+                    <h2>
+                        Smart Matching Makes Finding Easier
+                    </h2>
+
+                    <p>
+                        FoundLink checks information such as item name,
+                        category, location and description to identify
+                        possible matches between lost and found reports.
+                    </p>
+
+
+                    <ul class="smart-points">
+
+                        <li>
+                            <i class="bi bi-check-circle-fill"></i>
+                            Compares important item details
+                        </li>
+
+                        <li>
+                            <i class="bi bi-check-circle-fill"></i>
+                            Identifies possible matches automatically
+                        </li>
+
+                        <li>
+                            <i class="bi bi-check-circle-fill"></i>
+                            Sends notifications when a match is found
+                        </li>
+
+                        <li>
+                            <i class="bi bi-check-circle-fill"></i>
+                            Helps users reconnect faster
+                        </li>
+
+                    </ul>
+
+                </div>
+
+
+                <div class="col-lg-5 mt-4 mt-lg-0">
+
+                    <div class="status-box">
+
+                        <div class="section-label">
+                            ITEM STATUS
+                        </div>
+
+                        <h4
+                            class="fw-bold"
+                            style="color:#21366d;"
+                        >
+                            Track Your Item
+                        </h4>
+
+                        <p class="small">
+
+                            Follow the progress of a report from the moment
+                            it is created until the item is recovered.
+
+                        </p>
+
+
+                        <div class="status-flow">
+
+                            <span class="status-item active">
+                                Lost
+                            </span>
+
+                            <span class="status-arrow">
+                                →
+                            </span>
+
+                            <span class="status-item">
+                                Possible Match
+                            </span>
+
+                            <span class="status-arrow">
+                                →
+                            </span>
+
+                            <span class="status-item">
+                                Found
+                            </span>
+
+                            <span class="status-arrow">
+                                →
+                            </span>
+
+                            <span class="status-item">
+                                Recovered
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     SAFETY & TRUST
+===================================================== -->
+
+<section
+    class="section safety-section"
+    id="safety"
+>
+
+    <div class="container">
+
+        <div class="section-heading reveal">
+
+            <div class="section-label">
+                SAFETY & TRUST
+            </div>
+
+            <h2>
+                Stay Safe While Reconnecting
+            </h2>
+
+            <p>
+                FoundLink encourages users to verify information and use
+                safe communication practices when recovering belongings.
+            </p>
+
+        </div>
+
+
+        <div class="row g-4">
+
+
+            <!-- SAFETY CARD 1 -->
+
+            <div class="col-md-4 reveal">
+
+                <div class="safety-card">
+
+                    <div class="safety-icon">
+                        <i class="bi bi-shield-lock-fill"></i>
+                    </div>
+
+                    <h5>
+                        Protect Your Account
+                    </h5>
+
+                    <p>
+                        Never share your password or OTP with another person.
+                        Keep your account information private.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- SAFETY CARD 2 -->
+
+            <div class="col-md-4 reveal">
+
+                <div class="safety-card">
+
+                    <div class="safety-icon">
+                        <i class="bi bi-patch-check-fill"></i>
+                    </div>
+
+                    <h5>
+                        Verify the Item
+                    </h5>
+
+                    <p>
+                        Confirm item details such as appearance, location
+                        and identifying information before returning it.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- SAFETY CARD 3 -->
+
+            <div class="col-md-4 reveal">
+
+                <div class="safety-card">
+
+                    <div class="safety-icon">
+                        <i class="bi bi-geo-alt-fill"></i>
+                    </div>
+
+                    <h5>
+                        Choose Safe Locations
+                    </h5>
+
+                    <p>
+                        Prefer public or trusted college locations when
+                        meeting someone to return or collect an item.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     CONTACT
+===================================================== -->
+
+<section
+    class="contact-section"
+    id="contact"
+>
+
+    <div class="container">
+
+        <div class="section-heading reveal">
+
+            <div class="section-label">
+                CONTACT
+            </div>
+
+            <h2>
+                Need Help With FoundLink?
+            </h2>
+
+            <p>
+                Have a question about reporting, Smart Matching or
+                recovering an item? Get in touch with us.
+            </p>
+
+        </div>
+
+
+        <div class="contact-box reveal">
+
+            <div class="row align-items-center">
+
+
+                <div class="col-lg-7">
+
+                    <div class="contact-icon">
+                        <i class="bi bi-headset"></i>
+                    </div>
+
+                    <h3>
+                        FoundLink Support
+                    </h3>
+
+                    <p>
+                        Our platform is designed to make the lost and found
+                        process simple and safe for students.
+                    </p>
+
+                </div>
+
+
+                <div class="col-lg-5 mt-4 mt-lg-0">
+
+                    <div class="contact-detail">
+
+                        <i class="bi bi-envelope-fill"></i>
+
+                        <span>
+                            support@foundlink.com
+                        </span>
+
+                    </div>
+
+
+                    <div class="contact-detail">
+
+                        <i class="bi bi-telephone-fill"></i>
+
+                        <span>
+                            +91 98765 43210
+                        </span>
+
+                    </div>
+
+
+                    <div class="contact-detail">
+
+                        <i class="bi bi-building"></i>
+
+                        <span>
+                            College Lost & Found Support
+                        </span>
+
+                    </div>
+
+
+                    <div class="contact-detail">
+
+                        <i class="bi bi-clock-fill"></i>
+
+                        <span>
+                            Available during college hours
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     CTA
+===================================================== -->
+
+<section class="cta-section">
+
+    <div class="container">
+
+        <div class="cta-box reveal">
+
+            <h2>
+                Ready to Reconnect?
+            </h2>
+
+            <p>
+                Join FoundLink and make lost & found simpler for your
+                college community.
+            </p>
+
+            <a
+                href="{% url 'register' %}"
+                class="cta-btn"
+            >
+
+                Create Your Account
+
+                <i class="bi bi-arrow-right ms-1"></i>
+
+            </a>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     FOOTER
+===================================================== -->
+
+<footer>
+
+    <div class="container">
+
+        <div class="row align-items-start">
+
+
+            <div class="col-md-7">
+
+                <a
+                    href="{% url 'home' %}"
+                    class="footer-brand"
+                >
+
+                    <div class="footer-logo">
+
+                        <!-- LOCATION LOGO KEPT -->
+
+                        <i class="bi bi-geo-alt-fill"></i>
+
+                    </div>
+
+                    <div class="footer-name">
+                        Found<span>Link</span>
+                    </div>
+
+                </a>
+
+
+                <p class="footer-text">
+
+                    A smart, simple and secure Lost & Found platform
+                    designed to help students reconnect with their
+                    belongings.
+
+                </p>
+
+            </div>
+
+
+            <div class="col-md-5 text-md-end">
+
+                <div class="footer-text ms-md-auto">
+
+                    <strong style="color:white;">
+                        FoundLink
+                    </strong>
+
+                    <br>
+
+                    Lost & Found Platform for Students
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="footer-bottom text-center">
+
+            © 2026 FoundLink. All rights reserved.
+
+        </div>
+
+    </div>
+
+</footer>
+
+
+<!-- =====================================================
+     AI CHATBOX
+===================================================== -->
+
+<form style="display:none;">
+
+    {% csrf_token %}
+
+</form>
+
+
+<div
+    id="foundlink-ai-box"
+    class="ai-chat-box"
+>
+
+    <div class="ai-chat-header">
+
+        <div class="ai-chat-title">
+
+            <div class="ai-chat-title-icon">
+                <i class="bi bi-stars"></i>
+            </div>
+
+            <div>
+
+                <strong>
+                    FoundLink AI Assistant
+                </strong>
+
+                <span>
+                    Ask me about FoundLink
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <button
+            type="button"
+            class="ai-chat-close"
+            id="ai-chat-close"
+        >
+            <i class="bi bi-x-lg"></i>
+        </button>
+
+    </div>
+
+
+    <div
+        id="ai-chat-messages"
+        class="ai-chat-messages"
+    >
+
+        <div class="ai-message bot">
+
+            Hi! 👋 I'm the FoundLink Assistant.
+
+            <br><br>
+
+            I can help you with lost items, found items,
+            Smart Matching, notifications, connections,
+            recovery and safety.
+
+        </div>
+
+    </div>
+
+
+    <div class="ai-chat-input-area">
+
+        <input
+            type="text"
+            id="ai-chat-input"
+            class="ai-chat-input"
+            placeholder="Ask something..."
+            autocomplete="off"
+        >
+
+
+        <button
+            type="button"
+            id="ai-send-button"
+            class="ai-send-button"
+        >
+
+            <i class="bi bi-send-fill"></i>
+
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- AI CHAT BUTTON -->
+
+<button
+    type="button"
+    id="foundlink-ai-button"
+    class="ai-chat-button"
+>
+
+    <i class="bi bi-chat-dots-fill"></i>
+
+    <span>
+        AI Assistant
+    </span>
+
+</button>
+
+
+<!-- =====================================================
+     JAVASCRIPT
+===================================================== -->
+
+<script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js">
+</script>
+
+
+<script>
+
+    /* ==========================================
+       SCROLL REVEAL
+    ========================================== */
+
+    const revealElements =
+        document.querySelectorAll(".reveal");
+
+    const revealObserver =
+        new IntersectionObserver(
+            function(entries, observer) {
+
+                entries.forEach(function(entry) {
+
+                    if (entry.isIntersecting) {
+
+                        entry.target.classList.add("show");
+
+                        observer.unobserve(entry.target);
+
+                    }
+
+                });
+
+            },
+            {
+                threshold: 0.12
+            }
+        );
+
+
+    revealElements.forEach(function(element) {
+
+        revealObserver.observe(element);
+
+    });
+
+
+    /* ==========================================
+       STATUS FLOW ANIMATION
+    ========================================== */
+
+    const statusItems =
+        document.querySelectorAll(".status-item");
+
+    const statusArrows =
+        document.querySelectorAll(".status-arrow");
+
+    let currentStatus = 0;
+
+
+    function animateStatus() {
+
+        statusItems.forEach(function(item) {
+
+            item.classList.remove("active");
+
+        });
+
+
+        statusArrows.forEach(function(arrow) {
+
+            arrow.classList.remove("active");
+
+        });
+
+
+        if (statusItems.length > 0) {
+
+            statusItems[currentStatus]
+                .classList.add("active");
+
+        }
+
+
+        if (currentStatus > 0) {
+
+            statusArrows[currentStatus - 1]
+                .classList.add("active");
+
+        }
+
+
+        currentStatus++;
+
+
+        if (currentStatus >= statusItems.length) {
+
+            currentStatus = 0;
+
+        }
+
+    }
+
+
+    setInterval(
+        animateStatus,
+        1800
+    );
+
+
+    /* ==========================================
+       HERO IMAGE MOUSE MOVEMENT
+    ========================================== */
+
+    const heroVisual =
+        document.getElementById("heroVisual");
+
+    const heroImageWrapper =
+        document.getElementById("heroImageWrapper");
+
+
+    if (heroVisual && heroImageWrapper) {
+
+        heroVisual.addEventListener(
+            "mousemove",
+            function(event) {
+
+                const rect =
+                    heroVisual.getBoundingClientRect();
+
+                const x =
+                    event.clientX - rect.left;
+
+                const y =
+                    event.clientY - rect.top;
+
+                const moveX =
+                    (x / rect.width - 0.5) * 5;
+
+                const moveY =
+                    (y / rect.height - 0.5) * 5;
+
+
+                heroImageWrapper.style.transform =
+                    "translate(" +
+                    moveX +
+                    "px, " +
+                    moveY +
+                    "px)";
+
+            }
+        );
+
+
+        heroVisual.addEventListener(
+            "mouseleave",
+            function() {
+
+                heroImageWrapper.style.transform = "";
+
+            }
+        );
+
+    }
+
+
+    /* ==========================================
+       AI CHATBOX
+    ========================================== */
+
+    const aiButton =
+        document.getElementById(
+            "foundlink-ai-button"
+        );
+
+
+    const aiBox =
+        document.getElementById(
+            "foundlink-ai-box"
+        );
+
+
+    const aiClose =
+        document.getElementById(
+            "ai-chat-close"
+        );
+
+
+    const aiInput =
+        document.getElementById(
+            "ai-chat-input"
+        );
+
+
+    const aiSend =
+        document.getElementById(
+            "ai-send-button"
+        );
+
+
+    const aiMessages =
+        document.getElementById(
+            "ai-chat-messages"
+        );
+
+
+    /* OPEN CHAT */
+
+    if (aiButton) {
+
+        aiButton.addEventListener(
+            "click",
+            function() {
+
+                aiBox.classList.toggle("active");
+
+
+                if (
+                    aiBox.classList.contains("active")
+                ) {
+
+                    aiInput.focus();
+
+                }
+
+            }
+        );
+
+    }
+
+
+    /* CLOSE CHAT */
+
+    if (aiClose) {
+
+        aiClose.addEventListener(
+            "click",
+            function() {
+
+                aiBox.classList.remove("active");
+
+            }
+        );
+
+    }
+
+
+    /* ADD MESSAGE */
+
+    function addMessage(
+        message,
+        type
+    ) {
+
+        const messageDiv =
+            document.createElement("div");
+
+
+        messageDiv.className =
+            "ai-message " + type;
+
+
+        messageDiv.textContent =
+            message;
+
+
+        aiMessages.appendChild(
+            messageDiv
+        );
+
+
+        aiMessages.scrollTop =
+            aiMessages.scrollHeight;
+
+    }
+
+
+    /* SEND MESSAGE */
+
+    async function sendAIMessage() {
+
+        const message =
+            aiInput.value.trim();
+
+
+        if (!message) {
+
+            return;
+
+        }
+
+
+        addMessage(
+            message,
+            "user"
+        );
+
+
+        aiInput.value = "";
+
+
+        const csrfInput =
+            document.querySelector(
+                '[name="csrfmiddlewaretoken"]'
+            );
+
+
+        const csrfToken =
+            csrfInput
+                ? csrfInput.value
+                : "";
+
+
+        const formData =
+            new FormData();
+
+
+        formData.append(
+            "message",
+            message
+        );
+
+
+        formData.append(
+            "csrfmiddlewaretoken",
+            csrfToken
+        );
+
+
+        try {
+
+            const response =
+                await fetch(
+                    "{% url 'ai_chat' %}",
+                    {
+                        method: "POST",
+
+                        body: formData,
+
+                        headers: {
+                            "X-Requested-With":
+                                "XMLHttpRequest"
+                        }
+                    }
+                );
+
+
+            const data =
+                await response.json();
+
+
+            if (data.response) {
+
+                addMessage(
+                    data.response,
+                    "bot"
+                );
+
+            }
+
+            else {
+
+                addMessage(
+                    "Sorry, I could not process that message.",
+                    "bot"
+                );
+
+            }
+
+        }
+
+        catch (error) {
+
+            addMessage(
+                "Unable to connect to FoundLink Assistant. Please try again.",
+                "bot"
+            );
+
+        }
+
+    }
+
+
+    /* SEND BUTTON */
+
+    if (aiSend) {
+
+        aiSend.addEventListener(
+            "click",
+            sendAIMessage
+        );
+
+    }
+
+
+    /* ENTER KEY */
+
+    if (aiInput) {
+
+        aiInput.addEventListener(
+            "keydown",
+            function(event) {
+
+                if (event.key === "Enter") {
+
+                    event.preventDefault();
+
+                    sendAIMessage();
+
+                }
+
+            }
+        );
+
+    }
+
+
+    /* ==========================================
+       AI BUTTON START ANIMATION
+    ========================================== */
+
+    setTimeout(
+        function() {
+
+            if (aiButton) {
+
+                aiButton.animate(
+                    [
+                        {
+                            transform: "scale(1)"
+                        },
+                        {
+                            transform: "scale(1.06)"
+                        },
+                        {
+                            transform: "scale(1)"
+                        }
+                    ],
+                    {
+                        duration: 700,
+                        iterations: 2
+                    }
+                );
+
+            }
+
+        },
+        1800
+    );
+
+</script>
+
+
+</body>
+
+</html>

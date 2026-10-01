@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Edit Profile - FoundLink</title>
+
+<!-- Bootstrap -->
+<link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+>
+
+<!-- Bootstrap Icons -->
+<link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+>
+
+<style>
+
+    * {
+        box-sizing: border-box;
+    }
+
+    html,
+    body {
+        margin: 0;
+        padding: 0;
+        min-height: 100%;
+    }
+
+    body {
+        background: #f8fbfc;
+        font-family: Arial, Helvetica, sans-serif;
+        color: #21366d;
+    }
+
+    /* =========================
+       NAVBAR
+    ========================= */
+
+    .navbar-custom {
+        height: 68px;
+        background: #ffffff;
+        border-bottom: 1px solid #e3eeee;
+        padding: 0 35px;
+    }
+
+    .brand {
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        color: #21366d;
+        font-size: 23px;
+        font-weight: 700;
+    }
+
+    .brand-icon {
+        width: 39px;
+        height: 39px;
+        border-radius: 11px;
+        background: #59aaa9;
+        color: #ffffff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 20px;
+    }
+
+    .brand span {
+        color: #59aaa9;
+    }
+
+    .back-profile {
+        text-decoration: none;
+        color: #607080;
+        font-size: 13px;
+        font-weight: 600;
+        padding: 9px 13px;
+        border-radius: 9px;
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+    }
+
+    .back-profile:hover {
+        background: #f0f8f8;
+        color: #438f8e;
+    }
+
+    /* =========================
+       MAIN
+    ========================= */
+
+    .main-wrapper {
+        min-height: calc(100vh - 68px);
+        padding: 25px 35px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .edit-card {
+        width: 100%;
+        max-width: 950px;
+        min-height: 545px;
+        background: #ffffff;
+        border: 1px solid #e1eeee;
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: 0 12px 35px rgba(33, 54, 109, 0.08);
+        display: grid;
+        grid-template-columns: 38% 62%;
+    }
+
+    /* =========================
+       LEFT PANEL
+    ========================= */
+
+    .left-panel {
+        background: linear-gradient(
+            145deg,
+            #438f8e,
+            #59aaa9
+        );
+        color: #ffffff;
+        padding: 35px 30px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    .profile-icon {
+        width: 62px;
+        height: 62px;
+        border-radius: 16px;
+        background: rgba(255, 255, 255, 0.15);
+        border: 1px solid rgba(255, 255, 255, 0.28);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 28px;
+        margin-bottom: 20px;
+    }
+
+    .left-panel h2 {
+        font-size: 25px;
+        font-weight: 700;
+        margin: 0 0 9px;
+    }
+
+    .left-panel p {
+        font-size: 12px;
+        line-height: 1.65;
+        color: rgba(255, 255, 255, 0.88);
+        margin: 0 0 23px;
+    }
+
+    .info-item {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-size: 11px;
+        margin-bottom: 12px;
+        color: rgba(255, 255, 255, 0.93);
+    }
+
+    .info-item i {
+        font-size: 14px;
+    }
+
+    .account-note {
+        margin-top: 17px;
+        padding: 12px 13px;
+        border-radius: 10px;
+        background: rgba(255, 255, 255, 0.12);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        font-size: 10px;
+        line-height: 1.55;
+        color: rgba(255, 255, 255, 0.92);
+    }
+
+    /* =========================
+       RIGHT PANEL
+    ========================= */
+
+    .right-panel {
+        padding: 35px 42px;
+    }
+
+    .heading-icon {
+        width: 43px;
+        height: 43px;
+        border-radius: 11px;
+        background: #eef8f8;
+        color: #438f8e;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 20px;
+        margin-bottom: 13px;
+    }
+
+    .right-panel h1 {
+        color: #21366d;
+        font-size: 27px;
+        font-weight: 700;
+        margin: 0 0 5px;
+    }
+
+    .subtitle {
+        color: #7c8b98;
+        font-size: 13px;
+        margin: 0 0 22px;
+    }
+
+    /* =========================
+       ERROR
+    ========================= */
+
+    .error-box {
+        background: #fff3f0;
+        border: 1px solid #f0d2cc;
+        color: #b84f3b;
+        border-radius: 9px;
+        padding: 10px 12px;
+        font-size: 11px;
+        margin-bottom: 17px;
+    }
+
+    /* =========================
+       FORM
+    ========================= */
+
+    .form-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 15px;
+    }
+
+    .form-group {
+        margin-bottom: 16px;
+    }
+
+    .form-label {
+        display: block;
+        color: #526575;
+        font-size: 11px;
+        font-weight: 700;
+        margin-bottom: 7px;
+    }
+
+    .input-wrapper {
+        position: relative;
+    }
+
+    .input-icon {
+        position: absolute;
+        left: 13px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #7fa2a1;
+        font-size: 14px;
+        pointer-events: none;
+    }
+
+    .form-control {
+        width: 100%;
+        height: 43px;
+        border: 1px solid #d9e7e7;
+        border-radius: 9px;
+        padding: 8px 12px 8px 37px;
+        font-size: 12px;
+        color: #21366d;
+        background: #ffffff;
+    }
+
+    .form-control::placeholder {
+        color: #a1afb7;
+    }
+
+    .form-control:focus {
+        border-color: #59aaa9;
+        box-shadow: 0 0 0 3px rgba(89, 170, 169, 0.12);
+        outline: none;
+    }
+
+    /* =========================
+       UPDATE INFORMATION
+    ========================= */
+
+    .update-note {
+        display: flex;
+        align-items: center;
+        gap: 9px;
+        background: #f7fbfb;
+        border: 1px solid #e3eeee;
+        border-radius: 10px;
+        padding: 11px 13px;
+        margin-top: 3px;
+        color: #71818e;
+        font-size: 10px;
+        line-height: 1.4;
+    }
+
+    .update-note i {
+        color: #59aaa9;
+        font-size: 15px;
+        flex-shrink: 0;
+    }
+
+    /* =========================
+       ACTIONS
+    ========================= */
+
+    .actions {
+        display: flex;
+        gap: 10px;
+        margin-top: 19px;
+        padding-top: 18px;
+        border-top: 1px solid #edf3f2;
+    }
+
+    .save-btn,
+    .cancel-btn {
+        height: 40px;
+        border-radius: 9px;
+        padding: 0 18px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 7px;
+        font-size: 12px;
+        font-weight: 700;
+    }
+
+    .save-btn {
+        border: none;
+        background: #59aaa9;
+        color: #ffffff;
+        cursor: pointer;
+    }
+
+    .save-btn:hover {
+        background: #438f8e;
+    }
+
+    .cancel-btn {
+        text-decoration: none;
+        background: #f1f6f6;
+        color: #60717e;
+        border: 1px solid #e0ebeb;
+    }
+
+    .cancel-btn:hover {
+        background: #e7f0f0;
+        color: #21366d;
+    }
+
+    /* =========================
+       SECURITY NOTE
+    ========================= */
+
+    .security-note {
+        margin-top: 16px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        color: #81919b;
+        font-size: 10px;
+    }
+
+    .security-note i {
+        color: #59aaa9;
+        font-size: 13px;
+    }
+
+    /* =========================
+       MOBILE
+    ========================= */
+
+    @media (max-width: 800px) {
+
+        body {
+            overflow: auto;
+        }
+
+        .navbar-custom {
+            height: 62px;
+            padding: 0 18px;
+        }
+
+        .main-wrapper {
+            min-height: calc(100vh - 62px);
+            padding: 18px;
+        }
+
+        .edit-card {
+            grid-template-columns: 1fr;
+            min-height: 0;
+        }
+
+        .left-panel {
+            padding: 30px 25px;
+        }
+
+        .right-panel {
+            padding: 28px 24px;
+        }
+
+    }
+
+    @media (max-width: 600px) {
+
+        .form-row {
+            grid-template-columns: 1fr;
+            gap: 0;
+        }
+
+        .brand {
+            font-size: 20px;
+        }
+
+        .brand-icon {
+            width: 35px;
+            height: 35px;
+            font-size: 18px;
+        }
+
+        .back-profile {
+            font-size: 11px;
+            padding: 8px;
+        }
+
+        .right-panel h1 {
+            font-size: 23px;
+        }
+
+    }
+
+    @media (max-width: 450px) {
+
+        .actions {
+            flex-direction: column;
+        }
+
+        .save-btn,
+        .cancel-btn {
+            width: 100%;
+        }
+
+        .left-panel h2 {
+            font-size: 22px;
+        }
+
+    }
+
+</style>
+
+
+</head>
+
+<body>
+
+
+<!-- =========================
+     NAVBAR
+========================= -->
+
+<nav class="navbar-custom d-flex align-items-center justify-content-between">
+
+    <a
+        href="{% url 'dashboard' %}"
+        class="brand"
+    >
+
+        <span class="brand-icon">
+            <i class="bi bi-geo-alt-fill"></i>
+        </span>
+
+        Found<span>Link</span>
+
+    </a>
+
+
+    <a
+        href="{% url 'profile' %}"
+        class="back-profile"
+    >
+
+        <i class="bi bi-arrow-left"></i>
+
+        Back to Profile
+
+    </a>
+
+</nav>
+
+
+<!-- =========================
+     MAIN CONTENT
+========================= -->
+
+<main class="main-wrapper">
+
+    <div class="edit-card">
+
+
+        <!-- =========================
+             LEFT PANEL
+        ========================= -->
+
+        <section class="left-panel">
+
+            <div class="profile-icon">
+
+                <i class="bi bi-person-gear"></i>
+
+            </div>
+
+
+            <h2>
+                Update Your Profile
+            </h2>
+
+
+            <p>
+                Keep your FoundLink account information
+                accurate and up to date.
+            </p>
+
+
+            <div class="info-item">
+
+                <i class="bi bi-person-check"></i>
+
+                <span>
+                    Keep your personal details updated
+                </span>
+
+            </div>
+
+
+            <div class="info-item">
+
+                <i class="bi bi-envelope-check"></i>
+
+                <span>
+                    Use an active email address
+                </span>
+
+            </div>
+
+
+            <div class="info-item">
+
+                <i class="bi bi-phone"></i>
+
+                <span>
+                    Keep your mobile number current
+                </span>
+
+            </div>
+
+
+            <div class="account-note">
+
+                <i class="bi bi-shield-check me-1"></i>
+
+                Your profile information helps other
+                FoundLink users connect with you safely.
+
+            </div>
+
+        </section>
+
+
+        <!-- =========================
+             RIGHT PANEL
+        ========================= -->
+
+        <section class="right-panel">
+
+
+            <div class="heading-icon">
+
+                <i class="bi bi-pencil-square"></i>
+
+            </div>
+
+
+            <h1>
+                Edit Profile
+            </h1>
+
+
+            <p class="subtitle">
+                Update your FoundLink account information.
+            </p>
+
+
+            {% if error %}
+
+                <div class="error-box">
+
+                    <i class="bi bi-exclamation-circle me-1"></i>
+
+                    {{ error }}
+
+                </div>
+
+            {% endif %}
+
+
+            <form method="POST">
+
+                {% csrf_token %}
+
+
+                <!-- NAME + EMAIL -->
+
+                <div class="form-row">
+
+
+                    <div class="form-group">
+
+                        <label class="form-label">
+                            Full Name
+                        </label>
+
+                        <div class="input-wrapper">
+
+                            <i class="bi bi-person input-icon"></i>
+
+                            <input
+                                type="text"
+                                name="full_name"
+                                class="form-control"
+                                value="{{ user.full_name }}"
+                                placeholder="Enter your full name"
+                                required
+                            >
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label class="form-label">
+                            Email Address
+                        </label>
+
+                        <div class="input-wrapper">
+
+                            <i class="bi bi-envelope input-icon"></i>
+
+                            <input
+                                type="email"
+                                name="email"
+                                class="form-control"
+                                value="{{ user.email }}"
+                                placeholder="Enter your email"
+                                required
+                            >
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- MOBILE -->
+
+                <div class="form-group">
+
+                    <label class="form-label">
+                        Mobile Number
+                    </label>
+
+                    <div class="input-wrapper">
+
+                        <i class="bi bi-phone input-icon"></i>
+
+                        <input
+                            type="text"
+                            name="mobile"
+                            class="form-control"
+                            value="{{ user.mobile }}"
+                            maxlength="15"
+                            placeholder="Enter your mobile number"
+                            required
+                        >
+
+                    </div>
+
+                </div>
+
+
+                <!-- INFORMATION NOTE -->
+
+                <div class="update-note">
+
+                    <i class="bi bi-info-circle"></i>
+
+                    <span>
+                        Updating your profile will keep your
+                        FoundLink contact information current.
+                    </span>
+
+                </div>
+
+
+                <!-- ACTIONS -->
+
+                <div class="actions">
+
+                    <button
+                        type="submit"
+                        class="save-btn"
+                    >
+
+                        <i class="bi bi-check-circle"></i>
+
+                        Save Changes
+
+                    </button>
+
+
+                    <a
+                        href="{% url 'profile' %}"
+                        class="cancel-btn"
+                    >
+
+                        <i class="bi bi-x-circle"></i>
+
+                        Cancel
+
+                    </a>
+
+                </div>
+
+
+            </form>
+
+
+            <!-- SECURITY -->
+
+            <div class="security-note">
+
+                <i class="bi bi-shield-lock"></i>
+
+                Your account information is kept secure.
+
+            </div>
+
+
+        </section>
+
+    </div>
+
+</main>
+
+
+</body>
+
+</html>
