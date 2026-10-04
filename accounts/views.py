@@ -68,25 +68,37 @@ def login(request):
 
     if request.method == "POST":
 
-        email = request.POST.get("email")
-        password = request.POST.get("password")
+        # Get and clean the values from the login form.
+        email = (request.POST.get("email") or "").strip()
+        password = request.POST.get("password") or ""
+
+        # Do not allow an empty login request.
+        if not email or not password:
+            return render(request, "login.html", {
+                "error": "Please enter your email and password."
+            })
 
         try:
+            # Use case-insensitive email matching so that
+            # Payal@Example.com and payal@example.com work the same way.
+            user = User.objects.get(email__iexact=email)
 
-            user = User.objects.get(email=email)
-
+            # Check the password against the hashed password stored in DB.
             if check_password(password, user.password):
 
+                # Store the custom FoundLink session values used
+                # throughout the rest of the project.
                 request.session["user_id"] = user.id
                 request.session["user_name"] = user.full_name
 
+                # Make sure the session is saved before redirecting.
+                request.session.modified = True
+
                 return redirect("dashboard")
 
-            else:
-
-                return render(request, "login.html", {
-                    "error": "Invalid email or password."
-                })
+            return render(request, "login.html", {
+                "error": "Invalid email or password."
+            })
 
         except User.DoesNotExist:
 
