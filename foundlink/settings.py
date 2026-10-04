@@ -4,6 +4,7 @@ Django settings for FoundLink project.
 
 import os
 from pathlib import Path
+from urllib.parse import urlparse, unquote
 
 import dj_database_url
 import cloudinary
@@ -52,6 +53,18 @@ if CLOUDINARY_URL:
     cloudinary.config(
         cloudinary_url=CLOUDINARY_URL
     )
+
+    parsed_cloudinary_url = urlparse(CLOUDINARY_URL)
+
+    CLOUDINARY_STORAGE = {
+        "CLOUD_NAME": parsed_cloudinary_url.hostname,
+        "API_KEY": unquote(parsed_cloudinary_url.username or ""),
+        "API_SECRET": unquote(parsed_cloudinary_url.password or ""),
+        "SECURE": True,
+    }
+
+else:
+    CLOUDINARY_STORAGE = {}
 
 
 # -------------------------------------------------
