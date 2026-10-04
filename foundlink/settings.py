@@ -6,6 +6,7 @@ import os
 from pathlib import Path
 
 import dj_database_url
+import cloudinary
 
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -22,12 +23,10 @@ SECRET_KEY = os.environ.get(
 
 DEBUG = "RENDER" not in os.environ
 
-
 ALLOWED_HOSTS = os.environ.get(
     "ALLOWED_HOSTS",
     "127.0.0.1,localhost"
 ).split(",")
-
 
 RENDER_EXTERNAL_HOSTNAME = os.environ.get(
     "RENDER_EXTERNAL_HOSTNAME"
@@ -36,12 +35,23 @@ RENDER_EXTERNAL_HOSTNAME = os.environ.get(
 if RENDER_EXTERNAL_HOSTNAME:
     ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
 
-
 CSRF_TRUSTED_ORIGINS = [
     f"https://{host.strip()}"
     for host in ALLOWED_HOSTS
     if host.strip() not in ["127.0.0.1", "localhost"]
 ]
+
+
+# -------------------------------------------------
+# CLOUDINARY
+# -------------------------------------------------
+
+CLOUDINARY_URL = os.environ.get("CLOUDINARY_URL")
+
+if CLOUDINARY_URL:
+    cloudinary.config(
+        cloudinary_url=CLOUDINARY_URL
+    )
 
 
 # -------------------------------------------------
@@ -83,7 +93,6 @@ MIDDLEWARE = [
 # -------------------------------------------------
 
 ROOT_URLCONF = "foundlink.urls"
-
 
 TEMPLATES = [
     {
@@ -196,13 +205,6 @@ STORAGES = {
 MEDIA_URL = "/media/"
 
 MEDIA_ROOT = BASE_DIR / "media"
-
-
-# -------------------------------------------------
-# CLOUDINARY
-# -------------------------------------------------
-
-CLOUDINARY_URL = os.environ.get("CLOUDINARY_URL")
 
 
 # -------------------------------------------------
