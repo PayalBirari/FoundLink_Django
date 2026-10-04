@@ -316,4 +316,3 @@ class ReportUser(models.Model):
             f"{self.reporter.full_name} reported "
             f"{self.reported_user.full_name}"
         )
-

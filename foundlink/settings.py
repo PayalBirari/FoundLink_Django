@@ -20,19 +20,22 @@ SECRET_KEY = os.environ.get(
     "django-insecure-local-development-key"
 )
 
-# DEBUG = True locally
-# DEBUG = False automatically on Render
 DEBUG = "RENDER" not in os.environ
+
 
 ALLOWED_HOSTS = os.environ.get(
     "ALLOWED_HOSTS",
     "127.0.0.1,localhost"
 ).split(",")
 
-RENDER_EXTERNAL_HOSTNAME = os.environ.get("RENDER_EXTERNAL_HOSTNAME")
+
+RENDER_EXTERNAL_HOSTNAME = os.environ.get(
+    "RENDER_EXTERNAL_HOSTNAME"
+)
 
 if RENDER_EXTERNAL_HOSTNAME:
     ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
+
 
 CSRF_TRUSTED_ORIGINS = [
     f"https://{host.strip()}"
@@ -42,7 +45,7 @@ CSRF_TRUSTED_ORIGINS = [
 
 
 # -------------------------------------------------
-# INSTALLED APPS
+# APPLICATIONS
 # -------------------------------------------------
 
 INSTALLED_APPS = [
@@ -52,6 +55,8 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+
+    "cloudinary",
 
     "accounts",
 ]
@@ -63,10 +68,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
-
-    # WhiteNoise for production static files
     "whitenoise.middleware.WhiteNoiseMiddleware",
-
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -77,15 +79,11 @@ MIDDLEWARE = [
 
 
 # -------------------------------------------------
-# URL CONFIGURATION
+# URL / TEMPLATES
 # -------------------------------------------------
 
 ROOT_URLCONF = "foundlink.urls"
 
-
-# -------------------------------------------------
-# TEMPLATES
-# -------------------------------------------------
 
 TEMPLATES = [
     {
@@ -103,24 +101,13 @@ TEMPLATES = [
 ]
 
 
-# -------------------------------------------------
-# WSGI / ASGI
-# -------------------------------------------------
-
 WSGI_APPLICATION = "foundlink.wsgi.application"
-
 ASGI_APPLICATION = "foundlink.asgi.application"
 
 
 # -------------------------------------------------
 # DATABASE
 # -------------------------------------------------
-
-# Local computer:
-#     SQLite -> db.sqlite3
-#
-# Render:
-#     PostgreSQL -> DATABASE_URL
 
 DATABASES = {
     "default": dj_database_url.config(
@@ -163,7 +150,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 
 # -------------------------------------------------
-# LANGUAGE AND TIME
+# LANGUAGE / TIME
 # -------------------------------------------------
 
 LANGUAGE_CODE = "en-us"
@@ -183,10 +170,16 @@ STATIC_URL = "/static/"
 
 STATIC_ROOT = BASE_DIR / "staticfiles"
 
+
+# -------------------------------------------------
+# FILE STORAGE
+# -------------------------------------------------
+
 STORAGES = {
     "default": {
         "BACKEND": "django.core.files.storage.FileSystemStorage",
     },
+
     "staticfiles": {
         "BACKEND": (
             "whitenoise.storage."
@@ -198,12 +191,18 @@ STORAGES = {
 
 # -------------------------------------------------
 # MEDIA FILES
-# Uploaded Lost/Found item images
 # -------------------------------------------------
 
 MEDIA_URL = "/media/"
 
 MEDIA_ROOT = BASE_DIR / "media"
+
+
+# -------------------------------------------------
+# CLOUDINARY
+# -------------------------------------------------
+
+CLOUDINARY_URL = os.environ.get("CLOUDINARY_URL")
 
 
 # -------------------------------------------------
@@ -214,10 +213,7 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 
 # -------------------------------------------------
-# EMAIL SETTINGS FOR FORGOT PASSWORD OTP
+# EMAIL
 # -------------------------------------------------
-
-# Development mode:
-# OTP will appear in the VS Code terminal.
 
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
