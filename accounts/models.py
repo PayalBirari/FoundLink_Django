@@ -1,4 +1,5 @@
 from django.db import models
+from cloudinary.models import CloudinaryField
 
 
 # =================================================
@@ -46,8 +47,8 @@ class LostItem(models.Model):
 
     description = models.TextField()
 
-    image = models.ImageField(
-        upload_to="lost_items/",
+    image = CloudinaryField(
+        "image",
         blank=True,
         null=True
     )
@@ -92,8 +93,8 @@ class FoundItem(models.Model):
 
     description = models.TextField()
 
-    image = models.ImageField(
-        upload_to="found_items/",
+    image = CloudinaryField(
+        "image",
         blank=True,
         null=True
     )
@@ -311,7 +312,6 @@ class ReportUser(models.Model):
     )
 
     def __str__(self):
-
         return (
             f"{self.reporter.full_name} reported "
             f"{self.reported_user.full_name}"
