@@ -1,6 +1,12 @@
 from django import forms
+from cloudinary.forms import CloudinaryFileField
+
 from .models import User, LostItem, FoundItem
 
+
+# =================================================
+# REGISTER FORM
+# =================================================
 
 class RegisterForm(forms.ModelForm):
 
@@ -69,7 +75,15 @@ class RegisterForm(forms.ModelForm):
         return cleaned_data
 
 
+# =================================================
+# LOST ITEM FORM
+# =================================================
+
 class LostItemForm(forms.ModelForm):
+
+    image = CloudinaryFileField(
+        required=False
+    )
 
     class Meta:
         model = LostItem
@@ -89,7 +103,15 @@ class LostItemForm(forms.ModelForm):
         }
 
 
+# =================================================
+# FOUND ITEM FORM
+# =================================================
+
 class FoundItemForm(forms.ModelForm):
+
+    image = CloudinaryFileField(
+        required=False
+    )
 
     class Meta:
         model = FoundItem
@@ -107,3 +129,4 @@ class FoundItemForm(forms.ModelForm):
                 attrs={"type": "date"}
             )
         }
+
