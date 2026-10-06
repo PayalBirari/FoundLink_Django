@@ -1,5 +1,4 @@
 from django import forms
-from cloudinary.forms import CloudinaryFileField
 
 from .models import User, LostItem, FoundItem
 
@@ -36,21 +35,18 @@ class RegisterForm(forms.ModelForm):
                     "placeholder": "Enter full name"
                 }
             ),
-
             "email": forms.EmailInput(
                 attrs={
                     "class": "form-control",
                     "placeholder": "Enter email"
                 }
             ),
-
             "mobile": forms.TextInput(
                 attrs={
                     "class": "form-control",
                     "placeholder": "Enter mobile number"
                 }
             ),
-
             "password": forms.PasswordInput(
                 attrs={
                     "class": "form-control",
@@ -62,7 +58,6 @@ class RegisterForm(forms.ModelForm):
 
     def clean(self):
         cleaned_data = super().clean()
-
         password = cleaned_data.get("password")
         confirm_password = cleaned_data.get("confirm_password")
 
@@ -80,10 +75,6 @@ class RegisterForm(forms.ModelForm):
 # =================================================
 
 class LostItemForm(forms.ModelForm):
-
-    image = CloudinaryFileField(
-        required=False
-    )
 
     class Meta:
         model = LostItem
@@ -109,10 +100,6 @@ class LostItemForm(forms.ModelForm):
 
 class FoundItemForm(forms.ModelForm):
 
-    image = CloudinaryFileField(
-        required=False
-    )
-
     class Meta:
         model = FoundItem
         fields = [
@@ -129,4 +116,3 @@ class FoundItemForm(forms.ModelForm):
                 attrs={"type": "date"}
             )
         }
-
