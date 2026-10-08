@@ -1,5 +1,4 @@
 from django.db import models
-from cloudinary.models import CloudinaryField
 
 
 # =================================================
@@ -47,8 +46,8 @@ class LostItem(models.Model):
 
     description = models.TextField()
 
-    image = CloudinaryField(
-        "image",
+    image = models.ImageField(
+        upload_to="lost_items/",
         blank=True,
         null=True
     )
@@ -93,8 +92,8 @@ class FoundItem(models.Model):
 
     description = models.TextField()
 
-    image = CloudinaryField(
-        "image",
+    image = models.ImageField(
+        upload_to="found_items/",
         blank=True,
         null=True
     )

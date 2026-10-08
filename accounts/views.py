@@ -10,7 +10,6 @@ from django.db.models import Q
 from django.core.mail import send_mail
 from django.contrib.auth.hashers import make_password, check_password
 from django.urls import reverse
-import cloudinary.uploader
 
 from .forms import RegisterForm, LostItemForm, FoundItemForm
 
@@ -310,16 +309,7 @@ def create_lost_item(request):
 
             item.user_id = request.session["user_id"]
 
-            # Upload the image directly to Cloudinary.
-            uploaded_image = request.FILES.get("image")
-
-            if uploaded_image:
-                result = cloudinary.uploader.upload(
-                    uploaded_image,
-                    folder="foundlink/lost_items"
-                )
-                item.image = result["public_id"]
-
+            # Save the image using normal Django FileSystemStorage.
             item.save()
 
             print("========================================")
@@ -412,16 +402,7 @@ def create_found_item(request):
 
             item.user_id = request.session["user_id"]
 
-            # Upload the image directly to Cloudinary.
-            uploaded_image = request.FILES.get("image")
-
-            if uploaded_image:
-                result = cloudinary.uploader.upload(
-                    uploaded_image,
-                    folder="foundlink/found_items"
-                )
-                item.image = result["public_id"]
-
+            # Save the image using normal Django FileSystemStorage.
             item.save()
 
             print("========================================")
