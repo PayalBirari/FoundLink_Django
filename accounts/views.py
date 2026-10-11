@@ -12,6 +12,7 @@ from django.contrib.auth.hashers import make_password, check_password
 from django.urls import reverse
 
 from .forms import RegisterForm, LostItemForm, FoundItemForm
+from .ai import ask_foundlink_ai
 
 from .models import (
     User,
@@ -21,7 +22,11 @@ from .models import (
     Like,
     Comment,
     Connection,
+    Announcement,
+
 )
+
+
 
 
 # =================================================
@@ -29,7 +34,56 @@ from .models import (
 # =================================================
 
 def home(request):
-    return render(request, "home.html")
+    query = request.GET.get("q", "").strip()
+
+    found_items = FoundItem.objects.filter(
+        status="found"
+    ).order_by("-created_at")
+
+    if query:
+        found_items = found_items.filter(
+            Q(item_name__icontains=query) |
+            Q(category__icontains=query) |
+            Q(location__icontains=query) |
+            Q(description__icontains=query)
+        )
+
+    announcements = list(
+        Announcement.objects.filter(
+            is_active=True
+        ).order_by("-created_at")[:5]
+    )
+
+    if not announcements:
+        announcements = [
+            {
+                "title": "Welcome to FoundLink",
+                "message": (
+                    "Report lost or found items and discover "
+                    "possible matches."
+                )
+            },
+            {
+                "title": "Smart Match",
+                "message": (
+                    "FoundLink helps connect lost-item reports "
+                    "with found items."
+                )
+            },
+            {
+                "title": "Stay Safe",
+                "message": (
+                    "Never share passwords or OTPs with other users."
+                )
+            }
+        ]
+
+    return render(request, "home.html", {
+        "found_items": found_items[:6],
+        "query": query,
+        "announcements": announcements,
+    })
+
 
 
 # =================================================
@@ -247,20 +301,11 @@ def logout(request):
 def dashboard(request):
 
     if "user_id" not in request.session:
-
         return redirect("login")
 
     lost_items = LostItem.objects.all().order_by("-created_at")
 
     found_items = FoundItem.objects.all().order_by("-created_at")
-
-    notifications = []
-
-    lost_count = LostItem.objects.count()
-
-    found_count = FoundItem.objects.count()
-
-    connections_count = 0
 
     user_id = request.session["user_id"]
 
@@ -272,6 +317,47 @@ def dashboard(request):
         Q(sender_id=user_id) | Q(receiver_id=user_id),
         status="accepted"
     ).count()
+
+    lost_count = LostItem.objects.count()
+    found_count = FoundItem.objects.count()
+
+    # =================================================
+    # FOUNDLINK ANNOUNCEMENTS
+    # =================================================
+
+    announcements = list(
+        Announcement.objects.filter(
+            is_active=True
+        ).order_by("-created_at")[:5]
+    )
+
+    # If there are no admin announcements,
+    # show useful automatic FoundLink updates.
+    if not announcements:
+
+        announcements = [
+            {
+                "title": "Welcome to FoundLink",
+                "message": (
+                    "Report lost or found items and let FoundLink "
+                    "help you discover possible matches."
+                )
+            },
+            {
+                "title": "Smart Match Available",
+                "message": (
+                    "FoundLink compares item category, name, "
+                    "location and description to identify possible matches."
+                )
+            },
+            {
+                "title": "Stay Safe",
+                "message": (
+                    "Never share passwords, OTPs or sensitive personal "
+                    "information with other users."
+                )
+            }
+        ]
 
     return render(request, "dashboard.html", {
 
@@ -286,6 +372,8 @@ def dashboard(request):
         "found_count": found_count,
 
         "connections_count": connections_count,
+
+        "announcements": announcements,
     })
 
 
@@ -1458,75 +1546,34 @@ def ai_assistant(request):
 
 def ai_chat(request):
 
-    # ---------------------------------------------
-    # LOGIN CHECK
-    # ---------------------------------------------
-
-    if "user_id" not in request.session:
-
-        return JsonResponse({
-            "success": False,
-            "response": "Please login to use FoundLink Assistant."
-        }, status=401)
-
-    # ---------------------------------------------
-    # REQUEST CHECK
-    # ---------------------------------------------
-
     if request.method != "POST":
-
         return JsonResponse({
             "success": False,
             "response": "Invalid request."
         }, status=400)
 
-    # ---------------------------------------------
-    # GET MESSAGE
-    # ---------------------------------------------
-
-    message = request.POST.get(
-        "message",
-        ""
-    ).strip().lower()
-
-    # ---------------------------------------------
-    # EMPTY MESSAGE
-    # ---------------------------------------------
+    message = request.POST.get("message", "").strip()
 
     if not message:
-
         return JsonResponse({
             "success": True,
             "response": (
-                "Hi! 👋 I am your FoundLink Assistant. "
-                "How can I help you?"
-            )
+                "Hi! 👋 I am your FoundLink AI Assistant. "
+                "Ask me anything about FoundLink."
+            ),
+            "actions": []
         })
 
-    # ---------------------------------------------
-    # DEFAULT ACTIONS
-    # ---------------------------------------------
+    # Ask Gemini
+    response = ask_foundlink_ai(message)
 
+    # Quick action buttons
     actions = []
+    message_lower = message.lower()
 
-    # ---------------------------------------------
-    # LOST ITEM
-    # ---------------------------------------------
-
-    if (
-        "lost" in message
-        and (
-            "report" in message
-            or "how" in message
-        )
+    if "report lost" in message_lower or (
+        "lost" in message_lower and "report" in message_lower
     ):
-
-        response = (
-            "To report a lost item, open Report Lost. "
-            "Enter the item name, category, location, date and "
-            "description. You can also upload an image."
-        )
-
         actions = [
             {
                 "label": "Report Lost Item",
@@ -1538,24 +1585,9 @@ def ai_chat(request):
             }
         ]
 
-    # ---------------------------------------------
-    # FOUND ITEM
-    # ---------------------------------------------
-
-    elif (
-        "found" in message
-        and (
-            "report" in message
-            or "how" in message
-        )
+    elif "report found" in message_lower or (
+        "found" in message_lower and "report" in message_lower
     ):
-
-        response = (
-            "To report a found item, open Report Found and enter "
-            "the item name, category, location, date and description. "
-            "FoundLink will check it against existing lost-item reports."
-        )
-
         actions = [
             {
                 "label": "Report Found Item",
@@ -1567,22 +1599,7 @@ def ai_chat(request):
             }
         ]
 
-    # ---------------------------------------------
-    # SMART MATCH
-    # ---------------------------------------------
-
-    elif (
-        "match" in message
-        or "smart" in message
-    ):
-
-        response = (
-            "FoundLink Smart Match compares found items with lost "
-            "items using category, item name, location and description. "
-            "When a strong possible match is found, the lost item is "
-            "marked as Possible Match and the owner receives a notification."
-        )
-
+    elif "smart match" in message_lower or "match" in message_lower:
         actions = [
             {
                 "label": "Report Found Item",
@@ -1598,42 +1615,7 @@ def ai_chat(request):
             }
         ]
 
-    # ---------------------------------------------
-    # LOCATION
-    # ---------------------------------------------
-
-    elif "location" in message:
-
-        response = (
-            "Location helps FoundLink identify possible matches. "
-            "If a found item was reported in a location similar to "
-            "where an item was lost, location can provide an additional "
-            "matching signal."
-        )
-
-        actions = [
-            {
-                "label": "Report Lost Item",
-                "url": reverse("create_lost_item")
-            },
-            {
-                "label": "Report Found Item",
-                "url": reverse("create_found_item")
-            }
-        ]
-
-    # ---------------------------------------------
-    # NOTIFICATIONS
-    # ---------------------------------------------
-
-    elif "notification" in message:
-
-        response = (
-            "Your dashboard contains FoundLink notifications. "
-            "Possible Smart Matches, connection requests and some "
-            "recovery or return updates can appear there."
-        )
-
+    elif "notification" in message_lower:
         actions = [
             {
                 "label": "Open Dashboard",
@@ -1641,21 +1623,7 @@ def ai_chat(request):
             }
         ]
 
-    # ---------------------------------------------
-    # CONNECTIONS / CONTACT
-    # ---------------------------------------------
-
-    elif (
-        "connection" in message
-        or "contact" in message
-    ):
-
-        response = (
-            "You can search for another FoundLink user from Find Users "
-            "and send a connection request. Accepted connections are "
-            "available in My Connections."
-        )
-
+    elif "connection" in message_lower or "contact" in message_lower:
         actions = [
             {
                 "label": "Find Users",
@@ -1667,23 +1635,7 @@ def ai_chat(request):
             }
         ]
 
-    # ---------------------------------------------
-    # RECOVERY / RETURN
-    # ---------------------------------------------
-
-    elif (
-        "recover" in message
-        or "recovered" in message
-        or "return" in message
-        or "returned" in message
-    ):
-
-        response = (
-            "After an item is successfully recovered or returned, "
-            "update its status from My Reports. Lost items can move "
-            "to Recovered, while found items can move to Returned."
-        )
-
+    elif "recover" in message_lower or "return" in message_lower:
         actions = [
             {
                 "label": "Open My Reports",
@@ -1691,164 +1643,51 @@ def ai_chat(request):
             }
         ]
 
-    # ---------------------------------------------
-    # SAFETY
-    # ---------------------------------------------
-
-    elif (
-        "safe" in message
-        or "safety" in message
-    ):
-
-        response = (
-            "For safety, avoid sharing sensitive personal information "
-            "publicly. Use FoundLink's connection features and arrange "
-            "item returns in a safe public place."
-        )
-
-        actions = [
-            {
-                "label": "Find Users",
-                "url": reverse("search_users")
-            }
-        ]
-
-    # ---------------------------------------------
-    # DASHBOARD
-    # ---------------------------------------------
-
-    elif "dashboard" in message:
-
-        response = (
-            "Your FoundLink dashboard shows recent lost and found "
-            "items, notifications, statistics and your activity."
-        )
-
+    elif "dashboard" in message_lower:
         actions = [
             {
                 "label": "Open Dashboard",
                 "url": reverse("dashboard")
             }
         ]
-
-    # ---------------------------------------------
-    # MY REPORTS
-    # ---------------------------------------------
-
-    elif (
-        "my report" in message
-        or "my reports" in message
-    ):
-
-        response = (
-            "My Reports shows the lost and found items reported "
-            "by your account. You can edit, delete and update "
-            "their status there."
-        )
-
-        actions = [
-            {
-                "label": "Open My Reports",
-                "url": reverse("my_reports")
-            }
-        ]
-
-    # ---------------------------------------------
-    # LOST / FOUND GENERAL
-    # ---------------------------------------------
-
-    elif (
-        "lost item" in message
-        or "lost item" in message
-    ):
-
-        response = (
-            "If you lost something, report it using Report Lost. "
-            "Add accurate item details, location and date so Smart "
-            "Match has useful information."
-        )
-
-        actions = [
-            {
-                "label": "Report Lost Item",
-                "url": reverse("create_lost_item")
-            }
-        ]
-
-    # ---------------------------------------------
-    # GREETING
-    # ---------------------------------------------
-
-    elif (
-        "hello" in message
-        or "hi" in message
-        or "hey" in message
-    ):
-
-        response = (
-            "Hello! 👋 I am your FoundLink Assistant. "
-            "I can help with reporting items, Smart Match, "
-            "notifications, connections, recovery and safety."
-        )
-
-        actions = [
-            {
-                "label": "Report Lost",
-                "url": reverse("create_lost_item")
-            },
-            {
-                "label": "Report Found",
-                "url": reverse("create_found_item")
-            },
-            {
-                "label": "Open Dashboard",
-                "url": reverse("dashboard")
-            }
-        ]
-
-    # ---------------------------------------------
-    # HELP / DEFAULT
-    # ---------------------------------------------
-
-    else:
-
-        response = (
-            "I can help you with FoundLink. "
-            "You can ask me about:\n\n"
-            "• Reporting a lost item\n"
-            "• Reporting a found item\n"
-            "• Smart Match\n"
-            "• Notifications\n"
-            "• Connections\n"
-            "• Recovery and return\n"
-            "• Safety"
-        )
-
-        actions = [
-            {
-                "label": "Report Lost",
-                "url": reverse("create_lost_item")
-            },
-            {
-                "label": "Report Found",
-                "url": reverse("create_found_item")
-            },
-            {
-                "label": "My Reports",
-                "url": reverse("my_reports")
-            },
-            {
-                "label": "My Connections",
-                "url": reverse("my_connections")
-            }
-        ]
-
-    # ---------------------------------------------
-    # FINAL JSON RESPONSE
-    # ---------------------------------------------
 
     return JsonResponse({
         "success": True,
         "response": response,
         "actions": actions
     })
+
+def ai_lost_item_finder(request):
+    if not request.session.get("user_id"):
+        return redirect("login")
+
+    from .ai_finder import find_matching_found_items
+
+    matches = []
+    searched = False
+    ai_used = False
+    query = ""
+
+    if request.method == "POST":
+        query = request.POST.get("query", "").strip()[:1000]
+        searched = bool(query)
+
+        if query:
+            found_items = FoundItem.objects.filter(
+                status="found"
+            ).select_related("user")
+
+            matches, ai_used = find_matching_found_items(
+                query, found_items
+            )
+
+    return render(
+        request,
+        "ai_lost_item_finder.html",
+        {
+            "matches": matches,
+            "searched": searched,
+            "ai_used": ai_used,
+            "query": query,
+        },
+    )

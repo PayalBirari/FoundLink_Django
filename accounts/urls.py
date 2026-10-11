@@ -94,6 +94,12 @@ urlpatterns = [
         name="ai_chat"
     ),
 
+    path(
+        "ai-lost-item-finder/",
+        views.ai_lost_item_finder,
+        name="ai_lost_item_finder"
+    ),
+
 
     # =================================================
     # LOST ITEMS

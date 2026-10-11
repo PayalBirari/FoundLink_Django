@@ -4,7 +4,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ("accounts", "0010_alter_founditem_image_alter_lostitem_image"),
+        ("accounts", "0010_reportuser"),
     ]
 
     operations = [

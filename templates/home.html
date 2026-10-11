@@ -1,34 +1,29 @@
+
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FoundLink | Lost & Found</title>
+    <meta name="description" content="FoundLink helps students report lost items, find belongings and discover possible matches.">
 
-    <title>FoundLink | Lost & Found Platform</title>
-
-    <!-- Bootstrap -->
-    <link
-        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-        rel="stylesheet"
-    >
-
-    <!-- Bootstrap Icons -->
-    <link
-        rel="stylesheet"
-        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
-    >
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
     <style>
-
         :root {
-            --primary: #59aaa9;
-            --primary-dark: #438f8e;
             --navy: #21366d;
-            --text: #536174;
-            --light-bg: #f8fbfc;
+            --navy-dark: #17274f;
+            --teal: #59aaa9;
+            --teal-dark: #388e8d;
+            --teal-light: #e8f5f4;
+            --background: #f8fbfc;
             --white: #ffffff;
-            --border: #e5eeee;
+            --text: #53627d;
+            --border: #e7eeee;
+            --shadow: 0 16px 45px rgba(33, 54, 109, 0.09);
         }
 
         * {
@@ -37,2923 +32,1853 @@
 
         html {
             scroll-behavior: smooth;
+            scroll-padding-top: 100px;
         }
 
         body {
             margin: 0;
-            font-family: "Segoe UI", Arial, sans-serif;
-            color: var(--text);
-            background: var(--light-bg);
+            font-family: 'DM Sans', sans-serif;
+            background: var(--background);
+            color: var(--navy);
+            overflow-x: hidden;
         }
 
+        h1, h2, h3, h4 {
+            font-family: 'Manrope', sans-serif;
+            color: var(--navy);
+        }
 
-        /* =========================
-           NAVBAR
-        ========================= */
+        a {
+            text-decoration: none;
+        }
+
+        .section-padding {
+            padding: 85px 0;
+        }
+
+        .section-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 9px 15px;
+            border-radius: 50px;
+            background: var(--teal-light);
+            color: var(--teal-dark);
+            font-weight: 700;
+            font-size: 13px;
+            margin-bottom: 18px;
+        }
+
+        .section-title {
+            font-size: clamp(30px, 4vw, 43px);
+            font-weight: 800;
+            letter-spacing: -1.4px;
+            line-height: 1.2;
+        }
+
+        .section-description {
+            color: var(--text);
+            line-height: 1.8;
+            font-size: 16px;
+        }
+
+        /* NAVBAR */
 
         .main-navbar {
-            height: 66px;
-            background: rgba(255,255,255,0.98);
-            border-bottom: 1px solid var(--border);
             position: sticky;
             top: 0;
             z-index: 1000;
+            background: rgba(255, 255, 255, 0.97);
+            border-bottom: 1px solid rgba(33, 54, 109, 0.06);
+            box-shadow: 0 4px 20px rgba(33, 54, 109, 0.035);
+            backdrop-filter: blur(14px);
         }
 
-        .main-navbar .container {
-            height: 100%;
+        .navbar {
+            min-height: 82px;
         }
 
-        .navbar-brand {
-            text-decoration: none;
-            display: flex;
+        .brand {
+            display: inline-flex;
             align-items: center;
-            gap: 9px;
+            gap: 11px;
+            flex-shrink: 0;
         }
 
-        .logo-box {
-            width: 42px;
-            height: 42px;
-            background: var(--primary);
-            color: white;
-            border-radius: 11px;
-            display: flex;
+        .brand-icon {
+            width: 48px;
+            height: 48px;
+            display: inline-flex;
             align-items: center;
             justify-content: center;
-            font-size: 22px;
-            box-shadow: 0 6px 16px rgba(89,170,169,0.22);
-            animation: logoFloat 3s ease-in-out infinite;
+            background: var(--teal);
+            border-radius: 14px;
+        }
+
+        .brand-icon svg {
+            width: 30px;
+            height: 30px;
         }
 
         .brand-name {
-            font-size: 22px;
+            font-family: 'Manrope', sans-serif;
+            font-size: 27px;
             font-weight: 800;
-            letter-spacing: -0.5px;
+            letter-spacing: -1.2px;
             color: var(--navy);
+            line-height: 1;
         }
 
         .brand-name span {
-            color: var(--primary);
+            color: var(--teal);
         }
 
-        .nav-link {
-            color: #536174 !important;
-            font-weight: 600;
-            margin: 0 7px;
-            padding: 7px 12px !important;
-            border-radius: 8px;
-            transition: 0.2s;
+        .navbar-nav {
+            align-items: center;
+            gap: 11px;
         }
 
-        .nav-link:hover {
-            color: var(--primary) !important;
-            background: #f0f8f8;
+        .navbar-nav .nav-link {
+            color: #445170;
+            font-weight: 700;
+            font-size: 15px;
+            padding: 10px 12px !important;
+            transition: color 0.2s ease;
         }
 
-        .login-btn {
+        .navbar-nav .nav-link:hover {
+            color: var(--teal-dark);
+        }
+
+        .nav-login {
+            color: var(--navy) !important;
+            font-weight: 800 !important;
+        }
+
+        .btn-primary-custom,
+        .btn-outline-custom {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 9px;
+            padding: 13px 22px;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 800;
+            transition: all 0.25s ease;
+        }
+
+        .btn-primary-custom {
+            background: var(--teal);
+            color: var(--white);
+            border: 1px solid var(--teal);
+            box-shadow: 0 8px 18px rgba(89, 170, 169, 0.18);
+        }
+
+        .btn-primary-custom:hover {
+            background: var(--teal-dark);
+            border-color: var(--teal-dark);
+            color: var(--white);
+            transform: translateY(-2px);
+        }
+
+        .btn-outline-custom {
             color: var(--navy);
-            font-weight: 700;
-            text-decoration: none;
-            margin-right: 15px;
+            background: var(--white);
+            border: 1px solid #dce7e8;
         }
 
-        .login-btn:hover {
-            color: var(--primary);
+        .btn-outline-custom:hover {
+            color: var(--teal-dark);
+            border-color: var(--teal);
+            transform: translateY(-2px);
         }
 
-        .start-btn {
-            background: var(--primary);
-            color: white;
-            border: none;
-            padding: 10px 19px;
-            border-radius: 10px;
-            font-weight: 700;
-            text-decoration: none;
-            display: inline-block;
-            transition: 0.2s;
-        }
-
-        .start-btn:hover {
-            background: var(--primary-dark);
-            color: white;
-            transform: translateY(-1px);
-        }
-
-
-        /* =========================
-           ANNOUNCEMENT
-        ========================= */
+        /* ANNOUNCEMENT */
 
         .announcement-bar {
-            height: 44px;
-            background: var(--primary);
-            color: white;
             display: flex;
             align-items: center;
+            gap: 12px;
             overflow: hidden;
             white-space: nowrap;
-            position: relative;
-            z-index: 900;
+            background: var(--navy);
+            color: var(--white);
+            padding: 11px 0;
+            font-size: 13px;
         }
 
         .announcement-label {
-            height: 100%;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            padding: 0 22px;
-            background: var(--navy);
-            font-size: 13px;
-            font-weight: 800;
             flex-shrink: 0;
-            z-index: 2;
+            margin-left: 20px;
+            padding: 5px 11px;
+            border-radius: 5px;
+            background: var(--teal);
+            font-size: 11px;
+            font-weight: 800;
         }
 
-        .announcement-track {
-            display: inline-flex;
-            align-items: center;
-            min-width: max-content;
-            animation: announcementMove 30s linear infinite;
-        }
-
-        .announcement-item {
-            display: inline-flex;
-            align-items: center;
-            font-size: 13px;
-            font-weight: 700;
-            margin-right: 45px;
-        }
-
-        .announcement-item::after {
-            content: "•";
-            margin-left: 45px;
-            opacity: 0.8;
-        }
-
-        .announcement-empty {
-            font-size: 13px;
-            font-weight: 700;
-            padding-left: 25px;
-        }
-
-        @keyframes announcementMove {
-            from {
-                transform: translateX(100%);
-            }
-
-            to {
-                transform: translateX(-100%);
-            }
-        }
-
-        .announcement-bar:hover .announcement-track {
-            animation-play-state: paused;
-        }
-
-
-        /* =========================
-           HERO
-        ========================= */
-
-        .hero {
-            padding: 80px 0 70px;
-            background:
-                radial-gradient(
-                    circle at 90% 10%,
-                    rgba(89,170,169,0.12),
-                    transparent 30%
-                ),
-                var(--light-bg);
+        .ticker-window {
+            flex: 1;
             overflow: hidden;
         }
 
+        .ticker-text {
+            display: inline-block;
+            padding-left: 100%;
+            animation: tickerMove 32s linear infinite;
+        }
+
+        .ticker-text span {
+            margin-right: 55px;
+        }
+
+        .ticker-text i {
+            color: #8ed8d0;
+            margin-right: 8px;
+        }
+
+        @keyframes tickerMove {
+            from { transform: translateX(0); }
+            to { transform: translateX(-100%); }
+        }
+
+        /* HERO */
+
+        .hero-section {
+            position: relative;
+            overflow: hidden;
+            padding: 75px 0 82px;
+            background:
+                radial-gradient(circle at 7% 10%, rgba(89,170,169,0.10), transparent 25%),
+                radial-gradient(circle at 95% 85%, rgba(33,54,109,0.06), transparent 28%),
+                var(--background);
+        }
+
         .hero-content {
-            padding-right: 35px;
+            position: relative;
+            z-index: 2;
         }
 
         .hero-label {
             display: inline-flex;
             align-items: center;
-            gap: 8px;
-            background: #e8f6f6;
-            color: var(--primary-dark);
-            padding: 8px 14px;
+            gap: 10px;
+            padding: 10px 17px;
+            margin-bottom: 27px;
+            border: 1px solid #edf2f3;
             border-radius: 50px;
+            background: var(--white);
+            box-shadow: 0 8px 28px rgba(33,54,109,0.06);
+            color: var(--teal-dark);
             font-size: 14px;
-            font-weight: 700;
-            margin-bottom: 18px;
-            animation: fadeUp 0.7s ease both;
-        }
-
-        .hero h1 {
-            color: var(--navy);
-            font-size: clamp(42px,5vw,64px);
-            line-height: 1.08;
             font-weight: 800;
-            letter-spacing: -2px;
-            margin-bottom: 22px;
-            animation: fadeUp 0.8s ease 0.1s both;
         }
 
-        .hero h1 span {
-            color: var(--primary);
+        .hero-label i {
+            color: var(--teal);
+            font-size: 17px;
+        }
+
+        .hero-title {
+            font-size: clamp(40px, 5.2vw, 64px);
+            font-weight: 800;
+            letter-spacing: -2.7px;
+            line-height: 1.11;
+            margin-bottom: 23px;
+        }
+
+        .hero-title .highlight {
+            color: var(--teal);
         }
 
         .hero-description {
-            font-size: 18px;
-            line-height: 1.7;
-            max-width: 590px;
-            margin-bottom: 25px;
-            animation: fadeUp 0.8s ease 0.2s both;
-        }
-
-        .hero-subtext {
-            display: flex;
-            align-items: center;
-            gap: 9px;
-            font-size: 14px;
-            font-weight: 600;
-            color: #657387;
-            margin-bottom: 30px;
-            animation: fadeUp 0.8s ease 0.3s both;
-        }
-
-        .hero-subtext i {
-            color: var(--primary);
-            font-size: 18px;
+            max-width: 570px;
+            margin-bottom: 28px;
+            color: var(--text);
+            font-size: 17px;
+            line-height: 1.9;
         }
 
         .hero-actions {
             display: flex;
-            gap: 12px;
             flex-wrap: wrap;
-            animation: fadeUp 0.8s ease 0.4s both;
+            gap: 13px;
+            margin-bottom: 27px;
         }
 
-        .hero-primary-btn {
-            background: var(--primary);
-            color: white;
-            text-decoration: none;
-            padding: 14px 23px;
-            border-radius: 11px;
+        .hero-assurance {
+            display: flex;
+            align-items: center;
+            gap: 11px;
+            color: #455473;
+            font-size: 14px;
             font-weight: 700;
-            transition: 0.2s;
         }
 
-        .hero-primary-btn:hover {
-            background: var(--primary-dark);
-            color: white;
-            transform: translateY(-2px);
+        .hero-assurance i {
+            color: var(--teal);
+            font-size: 22px;
         }
-
-        .hero-secondary-btn {
-            background: white;
-            color: var(--navy);
-            text-decoration: none;
-            padding: 14px 23px;
-            border: 1px solid #dce8e8;
-            border-radius: 11px;
-            font-weight: 700;
-            transition: 0.2s;
-        }
-
-        .hero-secondary-btn:hover {
-            border-color: var(--primary);
-            color: var(--primary);
-        }
-
-
-        /* =========================
-           HERO IMAGE
-        ========================= */
 
         .hero-visual {
             position: relative;
-            padding: 15px;
-            animation: fadeRight 0.9s ease 0.2s both;
+            padding: 12px 16px 20px;
         }
 
-        .hero-image-wrapper {
-            position: relative;
-            border-radius: 24px;
+        .hero-image-wrap {
+            height: 475px;
             overflow: hidden;
-            box-shadow: 0 25px 60px rgba(33,54,109,0.15);
-            background: white;
-            animation: imageFloat 5s ease-in-out infinite;
-            transition: transform 0.2s ease;
+            border-radius: 32px;
+            background: #e1eeee;
+            box-shadow: 0 25px 60px rgba(33,54,109,0.16);
         }
 
         .hero-image {
-            width: 100%;
-            height: 480px;
-            object-fit: cover;
             display: block;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
 
         .image-overlay {
             position: absolute;
-            inset: 0;
+            inset: 12px 16px 20px;
+            border-radius: 32px;
             background: linear-gradient(
-                to top,
-                rgba(33,54,109,0.28),
-                transparent 45%
+                180deg,
+                rgba(20,36,70,0.02) 45%,
+                rgba(20,36,70,0.42) 100%
             );
+            pointer-events: none;
         }
 
         .floating-card {
             position: absolute;
-            background: white;
-            border-radius: 14px;
-            padding: 13px 16px;
-            box-shadow: 0 15px 35px rgba(33,54,109,0.15);
+            z-index: 2;
             display: flex;
             align-items: center;
-            gap: 11px;
-            z-index: 3;
+            gap: 13px;
+            padding: 16px 19px;
+            border: 1px solid rgba(255,255,255,0.8);
+            border-radius: 17px;
+            background: rgba(255,255,255,0.97);
+            box-shadow: 0 16px 38px rgba(23,39,79,0.15);
+        }
+
+        .floating-card-top {
+            top: 45px;
+            right: -3px;
+            min-width: 220px;
+        }
+
+        .floating-card-bottom {
+            right: 20px;
+            bottom: 4px;
+            left: -3px;
         }
 
         .floating-icon {
-            width: 39px;
-            height: 39px;
-            border-radius: 10px;
-            background: #e9f7f7;
-            color: var(--primary);
+            display: flex;
+            flex: 0 0 44px;
+            align-items: center;
+            justify-content: center;
+            width: 44px;
+            height: 44px;
+            border-radius: 13px;
+            background: var(--teal-light);
+            color: var(--teal-dark);
+            font-size: 21px;
+        }
+
+        .floating-card strong {
+            display: block;
+            margin-bottom: 3px;
+            color: var(--navy);
+            font-size: 14px;
+        }
+
+        .floating-card small {
+            color: #687692;
+            font-size: 12px;
+        }
+
+        /* BENEFITS */
+
+        .benefits-strip {
+            padding: 27px 0;
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+            background: var(--white);
+        }
+
+        .benefit-item {
             display: flex;
             align-items: center;
             justify-content: center;
+            gap: 13px;
+            padding: 7px 12px;
+        }
+
+        .benefit-icon {
+            display: flex;
+            flex-shrink: 0;
+            align-items: center;
+            justify-content: center;
+            width: 43px;
+            height: 43px;
+            border-radius: 13px;
+            background: var(--teal-light);
+            color: var(--teal-dark);
             font-size: 19px;
         }
 
-        .floating-title {
-            color: var(--navy);
-            font-weight: 800;
-            font-size: 13px;
-            margin: 0;
-        }
-
-        .floating-text {
-            font-size: 11px;
-            margin: 2px 0 0;
-            color: #7b8796;
-        }
-
-        .match-card {
-            left: -12px;
-            bottom: 40px;
-            animation: cardFloat 3.5s ease-in-out infinite;
-        }
-
-        .student-card {
-            right: -12px;
-            top: 45px;
-            animation: cardFloat 4s ease-in-out 0.7s infinite;
-        }
-
-
-        /* =========================
-           FEATURE STRIP
-        ========================= */
-
-        .feature-strip {
-            background: white;
-            border-top: 1px solid var(--border);
-            border-bottom: 1px solid var(--border);
-            padding: 22px 0;
-        }
-
-        .feature-item {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
+        .benefit-item strong {
+            display: block;
             color: var(--navy);
             font-size: 14px;
-            font-weight: 700;
-            transition: 0.25s;
         }
 
-        .feature-item:hover {
-            transform: translateY(-3px);
+        .benefit-item small {
+            display: block;
+            margin-top: 3px;
+            color: #77829a;
+            font-size: 12px;
         }
 
-        .feature-item i {
-            color: var(--primary);
-            font-size: 20px;
+        /* ABOUT / FEATURES */
+
+        .features-section {
+            background: var(--white);
         }
-
-
-        /* =========================
-           GENERAL SECTION
-        ========================= */
-
-        .section {
-            padding: 85px 0;
-        }
-
-        .section-white {
-            background: white;
-        }
-
-        .section-heading {
-            text-align: center;
-            margin-bottom: 50px;
-        }
-
-        .section-label {
-            color: var(--primary);
-            font-weight: 800;
-            font-size: 13px;
-            text-transform: uppercase;
-            letter-spacing: 1.2px;
-            margin-bottom: 9px;
-        }
-
-        .section-heading h2 {
-            color: var(--navy);
-            font-size: 36px;
-            font-weight: 800;
-            margin-bottom: 12px;
-        }
-
-        .section-heading p {
-            max-width: 650px;
-            margin: auto;
-            line-height: 1.7;
-        }
-
-
-        /* =========================
-           SCROLL REVEAL
-        ========================= */
-
-        .reveal {
-            opacity: 0;
-            transform: translateY(30px);
-            transition:
-                opacity 0.7s ease,
-                transform 0.7s ease;
-        }
-
-        .reveal.show {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-
-        /* =========================
-           FEATURE CARDS
-        ========================= */
 
         .feature-card {
+            position: relative;
             height: 100%;
-            background: white;
+            padding: 30px 27px;
             border: 1px solid var(--border);
-            border-radius: 17px;
-            padding: 28px;
-            transition: 0.3s;
+            border-radius: 22px;
+            background: var(--white);
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
         }
 
         .feature-card:hover {
-            transform: translateY(-7px);
-            box-shadow: 0 15px 35px rgba(33,54,109,0.08);
-            border-color: #cfe5e5;
+            transform: translateY(-6px);
+            border-color: rgba(89,170,169,0.55);
+            box-shadow: var(--shadow);
         }
 
-        .feature-card-icon {
-            width: 51px;
-            height: 51px;
-            border-radius: 13px;
-            background: #eaf7f7;
-            color: var(--primary);
+        .feature-icon {
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 23px;
-            margin-bottom: 20px;
+            width: 57px;
+            height: 57px;
+            margin-bottom: 22px;
+            border-radius: 17px;
+            background: var(--teal-light);
+            color: var(--teal-dark);
+            font-size: 25px;
         }
 
-        .feature-card h5 {
-            color: var(--navy);
+        .feature-number {
+            position: absolute;
+            top: 25px;
+            right: 25px;
+            color: #e1e8eb;
+            font-size: 25px;
             font-weight: 800;
-            margin-bottom: 10px;
+        }
+
+        .feature-card h3 {
+            margin-bottom: 12px;
+            font-size: 19px;
+            font-weight: 800;
         }
 
         .feature-card p {
+            margin-bottom: 0;
+            color: var(--text);
             font-size: 14px;
-            line-height: 1.7;
-            margin: 0;
+            line-height: 1.8;
         }
 
+        /* HOW IT WORKS */
 
-        /* =========================
-           HOW IT WORKS
-        ========================= */
+        .steps-section {
+            background: #f0f7f7;
+        }
 
         .step-card {
-            text-align: center;
-            padding: 25px 18px;
-            position: relative;
+            height: 100%;
+            padding: 28px 24px;
+            border: 1px solid #e6eeee;
+            border-radius: 21px;
+            background: var(--white);
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+        }
+
+        .step-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow);
         }
 
         .step-number {
-            width: 58px;
-            height: 58px;
-            border-radius: 50%;
-            background: #eaf7f7;
-            color: var(--primary);
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 0 auto 18px;
-            font-size: 20px;
+            width: 48px;
+            height: 48px;
+            margin-bottom: 22px;
+            border-radius: 15px;
+            background: var(--navy);
+            color: var(--white);
+            font-family: 'Manrope', sans-serif;
+            font-size: 19px;
             font-weight: 800;
-            transition: 0.3s;
         }
 
-        .step-card:hover .step-number {
-            background: var(--primary);
-            color: white;
-            transform: scale(1.08);
-        }
-
-        .step-card h5 {
-            color: var(--navy);
+        .step-card h3 {
+            margin-bottom: 11px;
+            font-size: 18px;
             font-weight: 800;
         }
 
         .step-card p {
+            margin-bottom: 0;
+            color: var(--text);
             font-size: 14px;
-            line-height: 1.7;
-        }
-
-
-        /* =========================
-           SMART MATCH
-        ========================= */
-
-        .smart-section {
-            background: #edf8f8;
-        }
-
-        .smart-box {
-            background: white;
-            border: 1px solid #d9eeee;
-            border-radius: 22px;
-            padding: 45px;
-            box-shadow: 0 15px 40px rgba(33,54,109,0.06);
-        }
-
-        .smart-icon {
-            width: 62px;
-            height: 62px;
-            border-radius: 16px;
-            background: var(--primary);
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 28px;
-            margin-bottom: 20px;
-            animation: smartPulse 2.5s ease-in-out infinite;
-        }
-
-        .smart-box h2 {
-            color: var(--navy);
-            font-weight: 800;
-            margin-bottom: 15px;
-        }
-
-        .smart-box p {
             line-height: 1.8;
-            margin-bottom: 20px;
         }
 
-        .smart-points {
-            list-style: none;
-            padding: 0;
-            margin: 0;
+        /* SMART MATCH */
+
+        .match-section {
+            background: var(--white);
         }
 
-        .smart-points li {
-            margin-bottom: 11px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-weight: 600;
-            font-size: 14px;
+        .match-panel {
+            position: relative;
+            overflow: hidden;
+            padding: 43px;
+            border-radius: 28px;
+            background: var(--navy);
+            color: var(--white);
         }
 
-        .smart-points i {
-            color: var(--primary);
-            font-size: 17px;
+        .match-panel::after {
+            position: absolute;
+            top: -125px;
+            right: -105px;
+            width: 330px;
+            height: 330px;
+            border: 1px solid rgba(255,255,255,0.12);
+            border-radius: 50%;
+            box-shadow: 0 0 0 35px rgba(255,255,255,0.03),
+                        0 0 0 70px rgba(255,255,255,0.025);
+            content: "";
         }
 
-
-        /* =========================
-           STATUS FLOW
-        ========================= */
-
-        .status-box {
-            background: #f8fbfc;
-            border: 1px solid #e5eeee;
-            border-radius: 18px;
-            padding: 25px;
+        .match-panel h2 {
+            color: var(--white);
+            font-size: clamp(28px, 3.5vw, 40px);
+            font-weight: 800;
+            letter-spacing: -1px;
+            line-height: 1.25;
         }
 
-        .status-flow {
+        .match-panel p {
+            max-width: 600px;
+            color: rgba(255,255,255,0.77);
+            line-height: 1.8;
+        }
+
+        .match-panel .section-label {
+            background: rgba(89,170,169,0.16);
+            color: #a5e4df;
+        }
+
+        .match-visual {
+            position: relative;
+            z-index: 1;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 7px;
-            flex-wrap: wrap;
-            margin-top: 22px;
+            min-height: 215px;
         }
 
-        .status-item {
-            padding: 8px 11px;
-            border-radius: 20px;
-            background: white;
-            border: 1px solid #dceaea;
-            color: #7b8796;
-            font-size: 11px;
-            font-weight: 700;
-            transition: 0.4s;
-        }
-
-        .status-item.active {
-            background: var(--primary);
-            border-color: var(--primary);
-            color: white;
-            transform: scale(1.08);
-            box-shadow: 0 5px 15px rgba(89,170,169,0.25);
-        }
-
-        .status-arrow {
-            color: #a0adb9;
-            font-weight: 800;
-            transition: 0.3s;
-        }
-
-        .status-arrow.active {
-            color: var(--primary);
-        }
-
-
-        /* =========================
-           SAFETY & TRUST
-        ========================= */
-
-        .safety-section {
-            background: white;
-        }
-
-        .safety-card {
-            height: 100%;
-            background: #f8fbfc;
-            border: 1px solid var(--border);
-            border-radius: 17px;
-            padding: 28px;
-            transition: 0.3s;
-        }
-
-        .safety-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 30px rgba(33,54,109,0.08);
-            border-color: #cfe5e5;
-        }
-
-        .safety-icon {
-            width: 52px;
-            height: 52px;
-            border-radius: 13px;
-            background: #eaf7f7;
-            color: var(--primary);
+        .match-circle {
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 23px;
-            margin-bottom: 18px;
+            width: 190px;
+            height: 190px;
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 50%;
+            background: rgba(255,255,255,0.05);
+            box-shadow: 0 0 0 20px rgba(255,255,255,0.035);
         }
 
-        .safety-card h5 {
-            color: var(--navy);
-            font-weight: 800;
-            margin-bottom: 10px;
+        .match-circle i {
+            color: #8ed8d0;
+            font-size: 79px;
         }
 
-        .safety-card p {
-            font-size: 14px;
-            line-height: 1.7;
-            margin: 0;
-        }
-
-
-        /* =========================
-           CONTACT
-        ========================= */
+        /* CONTACT */
 
         .contact-section {
-            background: #f3f9f9;
-            padding: 75px 0;
+            background: var(--background);
         }
 
-        .contact-box {
-            background: white;
+        .contact-card {
+            height: 100%;
+            padding: 30px;
             border: 1px solid var(--border);
             border-radius: 22px;
-            padding: 40px;
-            box-shadow: 0 15px 40px rgba(33,54,109,0.06);
+            background: var(--white);
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+        }
+
+        .contact-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow);
         }
 
         .contact-icon {
-            width: 56px;
-            height: 56px;
-            border-radius: 14px;
-            background: #eaf7f7;
-            color: var(--primary);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 25px;
-            margin-bottom: 18px;
+            width: 55px;
+            height: 55px;
+            margin-bottom: 20px;
+            border-radius: 16px;
+            background: var(--teal-light);
+            color: var(--teal-dark);
+            font-size: 24px;
         }
 
-        .contact-box h3 {
-            color: var(--navy);
+        .contact-card h3 {
+            margin-bottom: 10px;
+            font-size: 19px;
             font-weight: 800;
-            margin-bottom: 12px;
         }
 
-        .contact-box p {
-            line-height: 1.7;
-        }
-
-        .contact-detail {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 12px;
+        .contact-card p {
+            margin-bottom: 10px;
+            color: var(--text);
             font-size: 14px;
-            font-weight: 600;
+            line-height: 1.8;
         }
 
-        .contact-detail i {
-            color: var(--primary);
-            font-size: 18px;
-        }
-
-
-        /* =========================
-           CTA
-        ========================= */
-
-        .cta-section {
-            padding: 80px 0;
-            background: var(--navy);
-        }
-
-        .cta-box {
-            text-align: center;
-            color: white;
-        }
-
-        .cta-box h2 {
-            font-size: 38px;
+        .contact-link {
+            color: var(--teal-dark);
             font-weight: 800;
-            margin-bottom: 14px;
+            overflow-wrap: anywhere;
         }
 
-        .cta-box p {
-            color: #d8e0ef;
-            margin-bottom: 28px;
+        .contact-link:hover {
+            color: var(--navy);
         }
 
-        .cta-btn {
-            background: var(--primary);
-            color: white;
-            text-decoration: none;
-            padding: 14px 25px;
-            border-radius: 11px;
-            font-weight: 700;
-            display: inline-block;
-            transition: 0.2s;
+        .sample-note {
+            display: block;
+            margin-top: 9px;
+            color: #7b879a;
+            font-size: 11px;
         }
 
-        .cta-btn:hover {
-            background: #70b9b8;
-            color: white;
-            transform: translateY(-2px);
+        /* FOOTER */
+
+        .site-footer {
+            padding: 50px 0 22px;
+            background: var(--navy-dark);
+            color: rgba(255,255,255,0.75);
         }
 
-
-        /* =========================
-           FOOTER
-        ========================= */
-
-        footer {
-            background: #182a56;
-            color: #bac5d9;
-            padding: 35px 0 25px;
+        .site-footer .brand-name {
+            color: var(--white);
         }
 
-        .footer-brand {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            text-decoration: none;
+        .site-footer .brand-name span {
+            color: #7fd0c8;
+        }
+
+        .footer-description {
+            max-width: 350px;
+            margin-top: 18px;
+            color: rgba(255,255,255,0.67);
+            font-size: 14px;
+            line-height: 1.8;
+        }
+
+        .footer-heading {
+            margin-bottom: 18px;
+            color: var(--white);
+            font-family: 'Manrope', sans-serif;
+            font-size: 15px;
+            font-weight: 800;
+        }
+
+        .footer-links {
+            padding: 0;
+            margin: 0;
+            list-style: none;
+        }
+
+        .footer-links li {
             margin-bottom: 12px;
         }
 
-        .footer-logo {
-            width: 39px;
-            height: 39px;
-            background: var(--primary);
-            color: white;
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 20px;
+        .footer-links a {
+            color: rgba(255,255,255,0.7);
+            font-size: 14px;
+            transition: color 0.2s ease;
         }
 
-        .footer-name {
-            color: white;
-            font-size: 21px;
-            font-weight: 800;
+        .footer-links a:hover {
+            color: #8ed8d0;
         }
 
-        .footer-name span {
-            color: #72b9b8;
-        }
-
-        .footer-text {
+        .footer-contact {
+            color: rgba(255,255,255,0.7);
             font-size: 13px;
-            max-width: 400px;
-            line-height: 1.7;
+            line-height: 1.8;
+            overflow-wrap: anywhere;
         }
 
         .footer-bottom {
-            border-top: 1px solid rgba(255,255,255,0.08);
-            margin-top: 25px;
-            padding-top: 18px;
-            font-size: 12px;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+            margin-top: 35px;
+            padding-top: 22px;
+            border-top: 1px solid rgba(255,255,255,0.12);
+            color: rgba(255,255,255,0.6);
+            font-size: 13px;
         }
 
+        /* AI CHAT */
 
-        /* =========================
-           AI ASSISTANT
-        ========================= */
-
-        .ai-chat-button {
+        .ai-chat-toggle {
             position: fixed;
-            right: 25px;
-            bottom: 25px;
-            height: 58px;
-            min-width: 155px;
-            background: var(--primary);
-            color: white;
-            border: none;
-            border-radius: 30px;
-            padding: 0 20px;
+            right: 24px;
+            bottom: 24px;
+            z-index: 1100;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 10px;
-            font-size: 15px;
-            font-weight: 800;
-            box-shadow: 0 10px 30px rgba(33,54,109,0.25);
-            cursor: pointer;
-            z-index: 2000;
-            transition: 0.25s;
+            width: 60px;
+            height: 60px;
+            border: none;
+            border-radius: 50%;
+            background: var(--teal);
+            color: var(--white);
+            font-size: 26px;
+            box-shadow: 0 9px 28px rgba(33,54,109,0.22);
+            transition: all 0.25s ease;
         }
 
-        .ai-chat-button:hover {
-            background: var(--primary-dark);
+        .ai-chat-toggle:hover {
+            background: var(--teal-dark);
             transform: translateY(-3px);
         }
 
-        .ai-chat-button i {
-            font-size: 22px;
-        }
-
-        .ai-chat-button::after {
-            content: "";
-            position: absolute;
-            inset: -5px;
-            border: 2px solid rgba(89,170,169,0.35);
-            border-radius: 35px;
-            animation: aiPulse 2s infinite;
-        }
-
-        .ai-chat-box {
+        .chat-panel {
             position: fixed;
-            right: 25px;
-            bottom: 95px;
-            width: 350px;
-            max-width: calc(100vw - 30px);
-            background: white;
-            border: 1px solid #dceaea;
-            border-radius: 18px;
-            box-shadow: 0 20px 50px rgba(33,54,109,0.22);
-            overflow: hidden;
-            z-index: 1999;
+            right: 24px;
+            bottom: 98px;
+            z-index: 1099;
             display: none;
+            flex-direction: column;
+            width: min(365px, calc(100vw - 32px));
+            height: 460px;
+            max-height: calc(100vh - 130px);
+            overflow: hidden;
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            background: var(--white);
+            box-shadow: 0 18px 55px rgba(23,39,79,0.2);
         }
 
-        .ai-chat-box.active {
-            display: block;
-            animation: chatOpen 0.25s ease;
+        .chat-panel.open {
+            display: flex;
         }
 
-        .ai-chat-header {
-            background: var(--navy);
-            color: white;
-            padding: 16px 18px;
+        .chat-header {
             display: flex;
             align-items: center;
             justify-content: space-between;
+            padding: 17px 18px;
+            background: var(--navy);
+            color: var(--white);
         }
 
-        .ai-chat-title {
+        .chat-header-content {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 11px;
         }
 
-        .ai-chat-title-icon {
-            width: 38px;
-            height: 38px;
-            border-radius: 10px;
-            background: var(--primary);
+        .chat-header-icon {
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 19px;
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            background: rgba(255,255,255,0.13);
+            color: #9ce3dc;
+            font-size: 21px;
         }
 
-        .ai-chat-title strong {
+        .chat-header strong {
             display: block;
+            color: var(--white);
             font-size: 14px;
         }
 
-        .ai-chat-title span {
+        .chat-header small {
             display: block;
+            margin-top: 3px;
+            color: rgba(255,255,255,0.68);
             font-size: 11px;
-            color: #d5dfed;
-            margin-top: 2px;
         }
 
-        .ai-chat-close {
+        .chat-close {
             border: none;
             background: transparent;
-            color: white;
-            font-size: 20px;
-            cursor: pointer;
+            color: var(--white);
+            font-size: 22px;
         }
 
-        .ai-chat-messages {
-            height: 270px;
+        .chat-messages {
+            flex: 1;
             overflow-y: auto;
-            padding: 16px;
+            padding: 17px;
             background: #f8fbfc;
         }
 
-        .ai-message {
-            max-width: 85%;
-            padding: 10px 13px;
+        .chat-message {
+            width: fit-content;
+            max-width: 90%;
+            margin-bottom: 12px;
+            padding: 11px 13px;
             border-radius: 13px;
             font-size: 13px;
-            line-height: 1.55;
-            margin-bottom: 10px;
+            line-height: 1.65;
+            overflow-wrap: anywhere;
+            white-space: pre-wrap;
         }
 
-        .ai-message.bot {
-            background: white;
-            border: 1px solid #e4eeee;
-            color: var(--text);
-            margin-right: auto;
+        .chat-message.bot {
+            border: 1px solid #e8eeee;
+            border-top-left-radius: 4px;
+            background: var(--white);
+            color: #475773;
         }
 
-        .ai-message.user {
-            background: var(--primary);
-            color: white;
+        .chat-message.user {
             margin-left: auto;
+            border-top-right-radius: 4px;
+            background: var(--teal);
+            color: var(--white);
         }
 
-        .ai-chat-input-area {
-            padding: 12px;
-            border-top: 1px solid #e5eeee;
-            background: white;
+        .chat-form {
             display: flex;
-            gap: 8px;
+            gap: 9px;
+            padding: 13px;
+            border-top: 1px solid var(--border);
+            background: var(--white);
         }
 
-        .ai-chat-input {
+        .chat-form input {
             flex: 1;
-            border: 1px solid #dce7e7;
-            border-radius: 10px;
-            padding: 10px 12px;
-            font-size: 13px;
+            min-width: 0;
+            padding: 11px 13px;
+            border: 1px solid #dfe8e9;
+            border-radius: 11px;
             outline: none;
+            font-size: 13px;
         }
 
-        .ai-chat-input:focus {
-            border-color: var(--primary);
+        .chat-form input:focus {
+            border-color: var(--teal);
         }
 
-        .ai-send-button {
+        .chat-form button {
             width: 43px;
-            height: 43px;
             border: none;
-            border-radius: 10px;
-            background: var(--primary);
-            color: white;
-            cursor: pointer;
-            font-size: 17px;
+            border-radius: 11px;
+            background: var(--teal);
+            color: var(--white);
+            font-size: 18px;
         }
 
-        .ai-send-button:hover {
-            background: var(--primary-dark);
+        .chat-form button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
         }
 
+        /* RESPONSIVE */
 
-        /* =========================
-           ANIMATIONS
-        ========================= */
-
-        @keyframes fadeUp {
-            from {
-                opacity: 0;
-                transform: translateY(25px);
+        @media (max-width: 991px) {
+            .navbar {
+                padding-top: 13px;
+                padding-bottom: 13px;
             }
 
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @keyframes fadeRight {
-            from {
-                opacity: 0;
-                transform: translateX(35px);
+            .navbar-nav {
+                align-items: stretch;
+                gap: 3px;
+                padding-top: 15px;
             }
 
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
-        }
-
-        @keyframes imageFloat {
-            0%,100% {
-                transform: translateY(0);
+            .navbar-nav .nav-link {
+                padding: 10px 3px !important;
             }
 
-            50% {
-                transform: translateY(-7px);
-            }
-        }
-
-        @keyframes cardFloat {
-            0%,100% {
-                transform: translateY(0);
+            .navbar-nav .btn-primary-custom {
+                margin-top: 8px;
             }
 
-            50% {
-                transform: translateY(-8px);
-            }
-        }
-
-        @keyframes logoFloat {
-            0%,100% {
-                transform: translateY(0);
-            }
-
-            50% {
-                transform: translateY(-2px);
-            }
-        }
-
-        @keyframes smartPulse {
-            0%,100% {
-                box-shadow: 0 0 0 0 rgba(89,170,169,0.15);
-            }
-
-            50% {
-                box-shadow: 0 0 0 9px rgba(89,170,169,0);
-            }
-        }
-
-        @keyframes aiPulse {
-            0% {
-                transform: scale(1);
-                opacity: 0.8;
-            }
-
-            70% {
-                transform: scale(1.08);
-                opacity: 0;
-            }
-
-            100% {
-                transform: scale(1.08);
-                opacity: 0;
-            }
-        }
-
-        @keyframes chatOpen {
-            from {
-                opacity: 0;
-                transform: translateY(12px) scale(0.97);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0) scale(1);
-            }
-        }
-
-
-        /* =========================
-           RESPONSIVE
-        ========================= */
-
-        @media (max-width:991px) {
-
-            .hero {
-                padding-top: 55px;
+            .hero-section {
+                padding: 55px 0 65px;
             }
 
             .hero-content {
-                padding-right: 0;
-                margin-bottom: 40px;
+                margin-bottom: 30px;
             }
 
-            .hero-image {
-                height: 400px;
+            .hero-visual {
+                max-width: 640px;
+                margin: 0 auto;
             }
 
-            .match-card {
-                left: 10px;
+            .hero-image-wrap {
+                height: 430px;
             }
 
-            .student-card {
-                right: 10px;
+            .section-padding {
+                padding: 70px 0;
             }
 
-            .nav-link {
-                margin: 2px 0;
+            .match-panel {
+                padding: 35px;
             }
 
-            .login-btn {
-                display: inline-block;
-                margin: 10px 0;
-            }
-
-            .start-btn {
-                display: inline-block;
-                margin-bottom: 10px;
+            .benefit-item {
+                justify-content: flex-start;
             }
         }
 
-        @media (max-width:767px) {
-
-            .main-navbar {
-                height: auto;
-                min-height: 66px;
+        @media (max-width: 575px) {
+            .brand-icon {
+                width: 42px;
+                height: 42px;
+                border-radius: 12px;
             }
 
-            .announcement-bar {
-                height: 40px;
+            .brand-icon svg {
+                width: 26px;
+                height: 26px;
             }
 
-            .announcement-label {
-                padding: 0 14px;
-                font-size: 11px;
+            .brand-name {
+                font-size: 23px;
             }
 
-            .announcement-item {
-                font-size: 11px;
-                margin-right: 30px;
+            .hero-section {
+                padding: 42px 0 52px;
             }
 
-            .announcement-item::after {
-                margin-left: 30px;
-            }
-
-            .hero h1 {
-                font-size: 42px;
-                letter-spacing: -1px;
+            .hero-title {
+                font-size: clamp(37px, 10vw, 49px);
+                letter-spacing: -1.9px;
             }
 
             .hero-description {
-                font-size: 16px;
+                font-size: 15px;
             }
 
-            .hero-image {
-                height: 330px;
+            .hero-actions a {
+                width: 100%;
+            }
+
+            .hero-image-wrap {
+                height: 320px;
+                border-radius: 24px;
+            }
+
+            .hero-visual {
+                padding: 10px 5px 22px;
+            }
+
+            .image-overlay {
+                inset: 10px 5px 22px;
+                border-radius: 24px;
             }
 
             .floating-card {
-                padding: 10px 12px;
+                gap: 9px;
+                padding: 11px;
+                border-radius: 13px;
+            }
+
+            .floating-card-top {
+                top: 25px;
+                right: -3px;
+                min-width: 0;
+            }
+
+            .floating-card-bottom {
+                right: 5px;
+                bottom: 0;
+                left: -3px;
             }
 
             .floating-icon {
-                width: 34px;
-                height: 34px;
-                font-size: 16px;
+                flex: 0 0 37px;
+                width: 37px;
+                height: 37px;
+                border-radius: 10px;
+                font-size: 18px;
             }
 
-            .floating-title {
-                font-size: 11px;
+            .floating-card strong {
+                font-size: 12px;
             }
 
-            .floating-text {
+            .floating-card small {
                 font-size: 10px;
             }
 
-            .section {
-                padding: 65px 0;
+            .section-padding {
+                padding: 60px 0;
             }
 
-            .section-heading h2 {
-                font-size: 30px;
+            .benefit-item {
+                padding: 8px;
             }
 
-            .smart-box {
-                padding: 28px;
+            .match-panel {
+                padding: 27px 22px;
             }
 
-            .cta-box h2 {
-                font-size: 30px;
+            .match-visual {
+                min-height: 160px;
+                margin-top: 15px;
             }
 
-            .feature-item {
-                justify-content: flex-start;
-                margin: 7px 0;
+            .match-circle {
+                width: 140px;
+                height: 140px;
             }
 
-            .contact-box {
-                padding: 28px;
+            .match-circle i {
+                font-size: 60px;
             }
 
-            .ai-chat-button {
-                right: 15px;
-                bottom: 15px;
-                min-width: 145px;
-                height: 54px;
+            .chat-panel {
+                right: 16px;
+                bottom: 85px;
+                height: min(460px, calc(100vh - 110px));
             }
 
-            .ai-chat-box {
-                right: 15px;
-                bottom: 82px;
+            .ai-chat-toggle {
+                right: 16px;
+                bottom: 16px;
+                width: 55px;
+                height: 55px;
+            }
+
+            .footer-bottom {
+                flex-direction: column;
+                align-items: flex-start;
             }
         }
 
-        @media (prefers-reduced-motion:reduce) {
+        @media (prefers-reduced-motion: reduce) {
+            html {
+                scroll-behavior: auto;
+            }
 
-            *,
-            *::before,
-            *::after {
+            *, *::before, *::after {
                 animation-duration: 0.01ms !important;
                 animation-iteration-count: 1 !important;
-                scroll-behavior: auto !important;
                 transition-duration: 0.01ms !important;
             }
         }
-
     </style>
 </head>
 
-
 <body>
 
+<!-- NAVBAR -->
+<header class="main-navbar">
+    <nav class="navbar navbar-expand-lg container">
 
-<!-- =====================================================
-     NAVBAR
-===================================================== -->
-
-<nav class="navbar navbar-expand-lg main-navbar">
-
-    <div class="container">
-
-        <a href="{% url 'home' %}" class="navbar-brand">
-
-            <div class="logo-box">
-
-                <!-- LOCATION LOGO - DO NOT CHANGE -->
-
-                <i class="bi bi-geo-alt-fill"></i>
-
-            </div>
-
-            <div class="brand-name">
-                Found<span>Link</span>
-            </div>
-
+        <a class="brand" href="{% url 'home' %}" aria-label="FoundLink home">
+            <span class="brand-icon">
+                <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                    <path d="M20 3.5C12.8 3.5 7 9.2 7 16.3C7 25.6 20 36.5 20 36.5C20 36.5 33 25.6 33 16.3C33 9.2 27.2 3.5 20 3.5Z" fill="white"/>
+                    <circle cx="20" cy="16" r="5.1" fill="#59AAA9"/>
+                </svg>
+            </span>
+            <span class="brand-name">Found<span>Link</span></span>
         </a>
 
-
-        <button
-            class="navbar-toggler"
-            type="button"
-            data-bs-toggle="collapse"
-            data-bs-target="#mainNavbar"
-        >
-            <span class="navbar-toggler-icon"></span>
+        <button class="navbar-toggler border-0 shadow-none" type="button"
+                data-bs-toggle="collapse" data-bs-target="#mainNavigation"
+                aria-controls="mainNavigation" aria-expanded="false"
+                aria-label="Toggle navigation">
+            <i class="bi bi-list fs-2" style="color: var(--navy);"></i>
         </button>
 
-
-        <div class="collapse navbar-collapse" id="mainNavbar">
-
+        <div class="collapse navbar-collapse" id="mainNavigation">
             <ul class="navbar-nav mx-auto">
-
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'home' %}">
-                        Home
-                    </a>
+                    <a class="nav-link" href="#home">Home</a>
                 </li>
-
                 <li class="nav-item">
-                    <a class="nav-link" href="#about">
-                        About
-                    </a>
+                    <a class="nav-link" href="#about">About</a>
                 </li>
-
                 <li class="nav-item">
-                    <a class="nav-link" href="#how-it-works">
-                        How It Works
-                    </a>
+                    <a class="nav-link" href="#how-it-works">How It Works</a>
                 </li>
-
                 <li class="nav-item">
-                    <a class="nav-link" href="#safety">
-                        Safety
-                    </a>
+                    <a class="nav-link" href="#contact">Contact</a>
                 </li>
-
-                <li class="nav-item">
-                    <a class="nav-link" href="#contact">
-                        Contact
-                    </a>
-                </li>
-
             </ul>
 
-
-            <div class="d-lg-flex align-items-center">
-
-                <a
-                    href="{% url 'login' %}"
-                    class="login-btn"
-                >
-                    Log In
+            <div class="d-flex flex-column flex-lg-row align-items-stretch align-items-lg-center gap-2">
+                <a href="{% url 'login' %}" class="nav-link nav-login px-lg-3">Login</a>
+                <a href="{% url 'register' %}" class="btn-primary-custom">
+                    Get Started <i class="bi bi-arrow-right"></i>
                 </a>
-
-                <a
-                    href="{% url 'register' %}"
-                    class="start-btn"
-                >
-                    Get Started
-                </a>
-
             </div>
-
         </div>
 
-    </div>
+    </nav>
+</header>
 
-</nav>
-
-
-<!-- =====================================================
-     ANNOUNCEMENT
-===================================================== -->
-
+<!-- ANNOUNCEMENT BAR -->
 <div class="announcement-bar">
+    <span class="announcement-label">FOUNDER'S NOTE</span>
 
-    <div class="announcement-label">
-
-        <i class="bi bi-megaphone-fill"></i>
-
-        ANNOUNCEMENT
-
+    <div class="ticker-window">
+        <div class="ticker-text">
+            <span><i class="bi bi-stars"></i> Welcome to FoundLink — your college lost-and-found platform.</span>
+            <span><i class="bi bi-search"></i> Report lost and found items to help belongings find their owners.</span>
+            <span><i class="bi bi-people"></i> A little help from your community can make a big difference.</span>
+        </div>
     </div>
-
-
-    <div class="announcement-track">
-
-        {% if announcements %}
-
-            {% for announcement in announcements %}
-
-                <span class="announcement-item">
-
-                    <strong>
-                        {{ announcement.title }}
-                    </strong>
-
-                    &nbsp;|&nbsp;
-
-                    {{ announcement.message }}
-
-                </span>
-
-            {% endfor %}
-
-        {% else %}
-
-            <span class="announcement-empty">
-                No new announcements at the moment.
-            </span>
-
-        {% endif %}
-
-    </div>
-
 </div>
 
+<main>
 
-<!-- =====================================================
-     HERO
-===================================================== -->
+    <!-- HERO -->
+    <section class="hero-section" id="home">
+        <div class="container">
+            <div class="row align-items-center g-4">
 
-<section class="hero">
+                <div class="col-lg-6">
+                    <div class="hero-content">
 
-    <div class="container">
+                        <div class="hero-label">
+                            <i class="bi bi-stars"></i>
+                            Smart Lost & Found Platform
+                        </div>
 
-        <div class="row align-items-center">
+                        <h1 class="hero-title">
+                            Lost Something?
+                            <span class="highlight">We Help You Find It.</span>
+                        </h1>
 
-            <div class="col-lg-6">
+                        <p class="hero-description">
+                            FoundLink connects students who lose and find items.
+                            Report your belongings, discover possible matches and
+                            receive updates — all in one place.
+                        </p>
 
-                <div class="hero-content">
+                        <div class="hero-actions">
+                            <a href="{% url 'login' %}" class="btn-primary-custom">
+                                <i class="bi bi-search"></i>
+                                Find My Item
+                            </a>
 
-                    <div class="hero-label">
+                            <a href="#how-it-works" class="btn-outline-custom">
+                                <i class="bi bi-play-circle"></i>
+                                How It Works
+                            </a>
+                        </div>
 
-                        <i class="bi bi-stars"></i>
-
-                        Smart Lost & Found Platform
-
-                    </div>
-
-
-                    <h1>
-
-                        Lost Something?
-
-                        <br>
-
-                        <span>We Help You Find It.</span>
-
-                    </h1>
-
-
-                    <p class="hero-description">
-
-                        FoundLink makes it simple to report lost and found
-                        items, discover possible matches, and reconnect
-                        students with their belongings.
-
-                    </p>
-
-
-                    <div class="hero-subtext">
-
-                        <i class="bi bi-shield-check"></i>
-
-                        Safe, simple and made for your college community.
+                        <div class="hero-assurance">
+                            <i class="bi bi-check-circle"></i>
+                            <span>Simple reporting for your college community.</span>
+                        </div>
 
                     </div>
-
-
-                    <div class="hero-actions">
-
-                        <a
-                            href="{% url 'register' %}"
-                            class="hero-primary-btn"
-                        >
-                            Get Started
-                            <i class="bi bi-arrow-right ms-1"></i>
-                        </a>
-
-
-                        <a
-                            href="#how-it-works"
-                            class="hero-secondary-btn"
-                        >
-                            How It Works
-                        </a>
-
-                    </div>
-
                 </div>
 
-            </div>
+                <div class="col-lg-6">
+                    <div class="hero-visual">
 
-
-            <div class="col-lg-6">
-
-                <div class="hero-visual" id="heroVisual">
-
-                    <div
-                        class="hero-image-wrapper"
-                        id="heroImageWrapper"
-                    >
-
-                        <img
-                            src="https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=1000&q=85"
-                            alt="College students"
-                            class="hero-image"
-                        >
+                        <div class="hero-image-wrap">
+                            <img
+                                class="hero-image"
+                                src="https://images.unsplash.com/photo-1523580494863-6f3031224c94?auto=format&fit=crop&w=1200&q=85"
+                                alt="Students together on a college campus"
+                                fetchpriority="high"
+                                onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=1200&q=80';"
+                            >
+                        </div>
 
                         <div class="image-overlay"></div>
 
-                    </div>
-
-
-                    <div class="floating-card match-card">
-
-                        <div class="floating-icon">
-                            <i class="bi bi-stars"></i>
+                        <div class="floating-card floating-card-top">
+                            <div class="floating-icon">
+                                <i class="bi bi-search"></i>
+                            </div>
+                            <div>
+                                <strong>Smart Match</strong>
+                                <small>Possible match found</small>
+                            </div>
                         </div>
 
+                        <div class="floating-card floating-card-bottom">
+                            <div class="floating-icon">
+                                <i class="bi bi-people-fill"></i>
+                            </div>
+                            <div>
+                                <strong>Built for students</strong>
+                                <small>Connect your college community</small>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- BENEFITS -->
+    <section class="benefits-strip">
+        <div class="container">
+            <div class="row g-3">
+
+                <div class="col-md-4">
+                    <div class="benefit-item">
+                        <div class="benefit-icon">
+                            <i class="bi bi-clipboard-check"></i>
+                        </div>
                         <div>
-
-                            <p class="floating-title">
-                                Smart Match
-                            </p>
-
-                            <p class="floating-text">
-                                Find possible matches faster
-                            </p>
-
+                            <strong>Easy Item Reporting</strong>
+                            <small>Share item details in one place</small>
                         </div>
-
                     </div>
+                </div>
 
-
-                    <div class="floating-card student-card">
-
-                        <div class="floating-icon">
-                            <i class="bi bi-mortarboard-fill"></i>
+                <div class="col-md-4">
+                    <div class="benefit-item">
+                        <div class="benefit-icon">
+                            <i class="bi bi-bell"></i>
                         </div>
-
                         <div>
-
-                            <p class="floating-title">
-                                Built for Students
-                            </p>
-
-                            <p class="floating-text">
-                                Simple college lost & found
-                            </p>
-
+                            <strong>Useful Notifications</strong>
+                            <small>Stay updated about possible matches</small>
                         </div>
-
                     </div>
+                </div>
 
+                <div class="col-md-4">
+                    <div class="benefit-item">
+                        <div class="benefit-icon">
+                            <i class="bi bi-people"></i>
+                        </div>
+                        <div>
+                            <strong>Community Support</strong>
+                            <small>Help items return to their owners</small>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- ABOUT AND FEATURES -->
+    <section class="features-section section-padding" id="about">
+        <div class="container">
+
+            <div class="text-center mx-auto mb-5" style="max-width: 700px;">
+                <div class="section-label">
+                    <i class="bi bi-compass"></i>
+                    About FoundLink
+                </div>
+
+                <h2 class="section-title mb-3">
+                    Making lost and found easier.
+                </h2>
+
+                <p class="section-description mb-0">
+                    FoundLink provides one organised platform where students can report
+                    lost belongings, share found items and check for possible matches.
+                </p>
+            </div>
+
+            <div class="row g-4">
+
+                <div class="col-md-6 col-lg-4">
+                    <div class="feature-card">
+                        <span class="feature-number">01</span>
+                        <div class="feature-icon">
+                            <i class="bi bi-file-earmark-plus"></i>
+                        </div>
+                        <h3>Easy Reporting</h3>
+                        <p>
+                            Add the item name, category, location, date and other
+                            useful details to create a lost or found report.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-lg-4">
+                    <div class="feature-card">
+                        <span class="feature-number">02</span>
+                        <div class="feature-icon">
+                            <i class="bi bi-search-heart"></i>
+                        </div>
+                        <h3>Smart Matching</h3>
+                        <p>
+                            FoundLink can highlight possible matches between lost and
+                            found reports using details such as item names and locations.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-lg-4">
+                    <div class="feature-card">
+                        <span class="feature-number">03</span>
+                        <div class="feature-icon">
+                            <i class="bi bi-bell-fill"></i>
+                        </div>
+                        <h3>Notifications</h3>
+                        <p>
+                            Check your notifications to stay informed about possible
+                            matches and relevant activity on the platform.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-lg-4">
+                    <div class="feature-card">
+                        <span class="feature-number">04</span>
+                        <div class="feature-icon">
+                            <i class="bi bi-person-lines-fill"></i>
+                        </div>
+                        <h3>Student Connections</h3>
+                        <p>
+                            Connect with people in the community who may be able to
+                            provide information about a lost or found item.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-lg-4">
+                    <div class="feature-card">
+                        <span class="feature-number">05</span>
+                        <div class="feature-icon">
+                            <i class="bi bi-journal-check"></i>
+                        </div>
+                        <h3>Manage Reports</h3>
+                        <p>
+                            Keep track of your submitted lost and found reports and
+                            review their current status from your account.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-lg-4">
+                    <div class="feature-card">
+                        <span class="feature-number">06</span>
+                        <div class="feature-icon">
+                            <i class="bi bi-chat-dots"></i>
+                        </div>
+                        <h3>AI Assistant</h3>
+                        <p>
+                            Use the FoundLink assistant for guidance about reporting
+                            lost items and using the platform.
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- HOW IT WORKS -->
+    <section class="steps-section section-padding" id="how-it-works">
+        <div class="container">
+
+            <div class="text-center mx-auto mb-5" style="max-width: 680px;">
+                <div class="section-label">
+                    <i class="bi bi-signpost-split"></i>
+                    Three simple steps
+                </div>
+
+                <h2 class="section-title mb-3">How FoundLink Works</h2>
+
+                <p class="section-description mb-0">
+                    Start with an account, report your item and check for possible matches.
+                </p>
+            </div>
+
+            <div class="row g-4">
+
+                <div class="col-md-4">
+                    <div class="step-card">
+                        <div class="step-number">01</div>
+                        <h3>Create an Account</h3>
+                        <p>
+                            Register on FoundLink to access item reporting,
+                            notifications and other community features.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="step-card">
+                        <div class="step-number">02</div>
+                        <h3>Report or Search</h3>
+                        <p>
+                            Submit a lost or found report with accurate details,
+                            or explore available reports to search for an item.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="step-card">
+                        <div class="step-number">03</div>
+                        <h3>Check for Matches</h3>
+                        <p>
+                            Review possible matches and notifications to help
+                            reconnect a lost item with its owner.
+                        </p>
+                    </div>
                 </div>
 
             </div>
 
         </div>
-
-    </div>
-
-</section>
-
-
-<!-- =====================================================
-     FEATURE STRIP
-===================================================== -->
-
-<section class="feature-strip reveal">
-
-    <div class="container">
-
-        <div class="row">
-
-            <div class="col-md-3">
-
-                <div class="feature-item">
-                    <i class="bi bi-pencil-square"></i>
-                    Easy Reporting
-                </div>
-
-            </div>
-
-
-            <div class="col-md-3">
-
-                <div class="feature-item">
-                    <i class="bi bi-stars"></i>
-                    Smart Matching
-                </div>
-
-            </div>
-
-
-            <div class="col-md-3">
-
-                <div class="feature-item">
-                    <i class="bi bi-bell-fill"></i>
-                    Stay Updated
-                </div>
-
-            </div>
-
-
-            <!-- CHANGED:
-                 Safe & Secure removed because
-                 Safety is explained properly below.
-            -->
-
-            <div class="col-md-3">
-
-                <div class="feature-item">
-                    <i class="bi bi-mortarboard-fill"></i>
-                    Student Friendly
-                </div>
-
-            </div>
-
-        </div>
-
-    </div>
-
-</section>
-
-
-<!-- =====================================================
-     ABOUT
-===================================================== -->
-
-<section
-    class="section section-white"
-    id="about"
->
-
-    <div class="container">
-
-        <div class="section-heading reveal">
-
-            <div class="section-label">
-                WHY FOUNDLINK
-            </div>
-
-            <h2>
-                Everything You Need to Reconnect
-            </h2>
-
-            <p>
-                FoundLink brings reporting, matching, notifications and
-                safe communication together in one simple platform.
-            </p>
-
-        </div>
-
-
-        <div class="row g-4">
-
-
-            <div class="col-md-6 col-lg-3 reveal">
-
-                <div class="feature-card">
-
-                    <div class="feature-card-icon">
-                        <i class="bi bi-file-earmark-plus"></i>
-                    </div>
-
-                    <h5>
-                        Report Lost Items
-                    </h5>
-
-                    <p>
-                        Quickly add details, location, date and an image
-                        of your lost item.
-                    </p>
-
-                </div>
-
-            </div>
-
-
-            <div class="col-md-6 col-lg-3 reveal">
-
-                <div class="feature-card">
-
-                    <div class="feature-card-icon">
-                        <i class="bi bi-box-seam"></i>
-                    </div>
-
-                    <h5>
-                        Report Found Items
-                    </h5>
-
-                    <p>
-                        Help someone recover their belongings by reporting
-                        an item you found.
-                    </p>
-
-                </div>
-
-            </div>
-
-
-            <div class="col-md-6 col-lg-3 reveal">
-
-                <div class="feature-card">
-
-                    <div class="feature-card-icon">
-                        <i class="bi bi-stars"></i>
-                    </div>
-
-                    <h5>
-                        Smart Matching
-                    </h5>
-
-                    <p>
-                        FoundLink compares item details to identify
-                        possible lost and found matches.
-                    </p>
-
-                </div>
-
-            </div>
-
-
-            <div class="col-md-6 col-lg-3 reveal">
-
-                <div class="feature-card">
-
-                    <div class="feature-card-icon">
-                        <i class="bi bi-bell"></i>
-                    </div>
-
-                    <h5>
-                        Get Notified
-                    </h5>
-
-                    <p>
-                        Receive notifications when FoundLink identifies
-                        a possible match.
-                    </p>
-
-                </div>
-
-            </div>
-
-        </div>
-
-    </div>
-
-</section>
-
-
-<!-- =====================================================
-     HOW IT WORKS
-===================================================== -->
-
-<section
-    class="section"
-    id="how-it-works"
->
-
-    <div class="container">
-
-        <div class="section-heading reveal">
-
-            <div class="section-label">
-                SIMPLE PROCESS
-            </div>
-
-            <h2>
-                How FoundLink Works
-            </h2>
-
-            <p>
-                A simple four-step process designed to make lost and found
-                reporting easier.
-            </p>
-
-        </div>
-
-
-        <div class="row g-4">
-
-
-            <div class="col-md-6 col-lg-3 reveal">
-
-                <div class="step-card">
-
-                    <div class="step-number">
-                        01
-                    </div>
-
-                    <h5>
-                        Report
-                    </h5>
-
-                    <p>
-                        Report a lost or found item with useful details.
-                    </p>
-
-                </div>
-
-            </div>
-
-
-            <div class="col-md-6 col-lg-3 reveal">
-
-                <div class="step-card">
-
-                    <div class="step-number">
-                        02
-                    </div>
-
-                    <h5>
-                        Match
-                    </h5>
-
-                    <p>
-                        Smart Matching checks available reports for
-                        possible matches.
-                    </p>
-
-                </div>
-
-            </div>
-
-
-            <div class="col-md-6 col-lg-3 reveal">
-
-                <div class="step-card">
-
-                    <div class="step-number">
-                        03
-                    </div>
-
-                    <h5>
-                        Notify
-                    </h5>
-
-                    <p>
-                        Users receive notifications about possible matches.
-                    </p>
-
-                </div>
-
-            </div>
-
-
-            <div class="col-md-6 col-lg-3 reveal">
-
-                <div class="step-card">
-
-                    <div class="step-number">
-                        04
-                    </div>
-
-                    <h5>
-                        Reconnect
-                    </h5>
-
-                    <p>
-                        Contact the relevant user and safely recover the item.
-                    </p>
-
-                </div>
-
-            </div>
-
-        </div>
-
-    </div>
-
-</section>
-
-
-<!-- =====================================================
-     SMART MATCH
-===================================================== -->
-
-<section class="section smart-section">
-
-    <div class="container">
-
-        <div class="smart-box reveal">
-
-            <div class="row align-items-center">
-
-                <div class="col-lg-7">
-
-                    <div class="smart-icon">
-                        <i class="bi bi-stars"></i>
-                    </div>
-
-                    <h2>
-                        Smart Matching Makes Finding Easier
-                    </h2>
-
-                    <p>
-                        FoundLink checks information such as item name,
-                        category, location and description to identify
-                        possible matches between lost and found reports.
-                    </p>
-
-
-                    <ul class="smart-points">
-
-                        <li>
-                            <i class="bi bi-check-circle-fill"></i>
-                            Compares important item details
-                        </li>
-
-                        <li>
-                            <i class="bi bi-check-circle-fill"></i>
-                            Identifies possible matches automatically
-                        </li>
-
-                        <li>
-                            <i class="bi bi-check-circle-fill"></i>
-                            Sends notifications when a match is found
-                        </li>
-
-                        <li>
-                            <i class="bi bi-check-circle-fill"></i>
-                            Helps users reconnect faster
-                        </li>
-
-                    </ul>
-
-                </div>
-
-
-                <div class="col-lg-5 mt-4 mt-lg-0">
-
-                    <div class="status-box">
+    </section>
+
+    <!-- SMART MATCH -->
+    <section class="match-section section-padding">
+        <div class="container">
+            <div class="match-panel">
+
+                <div class="row align-items-center g-4">
+                    <div class="col-lg-8">
 
                         <div class="section-label">
-                            ITEM STATUS
+                            <i class="bi bi-stars"></i>
+                            Smart Lost & Found
                         </div>
 
-                        <h4
-                            class="fw-bold"
-                            style="color:#21366d;"
-                        >
-                            Track Your Item
-                        </h4>
+                        <h2 class="mb-3">
+                            Every detail could lead to a match.
+                        </h2>
 
-                        <p class="small">
-
-                            Follow the progress of a report from the moment
-                            it is created until the item is recovered.
-
+                        <p class="mb-4">
+                            When a lost report resembles a found report, FoundLink
+                            can highlight a possible match. Compare the details and
+                            verify the item before arranging its return.
                         </p>
 
+                        <a href="{% url 'login' %}" class="btn-primary-custom">
+                            Explore FoundLink <i class="bi bi-arrow-right"></i>
+                        </a>
 
-                        <div class="status-flow">
+                    </div>
 
-                            <span class="status-item active">
-                                Lost
-                            </span>
+                    <div class="col-lg-4">
+                        <div class="match-visual">
+                            <div class="match-circle">
+                                <i class="bi bi-search-heart"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-                            <span class="status-arrow">
-                                →
-                            </span>
+            </div>
+        </div>
+    </section>
 
-                            <span class="status-item">
-                                Possible Match
-                            </span>
+    <!-- CONTACT -->
+    <section class="contact-section section-padding" id="contact">
+        <div class="container">
 
-                            <span class="status-arrow">
-                                →
-                            </span>
+            <div class="text-center mx-auto mb-5" style="max-width: 680px;">
+                <div class="section-label">
+                    <i class="bi bi-envelope"></i>
+                    Get in Touch
+                </div>
 
-                            <span class="status-item">
-                                Found
-                            </span>
+                <h2 class="section-title mb-3">Contact FoundLink</h2>
 
-                            <span class="status-arrow">
-                                →
-                            </span>
+                <p class="section-description mb-0">
+                    Have a question or need help using the platform?
+                    Here are the contact details for FoundLink.
+                </p>
+            </div>
 
-                            <span class="status-item">
-                                Recovered
-                            </span>
+            <div class="row g-4 justify-content-center">
 
+                <div class="col-md-6 col-lg-4">
+                    <div class="contact-card">
+                        <div class="contact-icon">
+                            <i class="bi bi-telephone"></i>
                         </div>
 
-                    </div>
+                        <h3>Phone Number</h3>
 
-                </div>
+                        <p>
+                            Contact number for the FoundLink project.
+                        </p>
 
-            </div>
-
-        </div>
-
-    </div>
-
-</section>
-
-
-<!-- =====================================================
-     SAFETY & TRUST
-===================================================== -->
-
-<section
-    class="section safety-section"
-    id="safety"
->
-
-    <div class="container">
-
-        <div class="section-heading reveal">
-
-            <div class="section-label">
-                SAFETY & TRUST
-            </div>
-
-            <h2>
-                Stay Safe While Reconnecting
-            </h2>
-
-            <p>
-                FoundLink encourages users to verify information and use
-                safe communication practices when recovering belongings.
-            </p>
-
-        </div>
-
-
-        <div class="row g-4">
-
-
-            <!-- SAFETY CARD 1 -->
-
-            <div class="col-md-4 reveal">
-
-                <div class="safety-card">
-
-                    <div class="safety-icon">
-                        <i class="bi bi-shield-lock-fill"></i>
-                    </div>
-
-                    <h5>
-                        Protect Your Account
-                    </h5>
-
-                    <p>
-                        Never share your password or OTP with another person.
-                        Keep your account information private.
-                    </p>
-
-                </div>
-
-            </div>
-
-
-            <!-- SAFETY CARD 2 -->
-
-            <div class="col-md-4 reveal">
-
-                <div class="safety-card">
-
-                    <div class="safety-icon">
-                        <i class="bi bi-patch-check-fill"></i>
-                    </div>
-
-                    <h5>
-                        Verify the Item
-                    </h5>
-
-                    <p>
-                        Confirm item details such as appearance, location
-                        and identifying information before returning it.
-                    </p>
-
-                </div>
-
-            </div>
-
-
-            <!-- SAFETY CARD 3 -->
-
-            <div class="col-md-4 reveal">
-
-                <div class="safety-card">
-
-                    <div class="safety-icon">
-                        <i class="bi bi-geo-alt-fill"></i>
-                    </div>
-
-                    <h5>
-                        Choose Safe Locations
-                    </h5>
-
-                    <p>
-                        Prefer public or trusted college locations when
-                        meeting someone to return or collect an item.
-                    </p>
-
-                </div>
-
-            </div>
-
-        </div>
-
-    </div>
-
-</section>
-
-
-<!-- =====================================================
-     CONTACT
-===================================================== -->
-
-<section
-    class="contact-section"
-    id="contact"
->
-
-    <div class="container">
-
-        <div class="section-heading reveal">
-
-            <div class="section-label">
-                CONTACT
-            </div>
-
-            <h2>
-                Need Help With FoundLink?
-            </h2>
-
-            <p>
-                Have a question about reporting, Smart Matching or
-                recovering an item? Get in touch with us.
-            </p>
-
-        </div>
-
-
-        <div class="contact-box reveal">
-
-            <div class="row align-items-center">
-
-
-                <div class="col-lg-7">
-
-                    <div class="contact-icon">
-                        <i class="bi bi-headset"></i>
-                    </div>
-
-                    <h3>
-                        FoundLink Support
-                    </h3>
-
-                    <p>
-                        Our platform is designed to make the lost and found
-                        process simple and safe for students.
-                    </p>
-
-                </div>
-
-
-                <div class="col-lg-5 mt-4 mt-lg-0">
-
-                    <div class="contact-detail">
-
-                        <i class="bi bi-envelope-fill"></i>
-
-                        <span>
-                            support@foundlink.com
-                        </span>
-
-                    </div>
-
-
-                    <div class="contact-detail">
-
-                        <i class="bi bi-telephone-fill"></i>
-
-                        <span>
+                        <a href="tel:+919876543210" class="contact-link">
                             +91 98765 43210
+                        </a>
+
+                        <span class="sample-note">
+                            Sample number — replace with your actual contact number before publishing.
                         </span>
-
                     </div>
+                </div>
 
+                <div class="col-md-6 col-lg-4">
+                    <div class="contact-card">
+                        <div class="contact-icon">
+                            <i class="bi bi-envelope-at"></i>
+                        </div>
 
-                    <div class="contact-detail">
+                        <h3>Email</h3>
 
-                        <i class="bi bi-building"></i>
+                        <p>
+                            For project questions and general enquiries.
+                        </p>
 
-                        <span>
-                            College Lost & Found Support
+                        <a href="mailto:support@foundlink.example" class="contact-link">
+                            support@foundlink.example
+                        </a>
+
+                        <span class="sample-note">
+                            Sample email address — replace it with your real email before publishing.
                         </span>
-
                     </div>
+                </div>
 
+                <div class="col-md-6 col-lg-4">
+                    <div class="contact-card">
+                        <div class="contact-icon">
+                            <i class="bi bi-people"></i>
+                        </div>
 
-                    <div class="contact-detail">
+                        <h3>College Community</h3>
 
-                        <i class="bi bi-clock-fill"></i>
+                        <p>
+                            FoundLink helps students organise lost and found reports
+                            and share useful information within their community.
+                        </p>
 
-                        <span>
-                            Available during college hours
-                        </span>
-
+                        <a href="{% url 'register' %}" class="contact-link">
+                            Join FoundLink <i class="bi bi-arrow-right"></i>
+                        </a>
                     </div>
-
                 </div>
 
             </div>
-
         </div>
+    </section>
 
-    </div>
+</main>
 
-</section>
-
-
-<!-- =====================================================
-     CTA
-===================================================== -->
-
-<section class="cta-section">
-
+<!-- FOOTER -->
+<footer class="site-footer">
     <div class="container">
 
-        <div class="cta-box reveal">
+        <div class="row g-5">
 
-            <h2>
-                Ready to Reconnect?
-            </h2>
-
-            <p>
-                Join FoundLink and make lost & found simpler for your
-                college community.
-            </p>
-
-            <a
-                href="{% url 'register' %}"
-                class="cta-btn"
-            >
-
-                Create Your Account
-
-                <i class="bi bi-arrow-right ms-1"></i>
-
-            </a>
-
-        </div>
-
-    </div>
-
-</section>
-
-
-<!-- =====================================================
-     FOOTER
-===================================================== -->
-
-<footer>
-
-    <div class="container">
-
-        <div class="row align-items-start">
-
-
-            <div class="col-md-7">
-
-                <a
-                    href="{% url 'home' %}"
-                    class="footer-brand"
-                >
-
-                    <div class="footer-logo">
-
-                        <!-- LOCATION LOGO KEPT -->
-
-                        <i class="bi bi-geo-alt-fill"></i>
-
-                    </div>
-
-                    <div class="footer-name">
-                        Found<span>Link</span>
-                    </div>
-
+            <div class="col-lg-5 col-md-6">
+                <a class="brand" href="{% url 'home' %}" aria-label="FoundLink home">
+                    <span class="brand-icon">
+                        <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                            <path d="M20 3.5C12.8 3.5 7 9.2 7 16.3C7 25.6 20 36.5 20 36.5C20 36.5 33 25.6 33 16.3C33 9.2 27.2 3.5 20 3.5Z" fill="white"/>
+                            <circle cx="20" cy="16" r="5.1" fill="#59AAA9"/>
+                        </svg>
+                    </span>
+                    <span class="brand-name">Found<span>Link</span></span>
                 </a>
 
-
-                <p class="footer-text">
-
-                    A smart, simple and secure Lost & Found platform
-                    designed to help students reconnect with their
-                    belongings.
-
+                <p class="footer-description">
+                    FoundLink helps students report lost belongings, share found
+                    items and discover possible matches in one convenient place.
                 </p>
-
             </div>
 
+            <div class="col-lg-3 col-md-6 col-6">
+                <h3 class="footer-heading">Quick Links</h3>
 
-            <div class="col-md-5 text-md-end">
+                <ul class="footer-links">
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#about">About</a></li>
+                    <li><a href="#how-it-works">How It Works</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+            </div>
 
-                <div class="footer-text ms-md-auto">
+            <div class="col-lg-4 col-md-12">
+                <h3 class="footer-heading">Contact Information</h3>
 
-                    <strong style="color:white;">
-                        FoundLink
-                    </strong>
+                <p class="footer-contact mb-2">
+                    <i class="bi bi-telephone me-2"></i>
+                    +91 98765 43210 <span>(sample)</span>
+                </p>
 
-                    <br>
-
-                    Lost & Found Platform for Students
-
-                </div>
-
+                <p class="footer-contact mb-0">
+                    <i class="bi bi-envelope me-2"></i>
+                    support@foundlink.example <span>(sample)</span>
+                </p>
             </div>
 
         </div>
 
-
-        <div class="footer-bottom text-center">
-
-            © 2026 FoundLink. All rights reserved.
-
+        <div class="footer-bottom">
+            <span>© <span id="currentYear"></span> FoundLink. All rights reserved.</span>
+            <span>Made for a more connected college community.</span>
         </div>
 
     </div>
-
 </footer>
 
+<!-- AI ASSISTANT BUTTON -->
+<button type="button" class="ai-chat-toggle" id="chatToggle"
+        aria-label="Open FoundLink assistant" aria-expanded="false">
+    <i class="bi bi-chat-dots-fill"></i>
+</button>
 
-<!-- =====================================================
-     AI CHATBOX
-===================================================== -->
+<!-- AI ASSISTANT CHAT -->
+<section class="chat-panel" id="chatPanel" aria-label="FoundLink assistant">
 
-<form style="display:none;">
-
-    {% csrf_token %}
-
-</form>
-
-
-<div
-    id="foundlink-ai-box"
-    class="ai-chat-box"
->
-
-    <div class="ai-chat-header">
-
-        <div class="ai-chat-title">
-
-            <div class="ai-chat-title-icon">
+    <div class="chat-header">
+        <div class="chat-header-content">
+            <div class="chat-header-icon">
                 <i class="bi bi-stars"></i>
             </div>
 
             <div>
-
-                <strong>
-                    FoundLink AI Assistant
-                </strong>
-
-                <span>
-                    Ask me about FoundLink
-                </span>
-
+                <strong>FoundLink Assistant</strong>
+                <small>Lost and found help</small>
             </div>
-
         </div>
 
-
-        <button
-            type="button"
-            class="ai-chat-close"
-            id="ai-chat-close"
-        >
-            <i class="bi bi-x-lg"></i>
+        <button type="button" class="chat-close" id="chatClose" aria-label="Close chat">
+            &times;
         </button>
-
     </div>
 
-
-    <div
-        id="ai-chat-messages"
-        class="ai-chat-messages"
-    >
-
-        <div class="ai-message bot">
-
-            Hi! 👋 I'm the FoundLink Assistant.
-
-            <br><br>
-
-            I can help you with lost items, found items,
-            Smart Matching, notifications, connections,
-            recovery and safety.
-
+    <div class="chat-messages" id="chatMessages" aria-live="polite">
+        <div class="chat-message bot">
+            Hi! I'm the FoundLink assistant. I can help you understand how to report
+            a lost or found item. What would you like help with?
         </div>
-
     </div>
 
+    <form class="chat-form" id="chatForm">
+        {% csrf_token %}
 
-    <div class="ai-chat-input-area">
+        <input type="text"
+               id="chatInput"
+               name="message"
+               placeholder="Ask about a lost or found item..."
+               autocomplete="off"
+               maxlength="1000"
+               required>
 
-        <input
-            type="text"
-            id="ai-chat-input"
-            class="ai-chat-input"
-            placeholder="Ask something..."
-            autocomplete="off"
-        >
-
-
-        <button
-            type="button"
-            id="ai-send-button"
-            class="ai-send-button"
-        >
-
+        <button type="submit" id="chatSend" aria-label="Send message">
             <i class="bi bi-send-fill"></i>
-
         </button>
+    </form>
 
-    </div>
+</section>
 
-</div>
-
-
-<!-- AI CHAT BUTTON -->
-
-<button
-    type="button"
-    id="foundlink-ai-button"
-    class="ai-chat-button"
->
-
-    <i class="bi bi-chat-dots-fill"></i>
-
-    <span>
-        AI Assistant
-    </span>
-
-</button>
-
-
-<!-- =====================================================
-     JAVASCRIPT
-===================================================== -->
-
-<script
-    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js">
-</script>
-
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 <script>
+    // Current year
+    document.getElementById("currentYear").textContent =
+        new Date().getFullYear();
 
-    /* ==========================================
-       SCROLL REVEAL
-    ========================================== */
+    // Close the mobile menu after selecting a section
+    document.querySelectorAll("#mainNavigation .nav-link").forEach(function(link) {
+        link.addEventListener("click", function() {
+            const navigation = document.getElementById("mainNavigation");
 
-    const revealElements =
-        document.querySelectorAll(".reveal");
-
-    const revealObserver =
-        new IntersectionObserver(
-            function(entries, observer) {
-
-                entries.forEach(function(entry) {
-
-                    if (entry.isIntersecting) {
-
-                        entry.target.classList.add("show");
-
-                        observer.unobserve(entry.target);
-
-                    }
-
-                });
-
-            },
-            {
-                threshold: 0.12
+            if (navigation.classList.contains("show")) {
+                bootstrap.Collapse.getOrCreateInstance(navigation).hide();
             }
-        );
-
-
-    revealElements.forEach(function(element) {
-
-        revealObserver.observe(element);
-
+        });
     });
 
+    // Chat elements
+    const chatToggle = document.getElementById("chatToggle");
+    const chatPanel = document.getElementById("chatPanel");
+    const chatClose = document.getElementById("chatClose");
+    const chatForm = document.getElementById("chatForm");
+    const chatInput = document.getElementById("chatInput");
+    const chatMessages = document.getElementById("chatMessages");
+    const chatSend = document.getElementById("chatSend");
 
-    /* ==========================================
-       STATUS FLOW ANIMATION
-    ========================================== */
+    // Open chat
+    function openChat() {
+        chatPanel.classList.add("open");
+        chatToggle.setAttribute("aria-expanded", "true");
+        chatInput.focus();
+    }
 
-    const statusItems =
-        document.querySelectorAll(".status-item");
+    // Close chat
+    function closeChat() {
+        chatPanel.classList.remove("open");
+        chatToggle.setAttribute("aria-expanded", "false");
+    }
 
-    const statusArrows =
-        document.querySelectorAll(".status-arrow");
+    chatToggle.addEventListener("click", function() {
+        if (chatPanel.classList.contains("open")) {
+            closeChat();
+        } else {
+            openChat();
+        }
+    });
 
-    let currentStatus = 0;
+    chatClose.addEventListener("click", closeChat);
 
+    // Get Django CSRF cookie
+    function getCookie(name) {
+        const cookies = document.cookie ? document.cookie.split(";") : [];
 
-    function animateStatus() {
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
 
-        statusItems.forEach(function(item) {
-
-            item.classList.remove("active");
-
-        });
-
-
-        statusArrows.forEach(function(arrow) {
-
-            arrow.classList.remove("active");
-
-        });
-
-
-        if (statusItems.length > 0) {
-
-            statusItems[currentStatus]
-                .classList.add("active");
-
+            if (cookie.startsWith(name + "=")) {
+                return decodeURIComponent(
+                    cookie.substring(name.length + 1)
+                );
+            }
         }
 
-
-        if (currentStatus > 0) {
-
-            statusArrows[currentStatus - 1]
-                .classList.add("active");
-
-        }
-
-
-        currentStatus++;
-
-
-        if (currentStatus >= statusItems.length) {
-
-            currentStatus = 0;
-
-        }
-
+        return "";
     }
 
+    // Display a chat message safely
+    function addChatMessage(message, sender) {
+        const element = document.createElement("div");
+        element.className = "chat-message " + sender;
+        element.textContent = message;
 
-    setInterval(
-        animateStatus,
-        1800
-    );
-
-
-    /* ==========================================
-       HERO IMAGE MOUSE MOVEMENT
-    ========================================== */
-
-    const heroVisual =
-        document.getElementById("heroVisual");
-
-    const heroImageWrapper =
-        document.getElementById("heroImageWrapper");
-
-
-    if (heroVisual && heroImageWrapper) {
-
-        heroVisual.addEventListener(
-            "mousemove",
-            function(event) {
-
-                const rect =
-                    heroVisual.getBoundingClientRect();
-
-                const x =
-                    event.clientX - rect.left;
-
-                const y =
-                    event.clientY - rect.top;
-
-                const moveX =
-                    (x / rect.width - 0.5) * 5;
-
-                const moveY =
-                    (y / rect.height - 0.5) * 5;
-
-
-                heroImageWrapper.style.transform =
-                    "translate(" +
-                    moveX +
-                    "px, " +
-                    moveY +
-                    "px)";
-
-            }
-        );
-
-
-        heroVisual.addEventListener(
-            "mouseleave",
-            function() {
-
-                heroImageWrapper.style.transform = "";
-
-            }
-        );
-
+        chatMessages.appendChild(element);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
     }
 
+    // Send message to the existing Django AI chat endpoint
+    chatForm.addEventListener("submit", async function(event) {
+        event.preventDefault();
 
-    /* ==========================================
-       AI CHATBOX
-    ========================================== */
+        const message = chatInput.value.trim();
 
-    const aiButton =
-        document.getElementById(
-            "foundlink-ai-button"
-        );
-
-
-    const aiBox =
-        document.getElementById(
-            "foundlink-ai-box"
-        );
-
-
-    const aiClose =
-        document.getElementById(
-            "ai-chat-close"
-        );
-
-
-    const aiInput =
-        document.getElementById(
-            "ai-chat-input"
-        );
-
-
-    const aiSend =
-        document.getElementById(
-            "ai-send-button"
-        );
-
-
-    const aiMessages =
-        document.getElementById(
-            "ai-chat-messages"
-        );
-
-
-    /* OPEN CHAT */
-
-    if (aiButton) {
-
-        aiButton.addEventListener(
-            "click",
-            function() {
-
-                aiBox.classList.toggle("active");
-
-
-                if (
-                    aiBox.classList.contains("active")
-                ) {
-
-                    aiInput.focus();
-
-                }
-
-            }
-        );
-
-    }
-
-
-    /* CLOSE CHAT */
-
-    if (aiClose) {
-
-        aiClose.addEventListener(
-            "click",
-            function() {
-
-                aiBox.classList.remove("active");
-
-            }
-        );
-
-    }
-
-
-    /* ADD MESSAGE */
-
-    function addMessage(
-        message,
-        type
-    ) {
-
-        const messageDiv =
-            document.createElement("div");
-
-
-        messageDiv.className =
-            "ai-message " + type;
-
-
-        messageDiv.textContent =
-            message;
-
-
-        aiMessages.appendChild(
-            messageDiv
-        );
-
-
-        aiMessages.scrollTop =
-            aiMessages.scrollHeight;
-
-    }
-
-
-    /* SEND MESSAGE */
-
-    async function sendAIMessage() {
-
-        const message =
-            aiInput.value.trim();
-
-
-        if (!message) {
-
+        if (!message || chatSend.disabled) {
             return;
-
         }
 
+        addChatMessage(message, "user");
+        chatInput.value = "";
+        chatSend.disabled = true;
 
-        addMessage(
-            message,
-            "user"
-        );
-
-
-        aiInput.value = "";
-
-
-        const csrfInput =
-            document.querySelector(
-                '[name="csrfmiddlewaretoken"]'
-            );
-
-
-        const csrfToken =
-            csrfInput
-                ? csrfInput.value
-                : "";
-
-
-        const formData =
-            new FormData();
-
-
-        formData.append(
-            "message",
-            message
-        );
-
-
-        formData.append(
-            "csrfmiddlewaretoken",
-            csrfToken
-        );
-
+        const originalButton = chatSend.innerHTML;
+        chatSend.innerHTML =
+            '<span class="spinner-border spinner-border-sm" aria-hidden="true"></span>';
 
         try {
+            const formData = new FormData();
+            formData.append("message", message);
 
-            const response =
-                await fetch(
-                    "{% url 'ai_chat' %}",
-                    {
-                        method: "POST",
+            const csrfInput = chatForm.querySelector(
+                'input[name="csrfmiddlewaretoken"]'
+            );
 
-                        body: formData,
+            const csrfToken = getCookie("csrftoken") ||
+                (csrfInput ? csrfInput.value : "");
 
-                        headers: {
-                            "X-Requested-With":
-                                "XMLHttpRequest"
-                        }
-                    }
-                );
-
-
-            const data =
-                await response.json();
-
-
-            if (data.response) {
-
-                addMessage(
-                    data.response,
-                    "bot"
-                );
-
+            if (csrfToken) {
+                formData.append("csrfmiddlewaretoken", csrfToken);
             }
 
-            else {
+            const response = await fetch("{% url 'ai_chat' %}", {
+                method: "POST",
+                body: formData,
+                headers: {
+                    "X-Requested-With": "XMLHttpRequest",
+                    "X-CSRFToken": csrfToken
+                },
+                credentials: "same-origin"
+            });
 
-                addMessage(
-                    "Sorry, I could not process that message.",
-                    "bot"
-                );
+            let data;
 
+            try {
+                data = await response.json();
+            } catch (parseError) {
+                throw new Error("Unexpected response from the assistant.");
             }
 
-        }
+            if (!response.ok) {
+                throw new Error(
+                    data.response ||
+                    data.error ||
+                    "The assistant is temporarily unavailable."
+                );
+            }
 
-        catch (error) {
+            const answer = data.response || data.reply || data.message;
 
-            addMessage(
-                "Unable to connect to FoundLink Assistant. Please try again.",
+            if (answer) {
+                addChatMessage(String(answer), "bot");
+            } else {
+                addChatMessage(
+                    "I couldn't prepare a response right now. Please try again.",
+                    "bot"
+                );
+            }
+
+        } catch (error) {
+            console.error("FoundLink assistant error:", error);
+
+            addChatMessage(
+                "Sorry, the assistant is temporarily unavailable. You can still use FoundLink to report and search for items.",
                 "bot"
             );
 
+        } finally {
+            chatSend.disabled = false;
+            chatSend.innerHTML = originalButton;
+            chatInput.focus();
         }
-
-    }
-
-
-    /* SEND BUTTON */
-
-    if (aiSend) {
-
-        aiSend.addEventListener(
-            "click",
-            sendAIMessage
-        );
-
-    }
-
-
-    /* ENTER KEY */
-
-    if (aiInput) {
-
-        aiInput.addEventListener(
-            "keydown",
-            function(event) {
-
-                if (event.key === "Enter") {
-
-                    event.preventDefault();
-
-                    sendAIMessage();
-
-                }
-
-            }
-        );
-
-    }
-
-
-    /* ==========================================
-       AI BUTTON START ANIMATION
-    ========================================== */
-
-    setTimeout(
-        function() {
-
-            if (aiButton) {
-
-                aiButton.animate(
-                    [
-                        {
-                            transform: "scale(1)"
-                        },
-                        {
-                            transform: "scale(1.06)"
-                        },
-                        {
-                            transform: "scale(1)"
-                        }
-                    ],
-                    {
-                        duration: 700,
-                        iterations: 2
-                    }
-                );
-
-            }
-
-        },
-        1800
-    );
-
+    });
 </script>
 
-
 </body>
-
 </html>
