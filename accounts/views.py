@@ -381,41 +381,36 @@ def dashboard(request):
 # CREATE LOST ITEM
 # =================================================
 
+
 def create_lost_item(request):
+    import logging
+    logger = logging.getLogger(__name__)
 
     if "user_id" not in request.session:
-
         return redirect("login")
 
     if request.method == "POST":
-
         form = LostItemForm(request.POST, request.FILES)
 
         if form.is_valid():
+            try:
+                item = form.save(commit=False)
+                item.user_id = request.session["user_id"]
+                item.save()
 
-            item = form.save(commit=False)
+                logger.info("LOST ITEM SAVED SUCCESSFULLY: %s", item.pk)
+                return redirect("dashboard")
 
-            item.user_id = request.session["user_id"]
-
-            # Save the image using normal Django FileSystemStorage.
-            item.save()
-
-            print("========================================")
-            print("LOST ITEM ADDED SUCCESSFULLY!")
-            print("Item:", item.item_name)
-            print("Category:", item.category)
-            print("Location:", item.location)
-            print("========================================")
-
-            return redirect("dashboard")
-
+            except Exception:
+                logger.exception("ERROR SAVING LOST ITEM")
+                raise
     else:
-
         form = LostItemForm()
 
     return render(request, "add_lost_item.html", {
         "form": form
     })
+
 
 
 # =================================================
