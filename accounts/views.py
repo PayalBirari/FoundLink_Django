@@ -3,12 +3,14 @@
 # =================================================
 
 import random
+import logging
 
 from django.shortcuts import render, redirect
 from django.http import JsonResponse
 from django.db.models import Q
 from django.core.mail import send_mail
 from django.contrib.auth.hashers import make_password, check_password
+from django.contrib.admin.views.decorators import staff_member_required
 from django.urls import reverse
 
 from .forms import RegisterForm, LostItemForm, FoundItemForm
@@ -23,10 +25,8 @@ from .models import (
     Comment,
     Connection,
     Announcement,
-
+    LoginHistory,
 )
-
-
 
 
 # =================================================
@@ -85,28 +85,21 @@ def home(request):
     })
 
 
-
 # =================================================
 # REGISTER
 # =================================================
 
 def register(request):
-
     if request.method == "POST":
-
         form = RegisterForm(request.POST)
 
         if form.is_valid():
-
             user = form.save()
-
             user.password = make_password(user.password)
             user.save()
 
             return redirect("home")
-
     else:
-
         form = RegisterForm()
 
     return render(request, "register.html", {
@@ -115,50 +108,49 @@ def register(request):
 
 
 # =================================================
-# LOGIN
+# LOGIN + LOGIN HISTORY
 # =================================================
 
 def login(request):
-
     if request.method == "POST":
-
-        # Get and clean the values from the login form.
         email = (request.POST.get("email") or "").strip()
         password = request.POST.get("password") or ""
 
-        # Do not allow an empty login request.
-        if not email or not password:
-            return render(request, "login.html", {
-                "error": "Please enter your email and password."
-            })
+        user = User.objects.filter(
+            email__iexact=email
+        ).first() if email else None
 
-        try:
-            # Use case-insensitive email matching so that
-            # Payal@Example.com and payal@example.com work the same way.
-            user = User.objects.get(email__iexact=email)
+        successful = bool(
+            user and password and
+            check_password(password, user.password)
+        )
 
-            # Check the password against the hashed password stored in DB.
-            if check_password(password, user.password):
+        # Record successful and failed login attempts.
+        ip_address = request.META.get("REMOTE_ADDR")
 
-                # Store the custom FoundLink session values used
-                # throughout the rest of the project.
-                request.session["user_id"] = user.id
-                request.session["user_name"] = user.full_name
+        LoginHistory.objects.create(
+            email=email or "unknown@foundlink.local",
+            user=user,
+            status="success" if successful else "failed",
+            ip_address=ip_address or None,
+        )
 
-                # Make sure the session is saved before redirecting.
-                request.session.modified = True
+        if successful:
+            request.session["user_id"] = user.id
+            request.session["user_name"] = user.full_name
+            request.session.modified = True
 
-                return redirect("dashboard")
+            return redirect("dashboard")
 
-            return render(request, "login.html", {
-                "error": "Invalid email or password."
-            })
+        error = (
+            "Please enter your email and password."
+            if not email or not password
+            else "Invalid email or password."
+        )
 
-        except User.DoesNotExist:
-
-            return render(request, "login.html", {
-                "error": "Invalid email or password."
-            })
+        return render(request, "login.html", {
+            "error": error
+        })
 
     return render(request, "login.html")
 
@@ -168,15 +160,11 @@ def login(request):
 # =================================================
 
 def forgot_password(request):
-
     if request.method == "POST":
-
         email = request.POST.get("email")
 
         try:
-
             user = User.objects.get(email=email)
-
             otp = random.randint(100000, 999999)
 
             request.session["reset_email"] = email
@@ -200,7 +188,6 @@ def forgot_password(request):
             return redirect("verify_otp")
 
         except User.DoesNotExist:
-
             return render(request, "forgot_password.html", {
                 "error": "Email address not found."
             })
@@ -213,27 +200,20 @@ def forgot_password(request):
 # =================================================
 
 def verify_otp(request):
-
     if "reset_email" not in request.session:
-
         return redirect("forgot_password")
 
     if request.method == "POST":
-
         entered_otp = request.POST.get("otp")
         saved_otp = request.session.get("reset_otp")
 
         if entered_otp == saved_otp:
-
             request.session["otp_verified"] = True
-
             return redirect("reset_password")
 
-        else:
-
-            return render(request, "verify_otp.html", {
-                "error": "Invalid OTP."
-            })
+        return render(request, "verify_otp.html", {
+            "error": "Invalid OTP."
+        })
 
     return render(request, "verify_otp.html")
 
@@ -243,18 +223,14 @@ def verify_otp(request):
 # =================================================
 
 def reset_password(request):
-
     if not request.session.get("otp_verified"):
-
         return redirect("forgot_password")
 
     if request.method == "POST":
-
         password = request.POST.get("password")
         confirm_password = request.POST.get("confirm_password")
 
         if password != confirm_password:
-
             return render(request, "reset_password.html", {
                 "error": "Passwords do not match."
             })
@@ -262,9 +238,7 @@ def reset_password(request):
         email = request.session.get("reset_email")
 
         try:
-
             user = User.objects.get(email=email)
-
             user.password = make_password(password)
             user.save()
 
@@ -275,7 +249,6 @@ def reset_password(request):
             return redirect("login")
 
         except User.DoesNotExist:
-
             return redirect("forgot_password")
 
     return render(request, "reset_password.html")
@@ -286,11 +259,8 @@ def reset_password(request):
 # =================================================
 
 def logout(request):
-
     print("########## FOUNDLINK LOGOUT VIEW CALLED ##########")
-
     request.session.flush()
-
     return redirect("home")
 
 
@@ -299,12 +269,10 @@ def logout(request):
 # =================================================
 
 def dashboard(request):
-
     if "user_id" not in request.session:
         return redirect("login")
 
     lost_items = LostItem.objects.all().order_by("-created_at")
-
     found_items = FoundItem.objects.all().order_by("-created_at")
 
     user_id = request.session["user_id"]
@@ -321,20 +289,13 @@ def dashboard(request):
     lost_count = LostItem.objects.count()
     found_count = FoundItem.objects.count()
 
-    # =================================================
-    # FOUNDLINK ANNOUNCEMENTS
-    # =================================================
-
     announcements = list(
         Announcement.objects.filter(
             is_active=True
         ).order_by("-created_at")[:5]
     )
 
-    # If there are no admin announcements,
-    # show useful automatic FoundLink updates.
     if not announcements:
-
         announcements = [
             {
                 "title": "Welcome to FoundLink",
@@ -360,19 +321,12 @@ def dashboard(request):
         ]
 
     return render(request, "dashboard.html", {
-
         "lost_items": lost_items,
-
         "found_items": found_items,
-
         "notifications": notifications,
-
         "lost_count": lost_count,
-
         "found_count": found_count,
-
         "connections_count": connections_count,
-
         "announcements": announcements,
     })
 
@@ -381,9 +335,7 @@ def dashboard(request):
 # CREATE LOST ITEM
 # =================================================
 
-
 def create_lost_item(request):
-    import logging
     logger = logging.getLogger(__name__)
 
     if "user_id" not in request.session:
@@ -398,7 +350,11 @@ def create_lost_item(request):
                 item.user_id = request.session["user_id"]
                 item.save()
 
-                logger.info("LOST ITEM SAVED SUCCESSFULLY: %s", item.pk)
+                logger.info(
+                    "LOST ITEM SAVED SUCCESSFULLY: %s",
+                    item.pk
+                )
+
                 return redirect("dashboard")
 
             except Exception:
@@ -412,26 +368,23 @@ def create_lost_item(request):
     })
 
 
-
 # =================================================
 # VIEW LOST ITEMS
 # =================================================
 
 def view_lost_items(request):
-
     query = request.GET.get("q", "")
 
-    if query:
+    lost_items = LostItem.objects.all()
 
-        lost_items = LostItem.objects.filter(
+    if query:
+        lost_items = lost_items.filter(
             Q(item_name__icontains=query) |
             Q(category__icontains=query) |
             Q(location__icontains=query)
-        ).order_by("-created_at")
+        )
 
-    else:
-
-        lost_items = LostItem.objects.all().order_by("-created_at")
+    lost_items = lost_items.order_by("-created_at")
 
     return render(request, "view_lost_items.html", {
         "lost_items": lost_items,
@@ -444,20 +397,18 @@ def view_lost_items(request):
 # =================================================
 
 def view_found_items(request):
-
     query = request.GET.get("q", "")
 
-    if query:
+    found_items = FoundItem.objects.all()
 
-        found_items = FoundItem.objects.filter(
+    if query:
+        found_items = found_items.filter(
             Q(item_name__icontains=query) |
             Q(category__icontains=query) |
             Q(location__icontains=query)
-        ).order_by("-created_at")
+        )
 
-    else:
-
-        found_items = FoundItem.objects.all().order_by("-created_at")
+    found_items = found_items.order_by("-created_at")
 
     return render(request, "view_found_items.html", {
         "found_items": found_items,
@@ -465,156 +416,123 @@ def view_found_items(request):
     })
 
 
+
 # =================================================
 # CREATE FOUND ITEM + SMART MATCH
 # =================================================
 
 def create_found_item(request):
+    logger = logging.getLogger(__name__)
 
     if "user_id" not in request.session:
-
         return redirect("login")
 
-    if request.method == "POST":
+    if request.method != "POST":
+        form = FoundItemForm()
+        return render(request, "add_found_item.html", {
+            "form": form
+        })
 
-        form = FoundItemForm(request.POST, request.FILES)
+    form = FoundItemForm(request.POST, request.FILES)
 
-        if form.is_valid():
+    if not form.is_valid():
+        return render(request, "add_found_item.html", {
+            "form": form
+        })
 
-            item = form.save(commit=False)
+    # Save the found report first.
+    item = form.save(commit=False)
+    item.user_id = request.session["user_id"]
+    item.save()
 
-            item.user_id = request.session["user_id"]
+    logger.info("FOUND ITEM SAVED SUCCESSFULLY: %s", item.pk)
 
-            # Save the image using normal Django FileSystemStorage.
-            item.save()
+    lost_items = LostItem.objects.filter(
+        category__iexact=item.category,
+        status__in=["lost", "possible_match"]
+    )
 
-            print("========================================")
-            print("FOUND ITEM ADDED SUCCESSFULLY!")
-            print("Item:", item.item_name)
-            print("Category:", item.category)
-            print("Location:", item.location)
-            print("========================================")
+    for lost_item in lost_items:
+        score = 0
 
-            # =========================================
-            # SMART MATCH
-            # =========================================
+        found_name = (item.item_name or "").strip().lower()
+        lost_name = (lost_item.item_name or "").strip().lower()
 
-            lost_items = LostItem.objects.filter(
-                category__iexact=item.category,
-                status__in=["lost", "possible_match"]
+        found_location = (item.location or "").strip().lower()
+        lost_location = (lost_item.location or "").strip().lower()
+
+        found_description = (item.description or "").strip().lower()
+        lost_description = (lost_item.description or "").strip().lower()
+
+        if found_name and lost_name and (
+            found_name in lost_name or lost_name in found_name
+        ):
+            score += 3
+
+        if found_location and lost_location and (
+            found_location in lost_location
+            or lost_location in found_location
+        ):
+            score += 2
+
+        if found_description and lost_description and (
+            found_description in lost_description
+            or lost_description in found_description
+        ):
+            score += 1
+
+        if score < 3:
+            continue
+
+        # Save the match and dashboard notification first.
+        lost_item.status = "possible_match"
+        lost_item.save(update_fields=["status"])
+
+        Notification.objects.create(
+            user=lost_item.user,
+            message=(
+                f"Possible match found for your lost item "
+                f"'{lost_item.item_name}'. A found item "
+                f"'{item.item_name}' was reported at {item.location}."
+            )
+        )
+
+        logger.info(
+            "SMART MATCH: lost_item=%s found_item=%s score=%s",
+            lost_item.pk, item.pk, score
+        )
+
+        # Use a short SMTP timeout so email cannot hold up
+        # report submission for a long time.
+        try:
+            send_mail(
+                "FoundLink - Possible Match Found",
+                (
+                    f"Possible match found for your lost item "
+                    f"'{lost_item.item_name}'.\n\n"
+                    f"Found item: {item.item_name}\n"
+                    f"Category: {item.category}\n"
+                    f"Location: {item.location}\n\n"
+                    "Please check your FoundLink dashboard."
+                ),
+                None,
+                [lost_item.user.email],
+                fail_silently=False,
+                connection=None,
+            )
+            logger.info(
+                "SMART MATCH EMAIL SENT to %s",
+                lost_item.user.email
             )
 
-            for lost_item in lost_items:
+        except Exception:
+            logger.exception(
+                "SMART MATCH EMAIL FAILED for lost item %s",
+                lost_item.pk
+            )
 
-                score = 0
+    return redirect("dashboard")
 
-                found_name = item.item_name.lower()
-                lost_name = lost_item.item_name.lower()
-
-                found_location = item.location.lower()
-                lost_location = lost_item.location.lower()
-
-                found_description = item.description.lower()
-                lost_description = lost_item.description.lower()
-
-                # ITEM NAME MATCH
-                if (
-                    found_name in lost_name
-                    or lost_name in found_name
-                ):
-
-                    score += 3
-
-                # LOCATION MATCH
-                if (
-                    found_location in lost_location
-                    or lost_location in found_location
-                ):
-
-                    score += 2
-
-                # DESCRIPTION MATCH
-                if (
-                    found_description in lost_description
-                    or lost_description in found_description
-                ):
-
-                    score += 1
-
-                # =====================================
-                # MATCH FOUND
-                # =====================================
-
-                if score >= 3:
-
-                    lost_item.status = "possible_match"
-
-                    lost_item.save()
-
-                    Notification.objects.create(
-
-                        user=lost_item.user,
-
-                        message=(
-                            f"Possible match found for your lost "
-                            f"item '{lost_item.item_name}'. "
-                            f"A found item '{item.item_name}' "
-                            f"was reported at {item.location}."
-                        )
-                    )
-
-                    print("========================================")
-                    print("SMART MATCH FOUND!")
-                    print("LOST ITEM:", lost_item.item_name)
-                    print("FOUND ITEM:", item.item_name)
-                    print("MATCH SCORE:", score)
-                    print("NOTIFICATION CREATED")
-                    print("NOTIFICATION FOR:", lost_item.user.email)
-                    print("========================================")
-
-                    # =================================
-                    # EMAIL ALERT
-                    # =================================
-
-                    try:
-
-                        send_mail(
-
-                            "FoundLink - Possible Match Found",
-
-                            (
-                                f"Possible match found for your lost "
-                                f"item '{lost_item.item_name}'.\n\n"
-
-                                f"Found item: {item.item_name}\n"
-                                f"Category: {item.category}\n"
-                                f"Location: {item.location}\n\n"
-
-                                f"Please check your FoundLink dashboard."
-                            ),
-
-                            None,
-
-                            [lost_item.user.email],
-
-                            fail_silently=False,
-                        )
-
-                        print("EMAIL ALERT SENT")
-
-                    except Exception as e:
-
-                        print("EMAIL ERROR:", e)
-
-            return redirect("dashboard")
-
-    else:
-
-        form = FoundItemForm()
-
-    return render(request, "add_found_item.html", {
-        "form": form
-    })
 
 
 # =================================================
@@ -622,22 +540,17 @@ def create_found_item(request):
 # =================================================
 
 def delete_lost_item(request, item_id):
-
     if "user_id" not in request.session:
-
         return redirect("login")
 
     try:
-
         item = LostItem.objects.get(
             id=item_id,
             user_id=request.session["user_id"]
         )
-
         item.delete()
 
     except LostItem.DoesNotExist:
-
         pass
 
     return redirect("my_reports")
@@ -648,22 +561,17 @@ def delete_lost_item(request, item_id):
 # =================================================
 
 def delete_found_item(request, item_id):
-
     if "user_id" not in request.session:
-
         return redirect("login")
 
     try:
-
         item = FoundItem.objects.get(
             id=item_id,
             user_id=request.session["user_id"]
         )
-
         item.delete()
 
     except FoundItem.DoesNotExist:
-
         pass
 
     return redirect("my_reports")
@@ -674,24 +582,18 @@ def delete_found_item(request, item_id):
 # =================================================
 
 def edit_lost_item(request, item_id):
-
     if "user_id" not in request.session:
-
         return redirect("login")
 
     try:
-
         item = LostItem.objects.get(
             id=item_id,
             user_id=request.session["user_id"]
         )
-
     except LostItem.DoesNotExist:
-
         return redirect("my_reports")
 
     if request.method == "POST":
-
         form = LostItemForm(
             request.POST,
             request.FILES,
@@ -699,13 +601,9 @@ def edit_lost_item(request, item_id):
         )
 
         if form.is_valid():
-
             form.save()
-
             return redirect("my_reports")
-
     else:
-
         form = LostItemForm(instance=item)
 
     return render(request, "edit_lost_item.html", {
@@ -719,24 +617,18 @@ def edit_lost_item(request, item_id):
 # =================================================
 
 def edit_found_item(request, item_id):
-
     if "user_id" not in request.session:
-
         return redirect("login")
 
     try:
-
         item = FoundItem.objects.get(
             id=item_id,
             user_id=request.session["user_id"]
         )
-
     except FoundItem.DoesNotExist:
-
         return redirect("my_reports")
 
     if request.method == "POST":
-
         form = FoundItemForm(
             request.POST,
             request.FILES,
@@ -744,13 +636,9 @@ def edit_found_item(request, item_id):
         )
 
         if form.is_valid():
-
             form.save()
-
             return redirect("my_reports")
-
     else:
-
         form = FoundItemForm(instance=item)
 
     return render(request, "edit_found_item.html", {
@@ -764,22 +652,17 @@ def edit_found_item(request, item_id):
 # =================================================
 
 def delete_notification(request, notification_id):
-
     if "user_id" not in request.session:
-
         return redirect("login")
 
     try:
-
         notification = Notification.objects.get(
             id=notification_id,
             user_id=request.session["user_id"]
         )
-
         notification.delete()
 
     except Notification.DoesNotExist:
-
         pass
 
     return redirect("dashboard")
@@ -790,17 +673,13 @@ def delete_notification(request, notification_id):
 # =================================================
 
 def like_post(request, item_type, item_id):
-
     if "user_id" not in request.session:
-
         return redirect("login")
 
     user_id = request.session["user_id"]
 
     if item_type == "lost":
-
         try:
-
             item = LostItem.objects.get(id=item_id)
 
             existing_like = Like.objects.filter(
@@ -809,24 +688,18 @@ def like_post(request, item_type, item_id):
             ).first()
 
             if existing_like:
-
                 existing_like.delete()
-
             else:
-
                 Like.objects.create(
                     user_id=user_id,
                     lost_item=item
                 )
 
         except LostItem.DoesNotExist:
-
             pass
 
     elif item_type == "found":
-
         try:
-
             item = FoundItem.objects.get(id=item_id)
 
             existing_like = Like.objects.filter(
@@ -835,18 +708,14 @@ def like_post(request, item_type, item_id):
             ).first()
 
             if existing_like:
-
                 existing_like.delete()
-
             else:
-
                 Like.objects.create(
                     user_id=user_id,
                     found_item=item
                 )
 
         except FoundItem.DoesNotExist:
-
             pass
 
     return redirect("dashboard")
@@ -857,21 +726,15 @@ def like_post(request, item_type, item_id):
 # =================================================
 
 def add_comment(request, item_type, item_id):
-
     if "user_id" not in request.session:
-
         return redirect("login")
 
     if request.method == "POST":
-
         text = request.POST.get("text")
 
         if text:
-
             if item_type == "lost":
-
                 try:
-
                     item = LostItem.objects.get(id=item_id)
 
                     Comment.objects.create(
@@ -881,13 +744,10 @@ def add_comment(request, item_type, item_id):
                     )
 
                 except LostItem.DoesNotExist:
-
                     pass
 
             elif item_type == "found":
-
                 try:
-
                     item = FoundItem.objects.get(id=item_id)
 
                     Comment.objects.create(
@@ -897,7 +757,6 @@ def add_comment(request, item_type, item_id):
                     )
 
                 except FoundItem.DoesNotExist:
-
                     pass
 
     return redirect("dashboard")
@@ -908,9 +767,7 @@ def add_comment(request, item_type, item_id):
 # =================================================
 
 def search_users(request):
-
     if "user_id" not in request.session:
-
         return redirect("login")
 
     query = request.GET.get("q", "")
@@ -920,7 +777,6 @@ def search_users(request):
     )
 
     if query:
-
         users = users.filter(
             Q(full_name__icontains=query) |
             Q(email__icontains=query)
@@ -937,19 +793,15 @@ def search_users(request):
 # =================================================
 
 def send_connection_request(request, user_id):
-
     if "user_id" not in request.session:
-
         return redirect("login")
 
     sender_id = request.session["user_id"]
 
     if sender_id == user_id:
-
         return redirect("search_users")
 
     try:
-
         receiver = User.objects.get(id=user_id)
 
         existing = Connection.objects.filter(
@@ -958,7 +810,6 @@ def send_connection_request(request, user_id):
         ).first()
 
         if not existing:
-
             Connection.objects.create(
                 sender_id=sender_id,
                 receiver_id=receiver.id,
@@ -974,7 +825,6 @@ def send_connection_request(request, user_id):
             )
 
     except User.DoesNotExist:
-
         pass
 
     return redirect("search_users")
@@ -985,9 +835,7 @@ def send_connection_request(request, user_id):
 # =================================================
 
 def connection_requests(request):
-
     if "user_id" not in request.session:
-
         return redirect("login")
 
     requests = Connection.objects.filter(
@@ -1005,13 +853,10 @@ def connection_requests(request):
 # =================================================
 
 def accept_connection(request, connection_id):
-
     if "user_id" not in request.session:
-
         return redirect("login")
 
     try:
-
         connection = Connection.objects.get(
             id=connection_id,
             receiver_id=request.session["user_id"],
@@ -1019,7 +864,6 @@ def accept_connection(request, connection_id):
         )
 
         connection.status = "accepted"
-
         connection.save()
 
         Notification.objects.create(
@@ -1031,7 +875,6 @@ def accept_connection(request, connection_id):
         )
 
     except Connection.DoesNotExist:
-
         pass
 
     return redirect("connection_requests")
@@ -1042,13 +885,10 @@ def accept_connection(request, connection_id):
 # =================================================
 
 def reject_connection(request, connection_id):
-
     if "user_id" not in request.session:
-
         return redirect("login")
 
     try:
-
         connection = Connection.objects.get(
             id=connection_id,
             receiver_id=request.session["user_id"],
@@ -1056,11 +896,9 @@ def reject_connection(request, connection_id):
         )
 
         connection.status = "rejected"
-
         connection.save()
 
     except Connection.DoesNotExist:
-
         pass
 
     return redirect("connection_requests")
@@ -1071,9 +909,7 @@ def reject_connection(request, connection_id):
 # =================================================
 
 def my_connections(request):
-
     if "user_id" not in request.session:
-
         return redirect("login")
 
     user_id = request.session["user_id"]
@@ -1093,33 +929,22 @@ def my_connections(request):
 # =================================================
 
 def delete_user(request, user_id):
-
     if "user_id" not in request.session:
-
         return redirect("login")
 
     if request.session["user_id"] != user_id:
-
         return redirect("dashboard")
 
     try:
-
         user = User.objects.get(id=user_id)
-
         user.delete()
-
         request.session.flush()
 
     except User.DoesNotExist:
-
         pass
 
     return redirect("login")
 
-
-# =================================================
-# MY REPORTS
-# =================================================
 
 # =================================================
 # MY REPORTS
@@ -1139,22 +964,34 @@ def my_reports(request):
         user_id=user_id
     ).order_by("-created_at")
 
+    print("========== MY REPORTS DEBUG ==========")
+    print("Logged-in session user ID:", user_id)
+    print("Lost reports found:", lost_items.count())
+    print("Found reports found:", found_items.count())
+
+    for item in lost_items:
+        print("LOST:", item.id, item.item_name, item.user_id)
+
+    for item in found_items:
+        print("FOUND:", item.id, item.item_name, item.user_id)
+
+    print("======================================")
+
     return render(request, "my_reports.html", {
         "lost_items": lost_items,
         "found_items": found_items,
     })
+
+
 # =================================================
 # MARK LOST ITEM STATUS + NOTIFICATION
 # =================================================
 
 def mark_lost_status(request, item_id):
-
     if "user_id" not in request.session:
-
         return redirect("login")
 
     try:
-
         item = LostItem.objects.get(
             id=item_id,
             user_id=request.session["user_id"]
@@ -1162,30 +999,16 @@ def mark_lost_status(request, item_id):
 
         status = request.POST.get("status")
 
-        if status in [
-            "lost",
-            "possible_match",
-            "recovered"
-        ]:
-
+        if status in ["lost", "possible_match", "recovered"]:
             old_status = item.status
-
             item.status = status
-
             item.save()
 
-            if (
-                status == "recovered"
-                and old_status != "recovered"
-            ):
-
+            if status == "recovered" and old_status != "recovered":
                 Notification.objects.create(
-
                     user=item.user,
-
                     message=(
-                        f"Your lost item "
-                        f"'{item.item_name}' "
+                        f"Your lost item '{item.item_name}' "
                         f"has been marked as Recovered."
                     )
                 )
@@ -1198,7 +1021,6 @@ def mark_lost_status(request, item_id):
                 print("========================================")
 
     except LostItem.DoesNotExist:
-
         pass
 
     return redirect("my_reports")
@@ -1209,13 +1031,10 @@ def mark_lost_status(request, item_id):
 # =================================================
 
 def mark_found_status(request, item_id):
-
     if "user_id" not in request.session:
-
         return redirect("login")
 
     try:
-
         item = FoundItem.objects.get(
             id=item_id,
             user_id=request.session["user_id"]
@@ -1223,33 +1042,22 @@ def mark_found_status(request, item_id):
 
         status = request.POST.get("status")
 
-        if status in [
-            "found",
-            "returned"
-        ]:
-
+        if status in ["found", "returned"]:
             old_status = item.status
-
             item.status = status
-
             item.save()
 
-            if (
-                status == "returned"
-                and old_status != "returned"
-            ):
-
+            if status == "returned" and old_status != "returned":
                 lost_items = LostItem.objects.filter(
                     category__iexact=item.category
                 )
 
                 for lost_item in lost_items:
+                    found_name = (item.item_name or "").lower()
+                    lost_name = (lost_item.item_name or "").lower()
 
-                    found_name = item.item_name.lower()
-                    lost_name = lost_item.item_name.lower()
-
-                    found_location = item.location.lower()
-                    lost_location = lost_item.location.lower()
+                    found_location = (item.location or "").lower()
+                    lost_location = (lost_item.location or "").lower()
 
                     if (
                         found_name in lost_name
@@ -1257,14 +1065,10 @@ def mark_found_status(request, item_id):
                         or found_location in lost_location
                         or lost_location in found_location
                     ):
-
                         Notification.objects.create(
-
                             user=lost_item.user,
-
                             message=(
-                                f"The found item "
-                                f"'{item.item_name}' "
+                                f"The found item '{item.item_name}' "
                                 f"has been marked as Returned. "
                                 f"This may be related to your lost "
                                 f"item '{lost_item.item_name}'."
@@ -1283,7 +1087,6 @@ def mark_found_status(request, item_id):
                         print("========================================")
 
     except FoundItem.DoesNotExist:
-
         pass
 
     return redirect("my_reports")
@@ -1294,19 +1097,14 @@ def mark_found_status(request, item_id):
 # =================================================
 
 def profile(request):
-
     if "user_id" not in request.session:
-
         return redirect("login")
 
     try:
-
         user = User.objects.get(
             id=request.session["user_id"]
         )
-
     except User.DoesNotExist:
-
         return redirect("login")
 
     return render(request, "profile.html", {
@@ -1319,33 +1117,24 @@ def profile(request):
 # =================================================
 
 def edit_profile(request):
-
     if "user_id" not in request.session:
-
         return redirect("login")
 
     try:
-
         user = User.objects.get(
             id=request.session["user_id"]
         )
-
     except User.DoesNotExist:
-
         return redirect("login")
 
     if request.method == "POST":
-
         full_name = request.POST.get("full_name")
-        email = request.POST.get("email")
+        email = (request.POST.get("email") or "").strip()
         mobile = request.POST.get("mobile")
 
         if User.objects.filter(
-            email=email
-        ).exclude(
-            id=user.id
-        ).exists():
-
+            email__iexact=email
+        ).exclude(id=user.id).exists():
             return render(request, "edit_profile.html", {
                 "user": user,
                 "error": "This email is already registered."
@@ -1354,7 +1143,6 @@ def edit_profile(request):
         user.full_name = full_name
         user.email = email
         user.mobile = mobile
-
         user.save()
 
         request.session["user_name"] = user.full_name
@@ -1371,9 +1159,7 @@ def edit_profile(request):
 # =================================================
 
 def ai_assistant(request):
-
     if "user_id" not in request.session:
-
         return redirect("login")
 
     message = request.POST.get(
@@ -1382,7 +1168,6 @@ def ai_assistant(request):
     ).strip().lower()
 
     if not message:
-
         return render(request, "dashboard.html", {
             "ai_response": (
                 "Hi! 👋 I am FoundLink Assistant. "
@@ -1391,16 +1176,10 @@ def ai_assistant(request):
             )
         })
 
-    response = ""
-
     if (
         "lost" in message
-        and (
-            "report" in message
-            or "how" in message
-        )
+        and ("report" in message or "how" in message)
     ):
-
         response = (
             "To report a lost item, open Report Lost and enter "
             "the item name, category, location, date and description. "
@@ -1409,23 +1188,15 @@ def ai_assistant(request):
 
     elif (
         "found" in message
-        and (
-            "report" in message
-            or "how" in message
-        )
+        and ("report" in message or "how" in message)
     ):
-
         response = (
             "To report a found item, open Report Found and enter "
             "the item name, category, location, date and description. "
             "FoundLink will compare the report with existing lost items."
         )
 
-    elif (
-        "match" in message
-        or "smart" in message
-    ):
-
+    elif "match" in message or "smart" in message:
         response = (
             "FoundLink Smart Match compares a found item with "
             "existing lost-item reports using category, item name, "
@@ -1435,7 +1206,6 @@ def ai_assistant(request):
         )
 
     elif "location" in message:
-
         response = (
             "Location is useful for Smart Matching. If a found item "
             "and a lost item have similar locations, FoundLink can "
@@ -1443,18 +1213,13 @@ def ai_assistant(request):
         )
 
     elif "notification" in message:
-
         response = (
             "Possible Smart Matches appear in your dashboard "
             "notifications. FoundLink can also create notifications "
             "for connection requests and recovery or return updates."
         )
 
-    elif (
-        "safe" in message
-        or "safety" in message
-    ):
-
+    elif "safe" in message or "safety" in message:
         response = (
             "For safety, do not share sensitive personal information "
             "publicly. Use FoundLink's connection features and choose "
@@ -1467,39 +1232,27 @@ def ai_assistant(request):
         or "return" in message
         or "returned" in message
     ):
-
         response = (
             "When a lost item is recovered, update its status from "
             "My Reports to Recovered. Found items can be changed "
             "from Found to Returned."
         )
 
-    elif (
-        "connection" in message
-        or "contact" in message
-    ):
-
+    elif "connection" in message or "contact" in message:
         response = (
             "Use Find Users to search for another FoundLink user. "
             "You can send a connection request and manage accepted "
             "connections from My Connections."
         )
 
-    elif (
-        "report" in message
-        and "item" in message
-    ):
-
+    elif "report" in message and "item" in message:
         response = (
             "FoundLink has two reporting options: Report Lost for "
             "an item you lost and Report Found for an item you found. "
             "Both reports can include item details and an image."
         )
 
-    elif (
-        "dashboard" in message
-    ):
-
+    elif "dashboard" in message:
         response = (
             "Your dashboard shows recent lost and found reports, "
             "notifications, statistics and your FoundLink activity."
@@ -1510,7 +1263,6 @@ def ai_assistant(request):
         or "hi" in message
         or "hey" in message
     ):
-
         response = (
             "Hello! 👋 I am your FoundLink Assistant. "
             "I can help with lost items, found items, Smart Match, "
@@ -1518,7 +1270,6 @@ def ai_assistant(request):
         )
 
     else:
-
         response = (
             "I can help with FoundLink. Try asking:\n\n"
             "• How do I report a lost item?\n"
@@ -1540,7 +1291,6 @@ def ai_assistant(request):
 # =================================================
 
 def ai_chat(request):
-
     if request.method != "POST":
         return JsonResponse({
             "success": False,
@@ -1559,10 +1309,8 @@ def ai_chat(request):
             "actions": []
         })
 
-    # Ask Gemini
     response = ask_foundlink_ai(message)
 
-    # Quick action buttons
     actions = []
     message_lower = message.lower()
 
@@ -1652,6 +1400,11 @@ def ai_chat(request):
         "actions": actions
     })
 
+
+# =================================================
+# AI LOST ITEM FINDER
+# =================================================
+
 def ai_lost_item_finder(request):
     if not request.session.get("user_id"):
         return redirect("login")
@@ -1673,7 +1426,8 @@ def ai_lost_item_finder(request):
             ).select_related("user")
 
             matches, ai_used = find_matching_found_items(
-                query, found_items
+                query,
+                found_items
             )
 
     return render(
@@ -1686,3 +1440,32 @@ def ai_lost_item_finder(request):
             "query": query,
         },
     )
+
+
+# =================================================
+# ADMIN DASHBOARD: USERS + LOGIN HISTORY
+# =================================================
+
+@staff_member_required(login_url="/admin/login/")
+def admin_dashboard(request):
+    users = User.objects.all().order_by("-id")
+
+    history = (
+        LoginHistory.objects
+        .select_related("user")
+        .order_by("-created_at")[:100]
+    )
+
+    context = {
+        "users": users,
+        "history": history,
+        "total_users": User.objects.count(),
+        "successful_logins": LoginHistory.objects.filter(
+            status="success"
+        ).count(),
+        "failed_logins": LoginHistory.objects.filter(
+            status="failed"
+        ).count(),
+    }
+
+    return render(request, "admin_dashboard.html", context)
