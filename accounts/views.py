@@ -1122,27 +1122,29 @@ def delete_user(request, user_id):
 # =================================================
 
 def my_reports(request):
-
     if "user_id" not in request.session:
-
         return redirect("login")
 
-    user_id = request.session["user_id"]
+    try:
+        user = User.objects.get(
+            id=request.session["user_id"]
+        )
+    except User.DoesNotExist:
+        request.session.flush()
+        return redirect("login")
 
     lost_items = LostItem.objects.filter(
-        user_id=user_id
+        user=user
     ).order_by("-created_at")
 
     found_items = FoundItem.objects.filter(
-        user_id=user_id
+        user=user
     ).order_by("-created_at")
 
     return render(request, "my_reports.html", {
         "lost_items": lost_items,
-        "found_items": found_items
+        "found_items": found_items,
     })
-
-
 # =================================================
 # MARK LOST ITEM STATUS + NOTIFICATION
 # =================================================
