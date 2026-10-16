@@ -1,0 +1,248 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FoundLink | Admin Dashboard</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        body {
+            margin: 0;
+            background: #f3f7fa;
+            font-family: Arial, sans-serif;
+            color: #21366d;
+        }
+
+        .navbar {
+            background: #21366d;
+            color: white;
+            padding: 18px 28px;
+        }
+
+        .brand {
+            font-size: 23px;
+            font-weight: bold;
+        }
+
+        .brand span {
+            color: #59aaa9;
+        }
+
+        .container-main {
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 0 18px;
+        }
+
+        .welcome {
+            margin-bottom: 25px;
+        }
+
+        .welcome h1 {
+            font-size: 29px;
+            font-weight: bold;
+        }
+
+        .welcome p {
+            color: #68758b;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 14px;
+            padding: 23px;
+            height: 100%;
+            box-shadow: 0 4px 18px #21366d0d;
+            border: 1px solid #e8eef4;
+        }
+
+        .stat-card p {
+            color: #6d7a8c;
+            margin-bottom: 8px;
+        }
+
+        .stat-card h2 {
+            font-size: 30px;
+            font-weight: bold;
+            margin: 0;
+        }
+
+        .section-card {
+            background: white;
+            border-radius: 14px;
+            padding: 22px;
+            margin-top: 26px;
+            box-shadow: 0 4px 18px #21366d0d;
+            border: 1px solid #e8eef4;
+        }
+
+        .section-card h3 {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 18px;
+        }
+
+        .table th {
+            background: #edf5f7;
+            color: #21366d;
+            white-space: nowrap;
+        }
+
+        .table td {
+            vertical-align: middle;
+        }
+
+        .status {
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .success {
+            background: #d8f5e5;
+            color: #167346;
+        }
+
+        .failed {
+            background: #ffe0e0;
+            color: #b42323;
+        }
+
+        .logout-btn {
+            color: white;
+            text-decoration: none;
+            border: 1px solid #ffffff80;
+            border-radius: 8px;
+            padding: 9px 14px;
+        }
+
+        .logout-btn:hover {
+            background: #ffffff20;
+            color: white;
+        }
+
+        footer {
+            text-align: center;
+            color: #7a8797;
+            padding: 25px 10px;
+        }
+    </style>
+</head>
+
+<body>
+
+<nav class="navbar d-flex justify-content-between align-items-center flex-wrap gap-3">
+    <div class="brand">Found<span>Link</span> Admin</div>
+    <a href="/admin/logout/" class="logout-btn">Log out</a>
+</nav>
+
+<div class="container-main">
+
+    <div class="welcome">
+        <h1>Admin Dashboard</h1>
+        <p>Manage registered users and monitor login activity.</p>
+    </div>
+
+    <div class="row g-3">
+        <div class="col-12 col-md-4">
+            <div class="stat-card">
+                <p>Total Registered Users</p>
+                <h2>{{ total_users }}</h2>
+            </div>
+        </div>
+
+        <div class="col-12 col-md-4">
+            <div class="stat-card">
+                <p>Successful Login Attempts</p>
+                <h2>{{ successful_logins }}</h2>
+            </div>
+        </div>
+
+        <div class="col-12 col-md-4">
+            <div class="stat-card">
+                <p>Failed Login Attempts</p>
+                <h2>{{ failed_logins }}</h2>
+            </div>
+        </div>
+    </div>
+
+    <div class="section-card">
+        <h3>Registered Users</h3>
+
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Full Name</th>
+                        <th>Email</th>
+                        <th>Mobile</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for user in users %}
+                    <tr>
+                        <td>{{ user.id }}</td>
+                        <td>{{ user.full_name }}</td>
+                        <td>{{ user.email }}</td>
+                        <td>{{ user.mobile|default:"—" }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="4" class="text-center">No registered users found.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="section-card">
+        <h3>Recent Login Activity</h3>
+
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Email</th>
+                        <th>Status</th>
+                        <th>IP Address</th>
+                        <th>Date and Time</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for entry in history %}
+                    <tr>
+                        <td>{{ entry.email }}</td>
+                        <td>
+                            {% if entry.status == "success" %}
+                                <span class="status success">Successful</span>
+                            {% else %}
+                                <span class="status failed">Failed</span>
+                            {% endif %}
+                        </td>
+                        <td>{{ entry.ip_address|default:"—" }}</td>
+                        <td>{{ entry.created_at|date:"d M Y, h:i A" }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="4" class="text-center">No login activity recorded yet.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+
+<footer>
+    FoundLink Admin Dashboard
+</footer>
+
+</body>
+</html>

@@ -315,3 +315,41 @@ class ReportUser(models.Model):
             f"{self.reporter.full_name} reported "
             f"{self.reported_user.full_name}"
         )
+    # =================================================
+# LOGIN HISTORY
+# =================================================
+
+class LoginHistory(models.Model):
+
+    STATUS_CHOICES = [
+        ("success", "Successful"),
+        ("failed", "Failed"),
+    ]
+
+    email = models.EmailField(max_length=254)
+
+    user = models.ForeignKey(
+        User,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="login_history"
+    )
+
+    status = models.CharField(
+        max_length=10,
+        choices=STATUS_CHOICES
+    )
+
+    ip_address = models.GenericIPAddressField(
+        null=True,
+        blank=True
+    )
+
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["-created_at"]
+
+    def __str__(self):
+        return f"{self.email} - {self.status}"
