@@ -4,17 +4,16 @@ Django settings for FoundLink project.
 
 import os
 from pathlib import Path
-
-import dj_database_url
-
+from dotenv import load_dotenv
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+# Load environment variables
+load_dotenv(BASE_DIR / ".env")
 
-# -------------------------------------------------
+import dj_database_url
+
 # SECURITY
-# -------------------------------------------------
-
 SECRET_KEY = os.environ.get(
     "SECRET_KEY",
     "django-insecure-local-development-key"
@@ -27,9 +26,7 @@ ALLOWED_HOSTS = os.environ.get(
     "127.0.0.1,localhost"
 ).split(",")
 
-RENDER_EXTERNAL_HOSTNAME = os.environ.get(
-    "RENDER_EXTERNAL_HOSTNAME"
-)
+RENDER_EXTERNAL_HOSTNAME = os.environ.get("RENDER_EXTERNAL_HOSTNAME")
 
 if RENDER_EXTERNAL_HOSTNAME:
     ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
@@ -40,11 +37,7 @@ CSRF_TRUSTED_ORIGINS = [
     if host.strip() not in ["127.0.0.1", "localhost"]
 ]
 
-
-# -------------------------------------------------
 # APPLICATIONS
-# -------------------------------------------------
-
 INSTALLED_APPS = [
     "django.contrib.admin",
     "django.contrib.auth",
@@ -52,15 +45,10 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-
     "accounts",
 ]
 
-
-# -------------------------------------------------
 # MIDDLEWARE
-# -------------------------------------------------
-
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
@@ -72,11 +60,7 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
-
-# -------------------------------------------------
-# URL / TEMPLATES
-# -------------------------------------------------
-
+# URLS AND TEMPLATES
 ROOT_URLCONF = "foundlink.urls"
 
 TEMPLATES = [
@@ -94,15 +78,10 @@ TEMPLATES = [
     },
 ]
 
-
 WSGI_APPLICATION = "foundlink.wsgi.application"
 ASGI_APPLICATION = "foundlink.asgi.application"
 
-
-# -------------------------------------------------
 # DATABASE
-# -------------------------------------------------
-
 DATABASES = {
     "default": dj_database_url.config(
         default=f"sqlite:///{(BASE_DIR / 'db.sqlite3').as_posix()}",
@@ -110,11 +89,7 @@ DATABASES = {
     )
 }
 
-
-# -------------------------------------------------
 # PASSWORD VALIDATION
-# -------------------------------------------------
-
 AUTH_PASSWORD_VALIDATORS = [
     {
         "NAME": (
@@ -142,31 +117,17 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
-# -------------------------------------------------
-# LANGUAGE / TIME
-# -------------------------------------------------
-
+# LANGUAGE AND TIME
 LANGUAGE_CODE = "en-us"
-
 TIME_ZONE = "Asia/Kolkata"
-
 USE_I18N = True
-
 USE_TZ = True
 
-
-# -------------------------------------------------
 # STATIC FILES
-# -------------------------------------------------
-
 STATIC_URL = "/static/"
-
 STATIC_ROOT = BASE_DIR / "staticfiles"
 
-#--------------------------------------------------
-# FILE STORAGE
-#--------------------------------------------------
+# FILE STORAGE - SUPABASE
 STORAGES = {
     "default": {
         "BACKEND": "storages.backends.s3.S3Storage",
@@ -179,9 +140,13 @@ STORAGES = {
             "default_acl": None,
             "querystring_auth": False,
             "file_overwrite": False,
+            "addressing_style": "path",
+            "custom_domain": (
+                "rnripcunhujjgypwqixo.supabase.co/"
+                "storage/v1/object/public/foundlink-images"
+            ),
         },
     },
-
     "staticfiles": {
         "BACKEND": (
             "whitenoise.storage."
@@ -190,27 +155,14 @@ STORAGES = {
     },
 }
 
-
-# -------------------------------------------------
 # MEDIA FILES
-# -------------------------------------------------
-
 MEDIA_URL = "/media/"
-
 MEDIA_ROOT = BASE_DIR / "media"
 
-
-# -------------------------------------------------
 # DEFAULT PRIMARY KEY
-# -------------------------------------------------
-
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-
-# -------------------------------------------------
 # EMAIL
-# -------------------------------------------------
-
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = "smtp.gmail.com"
 EMAIL_PORT = 587
